@@ -32,6 +32,9 @@ npm install loopback-with-domain
 
 # configs
 
+see JSON files in "default-configs" directory.
+you can set the same properties as these JSONs.
+
 ## server
 
  config name | meaning       | default
