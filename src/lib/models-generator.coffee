@@ -7,7 +7,7 @@ mkdirp = require 'mkdirp'
 
 class ModelsGenerator
 
-    modelsDir: normalize "#{__dirname}/../common/models"
+    modelsDir: normalize "#{__dirname}/../../common/models"
 
     ###*
     @param {Facade} domain facade object in [base-domain](https://github.com/CureApp/base-domain)

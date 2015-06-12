@@ -5,8 +5,8 @@ fs = require 'fs'
 
 class ConfigJSONGenerator
 
-    defaultConfigsPath: normalize "#{__dirname}/../default-configs"
-    destinationPath   : normalize "#{__dirname}/../server"
+    defaultConfigsPath: normalize "#{__dirname}/../../default-configs"
+    destinationPath   : normalize "#{__dirname}/../../server"
 
     configNames: [
         'admin'

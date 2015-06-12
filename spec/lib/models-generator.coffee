@@ -1,7 +1,7 @@
 
 { normalize } = require 'path'
 
-ModelsGenerator = require '../src/models-generator'
+ModelsGenerator = require '../../src/lib/models-generator'
 
 
 describe 'ModelsGenerator', ->
@@ -22,7 +22,7 @@ describe 'ModelsGenerator', ->
 
             mGenerator = new ModelsGenerator()
             path = mGenerator.getDestinationPath('password-change-ticket', 'json')
-            expect(path).to.equal normalize __dirname + '/../common/models/password-change-ticket.json'
+            expect(path).to.equal normalize __dirname + '/../../common/models/password-change-ticket.json'
 
 
     describe 'getEntityModelsFromDomain', ->

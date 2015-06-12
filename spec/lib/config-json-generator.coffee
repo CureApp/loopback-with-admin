@@ -3,7 +3,7 @@
 
 fs = require 'fs'
 
-ConfigJSONGenerator = require '../src/config-json-generator'
+ConfigJSONGenerator = require '../../src/lib/config-json-generator'
 
 
 describe 'ConfigJSONGenerator', ->
@@ -16,12 +16,12 @@ describe 'ConfigJSONGenerator', ->
 
         it 'returns #{configName}.json', ->
             path = @generator.getDestinationPathByName('admin')
-            expect(path).to.equal normalize __dirname + '/../server/admin.json'
+            expect(path).to.equal normalize __dirname + '/../../server/admin.json'
 
 
         it 'returns config.json when "server" is given', ->
             path = @generator.getDestinationPathByName('server')
-            expect(path).to.equal normalize __dirname + '/../server/config.json'
+            expect(path).to.equal normalize __dirname + '/../../server/config.json'
 
 
     describe 'merge', ->
