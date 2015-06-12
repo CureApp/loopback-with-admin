@@ -1,3 +1,8 @@
 {
-  "accessToken": "(you must set access token)"
+  "accessToken": "(you must set access token)",
+  "account": {
+    "email": "dummy@example.com",
+    "password": "(password for dummy@example.com)"
+  },
+  "id": "(id for dummy@example.com, this must be unique in all User models)"
 }
