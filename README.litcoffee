@@ -21,6 +21,8 @@ npm install loopback-with-domain
     domain = require('base-domain').createInstance(dirname: 'domain')
 
     config =
+        admin:
+            accessToken: 'Your Secret Value Here'
         server:
             port: 4000
 
