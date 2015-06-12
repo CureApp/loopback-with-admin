@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "main": "server/server.js",
   "scripts": {
-      "test": "grunt"
+    "test": "grunt"
   },
   "dependencies": {
     "compression": "^1.0.3",
@@ -18,6 +18,7 @@
     "loopback-explorer": "^1.1.0"
   },
   "devDependencies": {
+    "base-domain": "^1.4.0",
     "grunt": "^0.4.5",
     "grunt-contrib-coffee": "^0.13.0",
     "grunt-mocha-chai-sinon": "0.0.9"

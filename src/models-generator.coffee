@@ -62,8 +62,22 @@ class ModelsGenerator
     @private
     ###
     getEntityModelsFromDomain: (domain) ->
+        # FIXME base-domain should implement their own 'getEntityModels()'
+
         domainFiles = fs.readdirSync domain.dirname
-        filename in domainFiles
+        entityModels = []
+
+        for filename in domainFiles
+            try
+                klass = require normalize domain.dirname + '/' + filename
+                continue if not klass.isEntity
+                name = klass.getName()
+                entityModels.push domain.getModel name
+            catch e
+                console.debug e
+                console.debug e.stack
+
+        return entityModels
 
 
     ###*
