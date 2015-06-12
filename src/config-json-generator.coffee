@@ -32,7 +32,7 @@ class ConfigJSONGenerator
 
         admin:
             accessToken: 'xxx'
-        'push-notification':
+        'push-credentials':
             gcmServerApiKey: 'yyy'
 
     @param {Object} strategies merging strategies, currently unused.
