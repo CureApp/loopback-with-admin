@@ -2,7 +2,9 @@
   "name": "loopback-with-domain",
   "version": "1.0.1",
   "main": "server/server.js",
-  "scripts": {},
+  "scripts": {
+      "test": "grunt"
+  },
   "dependencies": {
     "compression": "^1.0.3",
     "errorhandler": "^1.1.1",
