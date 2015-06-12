@@ -1,0 +1,45 @@
+{
+    "_meta": {
+        "sources": [
+            "loopback/common/models",
+            "loopback/server/models",
+            "../common/models",
+            "./models"
+        ]
+    },
+    "User": {
+        "dataSource": "memory"
+    },
+    "AccessToken": {
+        "dataSource": "db",
+        "public": true
+    },
+    "ACL": {
+        "dataSource": "memory",
+        "public": false
+    },
+    "RoleMapping": {
+        "dataSource": "memory",
+        "public": false
+    },
+    "Role": {
+        "dataSource": "memory",
+        "public": false
+    },
+    "application": {
+        "public": false,
+        "dataSource": "memory"
+    },
+    "installation": {
+        "public": true,
+        "dataSource": "db"
+    },
+    "notification": {
+        "public": false,
+        "dataSource": "memory"
+    },
+    "push": {
+        "public": true,
+        "dataSource": "push"
+    }
+}

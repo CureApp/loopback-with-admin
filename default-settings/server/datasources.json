@@ -1,0 +1,17 @@
+{
+    "memory": {
+        "name": "memory",
+        "connector": "memory"
+    },
+    "db": {
+        "name": "db",
+        "connector": "memory"
+    },
+    "push": {
+        "name": "push",
+        "connector": "loopback-component-push",
+        "installation": "installation",
+        "notification": "notification",
+        "application": "application"
+    }
+}
