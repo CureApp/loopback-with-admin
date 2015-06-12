@@ -1,5 +1,5 @@
 {
-  "name": "loopback-by-domain",
+  "name": "loopback-with-domain",
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
@@ -23,5 +23,5 @@
     "type": "",
     "url": ""
   },
-  "description": "loopback-by-domain"
+  "description": "loopback-with-domain"
 }
