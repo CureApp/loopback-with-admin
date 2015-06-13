@@ -28,16 +28,12 @@ class ConfigJSONGenerator
 
 
     ###*
-    @param {Object} customConfigs
+    @param {String} customConfigsPath
 
-        admin:
-            accessToken: 'xxx'
-        'push-credentials':
-            gcmServerApiKey: 'yyy'
-
-    @param {Object} strategies merging strategies, currently unused.
     ###
-    constructor: (@customConfigs = {}, @strategies = {}) ->
+    constructor: (customConfigsPath) ->
+
+        # @customConfigLoader = new CustomConfigLoader customConfigsPath
 
 
     ###*
@@ -49,9 +45,10 @@ class ConfigJSONGenerator
     ###
     generate: ->
 
-        configs = @getMergedConfigs()
+        for configName in @configNames
 
-        for configName, config of configs
+            config = @getMergedConfig(configName)
+
             path = @getDestinationPathByName(configName)
 
             fs.writeFileSync(path, JSON.stringify config)
@@ -73,20 +70,13 @@ class ConfigJSONGenerator
 
     @private
     ###
-    getMergedConfigs: ->
+    getMergedConfig: (configName) ->
 
-        mergedConfigs = {}
+        defaultConfig = @loadDefaultConfig(configName)
+        customConfig  = @customConfigLoader.load(configName)
 
-        for configName, defaultConfig of @loadDefaultConfigs()
+        return @merge customConfig, defaultConfig
 
-            customConfig = @customConfigs[configName]
-
-            if customConfig?
-                mergedConfigs[configName] = @merge(customConfig, defaultConfig)
-            else
-                mergedConfigs[configName] = defaultConfig
-
-        return mergedConfigs
 
 
     ###*
@@ -118,14 +108,9 @@ class ConfigJSONGenerator
 
     @private
     ###
-    loadDefaultConfigs: ->
+    loadDefaultConfig: (configName) ->
 
-        configs = {}
-
-        for name in @configNames
-            configs[name] = require @defaultConfigsPath + '/' + name + '.json'
-
-        return configs
+        require "#{@defaultConfigsPath}/#{configName}.json"
 
 
 module.exports = ConfigJSONGenerator

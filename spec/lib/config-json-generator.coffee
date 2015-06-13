@@ -77,41 +77,41 @@ describe 'ConfigJSONGenerator', ->
             expect(merged.sub.subsub).to.have.property 'onlySubSubBase', true
 
 
-    describe 'loadDefaultConfigs', ->
-
-        before ->
-            @configs = new ConfigJSONGenerator().loadDefaultConfigs()
-
-        it 'has six configs', ->
-            expect(Object.keys @configs).to.have.length 6
+    describe 'loadDefaultConfig', ->
 
         it 'loads admin', ->
-            expect(@configs.admin).to.be.an 'object'
-            expect(@configs.admin).to.have.property 'accessToken'
+            config = new ConfigJSONGenerator().loadDefaultConfig('admin')
+            expect(config).to.be.an 'object'
+            expect(config).to.have.property 'accessToken'
 
         it 'loads datasources', ->
-            expect(@configs.datasources).to.be.an 'object'
-            expect(@configs.datasources).to.have.property 'memory'
-            expect(@configs.datasources).to.have.property 'db'
+            config = new ConfigJSONGenerator().loadDefaultConfig('datasources')
+            expect(config).to.be.an 'object'
+            expect(config).to.have.property 'memory'
+            expect(config).to.have.property 'db'
 
         it 'loads middleware', ->
-            expect(@configs.middleware).to.be.an 'object'
+            config = new ConfigJSONGenerator().loadDefaultConfig('middleware')
+            expect(config).to.be.an 'object'
 
         it 'loads model-config', ->
-            expect(@configs['model-config']).to.be.an 'object'
+            config = new ConfigJSONGenerator().loadDefaultConfig('model-config')
+            expect(config).to.be.an 'object'
 
         it 'loads server', ->
-            expect(@configs.server).to.be.an 'object'
-            expect(@configs.server).to.have.property 'port', 3000
+            config = new ConfigJSONGenerator().loadDefaultConfig('server')
+            expect(config).to.be.an 'object'
+            expect(config).to.have.property 'port', 3000
 
         it 'loads push-credentials', ->
-            expect(@configs['push-credentials']).to.be.an 'object'
-            expect(@configs['push-credentials']).to.have.property 'gcmServerApiKey'
-            expect(@configs['push-credentials']).to.have.property 'apnsCertData'
-            expect(@configs['push-credentials']).to.have.property 'apnsKeyData'
+            config = new ConfigJSONGenerator().loadDefaultConfig('push-credentials')
+            expect(config).to.be.an 'object'
+            expect(config).to.have.property 'gcmServerApiKey'
+            expect(config).to.have.property 'apnsCertData'
+            expect(config).to.have.property 'apnsKeyData'
 
 
-    describe 'getMergedConfigs', ->
+    xdescribe 'getMergedConfig', ->
 
         it 'merges custom and default configs', ->
 
@@ -143,7 +143,7 @@ describe 'ConfigJSONGenerator', ->
             expect(Object.keys merged).to.have.length 6
 
 
-    describe 'generate', ->
+    xdescribe 'generate', ->
 
         before ->
             @tmpdir = __dirname + '/tmp'
