@@ -19,7 +19,7 @@ npm install loopback-with-domain
 before running, you can prepare a directory which contains custom config information.
 
 
-```
+```text
 (config-dir) # any name is acceptable
 |-- common
 |   |-- server.coffee
@@ -85,4 +85,44 @@ you can set the same properties as these JSONs.
  apnsCertData    | certificate pem contents for APNs
  apnsKeyData     | key pem contents for APNs
 
+
+# switching environment
+
+running script with environment variable "NODE\_ENV" like
+
+```bash
+$ NODE_ENV=production node app.js
+```
+
+"development" is selected by default.
+
+when your config dir is
+
+```text
+(config-dir) # any name is acceptable
+|-- common
+|   |-- server.coffee
+|   `-- admin.coffee
+|-- development
+|   `-- datasources.coffee
+|-- local
+|   `-- datasources.coffee
+|-- production
+|   `-- datasources.coffee
+```
+
+and launching script like
+
+```bash
+$ NODE_ENV=local node app.js
+```
+then, loopback-with-domain selects configs in "local" directory.
+
+## passing custom environment with argument
+
+    env = 'production'
+
+    lbWithDomain.runWithDomain(domain, configDir, env)
+
+env is prior to NODE\_ENV settings.
 
