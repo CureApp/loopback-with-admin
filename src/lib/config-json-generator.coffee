@@ -105,8 +105,8 @@ class ConfigJSONGenerator
 
         for own k, sub of dominant
             if merged[k]? and typeof merged[k] is 'object' and v?
-                    # merges subobject
-                    merged[k] = @merge sub, merged[k]
+                # merges subobject
+                merged[k] = @merge sub, merged[k]
             else
                 merged[k] = sub
 
