@@ -111,39 +111,27 @@ describe 'ConfigJSONGenerator', ->
             expect(config).to.have.property 'apnsKeyData'
 
 
-    xdescribe 'getMergedConfig', ->
+    describe 'getMergedConfig', ->
 
         it 'merges custom and default configs', ->
 
-            customConfig =
-                admin:
+            generator = new ConfigJSONGenerator()
+
+            generator.customConfigLoader =
+                load: ->
                     accessToken: 'MySecretOne'
                     account:
                         password: 'xxxyyy'
-                server:
-                    port: 4157
-
-            merged = new ConfigJSONGenerator(customConfig).getMergedConfigs()
-
-            expect(merged.admin).to.have.property 'accessToken', 'MySecretOne'
-            expect(merged.server).to.have.property 'port', 4157
-            expect(merged.admin.account).to.have.property 'email', 'dummy@example.com' # from default config
-            expect(merged.admin.account).to.have.property 'password', 'xxxyyy'
 
 
-        it 'does not include unnecessary keys', ->
+            merged = generator.getMergedConfig('admin')
 
-            customConfig =
-                xxx:
-                    yyy: true
-
-            merged = new ConfigJSONGenerator(customConfig).getMergedConfigs()
-
-            expect(merged).not.to.have.property 'xxx'
-            expect(Object.keys merged).to.have.length 6
+            expect(merged).to.have.property 'accessToken', 'MySecretOne'
+            expect(merged.account).to.have.property 'email', 'dummy@example.com' # from default config
+            expect(merged.account).to.have.property 'password', 'xxxyyy'
 
 
-    xdescribe 'generate', ->
+    describe 'generate', ->
 
         before ->
             @tmpdir = __dirname + '/tmp'
@@ -151,11 +139,7 @@ describe 'ConfigJSONGenerator', ->
                 fs.mkdirSync @tmpdir
             catch e
 
-            customConfig =
-                admin: accessToken: 'MySecretOne'
-                server: port: 4157
-
-            @generator = new ConfigJSONGenerator(customConfig)
+            @generator = new ConfigJSONGenerator(__dirname + '/sample-configs')
             @generator.destinationPath = @tmpdir
 
         after ->

@@ -3,6 +3,8 @@
 
 fs = require 'fs'
 
+CustomConfigLoader = require './custom-config-loader'
+
 class ConfigJSONGenerator
 
     defaultConfigsPath: normalize "#{__dirname}/../../default-configs"
@@ -28,12 +30,14 @@ class ConfigJSONGenerator
 
 
     ###*
+
+    @constructor
     @param {String} customConfigsPath
-
+    @param {String} env
     ###
-    constructor: (customConfigsPath) ->
+    constructor: (customConfigsPath, env) ->
 
-        # @customConfigLoader = new CustomConfigLoader customConfigsPath
+        @customConfigLoader = new CustomConfigLoader customConfigsPath, env
 
 
     ###*
