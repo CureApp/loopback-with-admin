@@ -52,7 +52,7 @@ class AclGenerator
 
         if @modelSetting.isUserModel()
             @adminUserACL()
-
+        @
 
 
     ###*
@@ -73,7 +73,7 @@ class AclGenerator
                 principalType: 'ROLE'
                 principalId: '$owner'
                 permission: 'ALLOW'
-
+        @
 
     ###*
     append ACL allowing accesses from READ access to everyone
@@ -88,6 +88,7 @@ class AclGenerator
             principalType: 'ROLE'
             principalId: '$everyone'
             permission: 'ALLOW'
+        @
 
 
     ###*
@@ -112,6 +113,7 @@ class AclGenerator
 
         if @modelSetting.isUserModel()
             @userACL()
+        @
 
 
     ###*
@@ -136,7 +138,7 @@ class AclGenerator
             principalId: '$everyone'
             permission: 'DENY'
             property: 'create'
-
+        @
 
     ###*
     append ACL for User model handled by admin,
@@ -160,6 +162,7 @@ class AclGenerator
             principalId: 'admin'
             permission: 'ALLOW'
             property: 'login'
+        @
 
 
 
