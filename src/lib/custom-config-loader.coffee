@@ -10,10 +10,9 @@ class CustomConfigLoader
 
 
     ###*
-    configを取得します. 特定のenvの設定があればそちらを優先
-    config は JSON.parse / JSON.stringify されて元のファイルとの参照を失います
+    load config by name. environment-specific config priors when exists.
 
-        dbConfig = new CustomConfigLoader(diranme, 'local').load('datasources')
+        dbConfig = new CustomConfigLoader(diranme, 'development').load('datasources')
 
     @method load
     @public
@@ -35,7 +34,7 @@ class CustomConfigLoader
         return {}
 
     ###*
-    objectを複製
+    clone object
 
     @private
     ###
