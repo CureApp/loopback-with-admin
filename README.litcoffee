@@ -126,3 +126,10 @@ then, loopback-with-domain selects configs in "local" directory.
 
 env is prior to NODE\_ENV settings.
 
+
+# modified loopback-datasource-juggler
+
+using [CureApp/loopback-datasource-juggler](https://github.com/CureApp/loopback-datasource-juggler).
+
+this repository is almost the same as original one except 'memory' connector handles id as string
+(orignally integer).

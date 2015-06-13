@@ -10,7 +10,7 @@
     "errorhandler": "^1.1.1",
     "loopback": "^2.8.0",
     "loopback-boot": "^2.6.5",
-    "loopback-datasource-juggler": "^2.7.0",
+    "loopback-datasource-juggler": "git+https://github.com/CureApp/loopback-datasource-juggler#cureapp-2.26.1",
     "mkdirp": "^0.5.1",
     "serve-favicon": "^2.0.1"
   },
