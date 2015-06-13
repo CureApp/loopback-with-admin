@@ -5,6 +5,8 @@
 fs = require 'fs'
 mkdirp = require 'mkdirp'
 
+ModelSetting = require './model-setting'
+
 class ModelsGenerator
 
     modelsDir: normalize "#{__dirname}/../../common/models"
