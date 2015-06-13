@@ -16,36 +16,73 @@ npm install loopback-with-domain
 
 # run
 
+before running, you can prepare a directory which contains custom config information.
+
+
+```
+(config-dir) # any name is acceptable
+|-- common
+|   |-- server.coffee
+|   `-- admin.coffee
+|-- development
+|   `-- datasources.coffee
+|-- production
+|   `-- datasources.coffee
+```
+
+
     lbWithDomain = require 'loopback-with-domain'
+
+    configDir = '/path/to/config-dir'
 
     domain = require('base-domain').createInstance(dirname: 'domain')
 
-    config =
-        admin:
-            accessToken: 'Your Secret Value Here'
-        server:
-            port: 4000
-
-    lbWithDomain.runWithDomain(domain, config).then ->
+    lbWithDomain.runWithDomain(domain, configDir).then ->
         # loopback started
 
 
 # configs
 
+these are the config names.
+
+- admin
+- datasources
+- middleware
+- model-config
+- server
+- push-credentials
+
 see JSON files in "default-configs" directory.
 you can set the same properties as these JSONs.
 
+
+## admin
+
+ config key  | meaning
+-------------|-----------------------
+ accessToken | accessToken for admin
+
+## datasources
+
+ config key  | meaning
+-------------|-----------------------
+ memory      | on memory datasource
+ db          | datasource for domain entities
+
 ## server
 
- config name | meaning       | default
+ config key  | meaning       | default
 -------------|---------------|----------------
  restApiRoot | REST api root | /api
  port        | port number   | 3000
 
-## admin
 
- config name | meaning               | default
--------------|-----------------------|----------------------------
- accessToken | accessToken for admin | (you must set access token)
+## push-credentials
+
+ config key      | meaning
+-----------------|-------------------------------------------
+ gcmServerApiKey | api key for Google Cloud Messaging (GCM)
+ apnsCertData    | certificate pem contents for APNs
+ apnsKeyData     | key pem contents for APNs
 
 
