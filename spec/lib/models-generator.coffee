@@ -1,10 +1,13 @@
 
 { normalize } = require 'path'
+{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
+fs = require 'fs'
 
 ModelsGenerator = require '../../src/lib/models-generator'
 
 
 describe 'ModelsGenerator', ->
+
     describe 'getEmptyJSContent', ->
 
         it 'returns valid JS code', ->
@@ -15,14 +18,6 @@ describe 'ModelsGenerator', ->
             context = vm.createContext module: {}
 
             vm.runInContext(mGenerator.getEmptyJSContent(), context)
-
-    describe 'getDestinationPath', ->
-
-        it 'returns destination path by model name and extension info', ->
-
-            mGenerator = new ModelsGenerator()
-            path = mGenerator.getDestinationPath('password-change-ticket', 'json')
-            expect(path).to.equal normalize __dirname + '/../../common/models/password-change-ticket.json'
 
 
     describe 'getEntityModelsFromDomain', ->
@@ -61,6 +56,55 @@ describe 'ModelsGenerator', ->
                 expect(entityModel).to.have.property 'isEntity', true
 
 
-    describe 'createModelSetting', ->
+    describe 'generateJSONandJS', ->
 
+        before ->
+            @generator = new ModelsGenerator()
+            @generator.destinationDir = __dirname + '/a/b/c'
+
+            mkdirSyncRecursive @generator.destinationDir
+
+            @modelName = 'test-model'
+            @contents = JSON.stringify test: true
+
+            @generator.generateJSONandJS(@modelName, @contents)
+
+        after ->
+            rmdirSyncRecursive __dirname + '/a'
+
+        it 'generate JSON file', ->
+            expect(fs.existsSync @generator.destinationDir + '/test-model.json').to.be.true
+            expect(require @generator.destinationDir + '/test-model.json').to.eql {test: true}
+
+        it 'generate JS file', ->
+            expect(fs.existsSync @generator.destinationDir + '/test-model.json').to.be.true
+            content = fs.readFileSync(@generator.destinationDir + '/test-model.js', 'utf8')
+            expect(content).to.equal @generator.getEmptyJSContent()
+
+
+    describe 'generateBuiltinModels', ->
+
+        before ->
+            @generator = new ModelsGenerator()
+            @generator.destinationDir = __dirname + '/b/c/d'
+
+            mkdirSyncRecursive @generator.destinationDir
+
+            @modelName = 'test-model'
+            @contents = JSON.stringify test: true
+
+            @generator.generateBuiltinModels(@modelName, @contents)
+
+        after ->
+            rmdirSyncRecursive __dirname + '/b'
+
+        it 'generate four JSON files', ->
+            expect(fs.readdirSync @generator.destinationDir).to.have.length 8
+
+
+        it 'generate JS file', ->
+            expect(fs.readdirSync @generator.destinationDir).to.have.length 8
+
+
+    describe 'createModelSetting', ->
     describe 'generate', ->

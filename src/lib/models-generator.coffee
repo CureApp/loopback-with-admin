@@ -1,22 +1,22 @@
 
-
 { normalize } = require 'path'
 
 fs = require 'fs'
-mkdirp = require 'mkdirp'
+
+{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
 ModelSetting = require './model-setting'
 
 class ModelsGenerator
 
-    modelsDir: normalize "#{__dirname}/../../common/models"
+    destinationDir : normalize "#{__dirname}/../../common/models"
+    builtinDir     : normalize "#{__dirname}/../data/models"
 
     ###*
     @param {Facade} domain facade object in [base-domain](https://github.com/CureApp/base-domain)
-    @param {Object} acls ACL setting. key: modelName, value: ACL type (one of 'owner', 'admin', 'public-read')
-    @param {Object} modelConfigs model config data, compatible with loopback's model-config.json
+    @param {Object} customModelsSetting model setting data, compatible with loopback's model-config.json and aclType
     ###
-    constructor: (@domain, @acls = {}, @modelConfigs = {}) ->
+    constructor: (@domain, @customModelsSetting = {}) ->
 
 
     ###*
@@ -24,29 +24,65 @@ class ModelsGenerator
 
     @method generate
     @public
-    @return {Array} generatedFileNames
+    @return {Array} generatedModelNames
     ###
     generate: ->
 
         entityModels = @getEntityModelsFromDomain(domain)
 
-        for EntityModel in entityModels
-            modelSetting = @createModelSetting(EntityModel, @acls[entityName])
+        mkdirSyncRecursive @destinationDir
 
-            jsonFilePath = @getDestinationPath(modelSetting.getName(), 'json')
-            fs.writeFileSync(jsonFilePath, modelSetting.toStringifiedJSON())
+        modelNames = for EntityModel in entityModels
 
-            jsFilePath = @getDestinationPath(modelSetting.getName(), 'js')
-            fs.writeFileSync(jsonFilePath, @getEmptyJSContent())
+            modelSetting = @createModelSetting(EntityModel)
+            modelName = modelSetting.getName()
+            @generateJSONandJS(modelName, modelSetting.toStringifiedJSON())
+
+        builtinModelNames = @generateBuiltinModels()
+
+        return modelNames.concat builtinModelNames
 
 
     ###*
-    get path to save model file
+    reset
 
+    @method reset
+    @public
+    @return
+    ###
+    reset: ->
+        rmdirSyncRecursive @destinationDir
+
+
+    ###*
+
+    @method generateBuiltinModels
     @private
     ###
-    getDestinationPath: (modelName, extName) ->
-        return normalize "#{@modelsDir}/#{modelName}.#{extName}"
+    generateBuiltinModels: ->
+
+        for filename in fs.readdirSync @builtinDir
+
+            [modelName, ext] = filename.split('.')
+            setting = require @builtinDir + '/' + filename
+            @generateJSONandJS(modelName, JSON.stringify(setting, null, 4))
+
+
+    ###*
+    generate JSON file and JS file of modelName
+
+    @private
+    @reurn {String} modelName
+    ###
+    generateJSONandJS: (modelName, jsonContent) ->
+
+        jsonFilePath = normalize "#{@destinationDir}/#{modelName}.json"
+        fs.writeFileSync(jsonFilePath, jsonContent)
+
+        jsFilePath = normalize "#{@destinationDir}/#{modelName}.js"
+        fs.writeFileSync(jsFilePath, @getEmptyJSContent())
+
+        return modelName
 
 
     ###*
@@ -90,9 +126,9 @@ class ModelsGenerator
     createModelSetting: (EntityModel) ->
 
         entityName = EntityModel.getName()
-        acl = @acls[entityName]
-        modelConfig = @modelConfigs[entityName]
+        customModelSetting = @customModelsSetting[entityName]
 
-        return new ModelSetting(EntityModel, acl, modelConfig)
+        return new ModelSetting(EntityModel, customModelSetting)
+
 
 module.exports = ModelsGenerator
