@@ -32,7 +32,7 @@ class Main
         main.reset() unless options.reset is false
         main.generate()
 
-        @startLoopback()
+        @launchLoopback()
 
 
     ###*
@@ -85,7 +85,7 @@ class Main
 
     @private
     ###
-    @startLoopback: ->
+    @launchLoopback: ->
         new LoopbackLauncher().launch()
 
 module.exports = Main

@@ -81,7 +81,7 @@ describe 'Main', ->
             expect(counter).to.equal 3
 
 
-    describe '@startLoopback', ->
+    describe '@launchLoopback', ->
 
         before ->
             @launch = LoopbackLauncher::launch
@@ -92,7 +92,7 @@ describe 'Main', ->
 
         it 'launch loopback-launcher', (done) ->
             @cb = done
-            Main.startLoopback()
+            Main.launchLoopback()
 
 
     describe 'runWithDomain', ->
@@ -102,16 +102,16 @@ describe 'Main', ->
 
             @reset = Main::reset
             @generate = Main::generate
-            @startLoopback = Main.startLoopback
+            @launchLoopback = Main.launchLoopback
 
             Main::reset = => @called.reset = true
             Main::generate = => @called.generate = true
-            Main.startLoopback = => @called.startLoopback = true
+            Main.launchLoopback = => @called.launchLoopback = true
 
         afterEach ->
             Main::reset = @reset
             Main::generate = @generate
-            Main.startLoopback = @startLoopback
+            Main.launchLoopback = @launchLoopback
 
         it 'invokes reset() unless reset is false', ->
 
@@ -119,7 +119,7 @@ describe 'Main', ->
 
             expect(@called.reset).to.be.true
             expect(@called.generate).to.be.true
-            expect(@called.startLoopback).to.be.true
+            expect(@called.launchLoopback).to.be.true
 
 
         it 'does not invoke reset if reset is false', ->
@@ -128,5 +128,5 @@ describe 'Main', ->
 
             expect(@called.reset).not.to.exist
             expect(@called.generate).to.be.true
-            expect(@called.startLoopback).to.be.true
+            expect(@called.launchLoopback).to.be.true
 
