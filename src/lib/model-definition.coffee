@@ -81,8 +81,18 @@ class ModelDefinition
     @private
     ###
     getRelations: ->
-        return {} # WIP
+        rels = {}
+        propInfo = @Entity.getPropInfo()
 
+        for prop in @Entity.getEntityProps()
+            typeInfo = propInfo.dic[prop]
+
+            rels[prop] =
+                type       : 'belongsTo'
+                model      : typeInfo.model
+                foreignKey : typeInfo.idPropName
+
+        return rels
 
 
 module.exports = ModelDefinition

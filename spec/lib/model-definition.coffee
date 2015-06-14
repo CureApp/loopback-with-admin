@@ -1,9 +1,18 @@
 
 ModelDefinition = require '../../src/lib/model-definition'
 
-class EntityModel extends require('base-domain').Entity
+Domain = require('base-domain')
+
+domain = Domain.createInstance()
+
+class EntityModel extends Domain.Entity
     @properties:
-        extmodel: @TYPES.MODEL 'extmodel'
+        em: @TYPES.MODEL 'ext-model'
+
+class ExtModel extends Domain.Entity
+
+EntityModel = domain.addClass('entity-model', EntityModel)
+ExtModel    = domain.addClass('ext-model', ExtModel)
 
 describe 'ModelDefinition', ->
 
@@ -56,7 +65,50 @@ describe 'ModelDefinition', ->
 
 
     describe 'getRelations', ->
+        it 'returns relations by EntityModel\'s property', ->
 
+            rels = new ModelDefinition(EntityModel).getRelations()
+
+            expect(rels).to.have.property 'em'
+            expect(rels.em).to.have.property 'type', 'belongsTo'
+            expect(rels.em).to.have.property 'model', 'ext-model'
+            expect(rels.em).to.have.property 'foreignKey', 'extModelId'
+
+
+    describe 'toJSON', ->
+
+        before ->
+            @def = new ModelDefinition(EntityModel, base: 'User')
+            @json = @def.toJSON()
+
+        it 'has name', ->
+            expect(@json).to.have.property 'name', 'entity-model'
+
+        it 'has plural', ->
+            expect(@json).to.have.property 'plural', 'entity-model'
+
+        it 'has base = User', ->
+            expect(@json).to.have.property 'base', 'User'
+
+        it 'has idInjection', ->
+            expect(@json).to.have.property 'idInjection', true
+
+        it 'has acls', ->
+            expect(@json).to.have.property 'acls'
+            expect(@json.acls).to.eql @def.getACL()
+
+        it 'has relations', ->
+            expect(@json).to.have.property 'relations'
+            expect(@json.relations).to.eql @def.getRelations()
 
 
     describe 'toStringifiedJSON', ->
+
+        it 'returns stringified definition', ->
+
+            def = new ModelDefinition(EntityModel)
+            stringifiedJSON = def.toStringifiedJSON()
+            expect(-> JSON.parse(stringifiedJSON)).not.to.throw Error
+
+            parsed = JSON.parse(stringifiedJSON)
+            expect(parsed).to.eql def.toJSON()
