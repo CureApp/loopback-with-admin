@@ -51,27 +51,25 @@ class Main
 
     @private
     ###
-    @startLoopback: ->
+    @startLoopback: -> new Promise (resolve, reject) ->
 
-        return new Promise (resolve, reject) ->
+        timer = setTimeout ->
+            reject new Error('timeout after 30sec')
+        , 30 * 1000
 
-            timer = setTimeout ->
-                reject new Error('timeout after 30sec')
-            , 30 * 1000
+        lbProcess = require('child_process').spawn ['node', __dirname + '/../server/server.js']
+        lbProcess.stdout.setEncoding 'utf8'
 
-            lbProcess = require('child_process').spawn ['node', __dirname + '/../server/server.js']
-            lbProcess.stdout.setEncoding 'utf8'
+        prevChunk = ''
 
-            prevChunk = ''
+        lbProcess.stdout.on 'data', (chunk) ->
+            data = prevChunk + chunk
 
-            lbProcess.stdout.on 'data', (chunk) ->
-                data = prevChunk + chunk
+            if data.match('LOOPBACK_WITH_DOMAIN_STARTED')
+                clearTimeout timer
+                resolve()
 
-                if data.match('LOOPBACK_WITH_DOMAIN_STARTED')
-                    clearTimeout timer
-                    resolve()
-
-                prevChunk = chunk
+            prevChunk = chunk
 
 
 
