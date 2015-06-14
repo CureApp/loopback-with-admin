@@ -8,6 +8,7 @@
   "dependencies": {
     "compression": "^1.0.3",
     "errorhandler": "^1.1.1",
+    "es6-promise": "^2.3.0",
     "loopback": "^2.8.0",
     "loopback-boot": "^2.6.5",
     "loopback-datasource-juggler": "git+https://github.com/CureApp/loopback-datasource-juggler#cureapp-2.26.1",
