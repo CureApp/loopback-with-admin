@@ -94,9 +94,9 @@ describe 'ConfigJSONGenerator', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('middleware')
             expect(config).to.be.an 'object'
 
-        it 'loads model-config', ->
+        it 'does not load model-config', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('model-config')
-            expect(config).to.be.an 'object'
+            expect(config).not.to.exist
 
         it 'loads server', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('server')
@@ -147,10 +147,10 @@ describe 'ConfigJSONGenerator', ->
                 fs.unlinkSync @tmpdir + '/' + fname
             fs.rmdirSync @tmpdir
 
-        it 'generates six json files', ->
+        it 'generates five json files', ->
 
             @generator.generate()
-            expect(fs.readdirSync @tmpdir).to.have.length 6
+            expect(fs.readdirSync @tmpdir).to.have.length 5
 
         it 'generates config.json', ->
 

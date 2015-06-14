@@ -48,7 +48,6 @@ these are the config names.
 - admin
 - datasources
 - middleware
-- model-config
 - server
 - push-credentials
 

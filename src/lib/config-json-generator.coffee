@@ -14,7 +14,6 @@ class ConfigJSONGenerator
         'admin'
         'datasources'
         'middleware'
-        'model-config'
         'server'
         'push-credentials'
     ]
@@ -114,7 +113,10 @@ class ConfigJSONGenerator
     ###
     loadDefaultConfig: (configName) ->
 
-        require "#{@defaultConfigsPath}/#{configName}.json"
+        try
+            require "#{@defaultConfigsPath}/#{configName}.json"
+        catch e
+            return null
 
 
 module.exports = ConfigJSONGenerator
