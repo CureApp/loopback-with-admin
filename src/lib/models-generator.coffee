@@ -113,8 +113,8 @@ class ModelsGenerator
                 name = klass.getName()
                 entityModels.push domain.getModel name
             catch e
-                console.debug e
-                console.debug e.stack
+                console.log e
+                console.log e.stack
 
         return entityModels
 
