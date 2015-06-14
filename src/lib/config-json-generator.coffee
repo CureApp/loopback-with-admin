@@ -76,7 +76,7 @@ class ConfigJSONGenerator
     getMergedConfig: (configName) ->
 
         defaultConfig = @loadDefaultConfig(configName)
-        customConfig  = @customConfigLoader.load(configName)
+        customConfig  = @loadCustomConfig(configName)
 
         return @merge customConfig, defaultConfig
 

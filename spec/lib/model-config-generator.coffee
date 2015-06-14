@@ -22,8 +22,33 @@ describe 'ModelConfigGenerator', ->
         it 'loads model-config', ->
             config = new ModelConfigGenerator().loadDefaultConfig('model-config')
             expect(config).to.be.an 'object'
+            expect(Object.keys config).to.have.length 10
 
 
-    xdescribe 'loadCustomConfig', ->
+    describe 'loadCustomConfig', ->
 
-    xdescribe 'generate', ->
+        it 'returns model config for each entity names', ->
+            entityNames = [
+                'player'
+                'instrument'
+                'song'
+            ]
+            config = new ModelConfigGenerator(entityNames).loadCustomConfig()
+            expect(Object.keys config).to.have.length 3
+            expect(config.player).to.have.property 'dataSource', 'db'
+            expect(config.player).to.have.property 'public', true
+
+
+    describe 'getMergedConfig', ->
+
+        it 'returns model config for each entity names', ->
+            entityNames = [
+                'player'
+                'instrument'
+                'song'
+            ]
+            config = new ModelConfigGenerator(entityNames).getMergedConfig('model-config')
+            expect(Object.keys config).to.have.length 10 + 3
+
+
+

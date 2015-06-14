@@ -13,7 +13,7 @@ class ModelConfigGenerator extends ConfigJSONGenerator
     ###*
     @constructor
     ###
-    constructor: (@entityNames) ->
+    constructor: (@entityNames = []) ->
 
     ###*
     returns custom model-config calculated by domain
