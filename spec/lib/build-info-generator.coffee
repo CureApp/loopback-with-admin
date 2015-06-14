@@ -30,10 +30,9 @@ describe 'ModelConfigGenerator', ->
 
             domain = require('base-domain').createInstance(dirname: 'dummy-domain-dir')
             configDir = 'dummy-config-dir'
-            reset  = true
             env    = 'production'
 
-            @info = new BuildInfoGenerator(domain, configDir, env, reset).loadCustomConfig()
+            @info = new BuildInfoGenerator(domain, configDir, env).loadCustomConfig()
 
         it 'contains domain info', ->
             expect(@info).to.have.property 'domainType', 'Facade'
@@ -50,7 +49,4 @@ describe 'ModelConfigGenerator', ->
 
         it 'contains env info', ->
             expect(@info).to.have.property 'env', 'production'
-
-        it 'contains reset info', ->
-            expect(@info).to.have.property 'reset', true
 

@@ -54,7 +54,7 @@ class ConfigJSONGenerator
 
             path = @getDestinationPathByName(configName)
 
-            fs.writeFileSync(path, JSON.stringify config)
+            fs.writeFileSync(path, JSON.stringify config, null, 2)
 
             normalize path # for returning value
 

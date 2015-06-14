@@ -29,7 +29,7 @@ class ModelsGenerator
     ###
     generate: ->
 
-        entityModels = @getEntityModelsFromDomain(domain)
+        entityModels = @getEntityModelsFromDomain(@domain)
 
         entityNames = (entity.getName() for entity in entityModels)
         @generateModelConfig(entityModels)
@@ -72,7 +72,7 @@ class ModelsGenerator
 
             [modelName, ext] = filename.split('.')
             definition = require @builtinDir + '/' + filename
-            @generateJSONandJS(modelName, JSON.stringify(definition, null, 4))
+            @generateJSONandJS(modelName, JSON.stringify(definition, null, 2))
 
 
     ###*

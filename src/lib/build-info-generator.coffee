@@ -13,7 +13,7 @@ class BuildInfoGenerator extends ConfigJSONGenerator
     ###*
     @constructor
     ###
-    constructor: (@domain, @configDir, @env, @reset) ->
+    constructor: (@domain, @configDir, @env) ->
 
 
     ###*
@@ -24,7 +24,6 @@ class BuildInfoGenerator extends ConfigJSONGenerator
     ###
     loadCustomConfig: ->
         env        : @env
-        reset      : @reset
         configDir  : @configDir
         domainType : @domain.constructor?.name ? 'object'
         domainDir  : @domain.dirname

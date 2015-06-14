@@ -20,12 +20,15 @@ describe 'CustomConfigLoader', ->
 
             expect(loader.env).to.equal 'xxxx'
 
+            process.env.NODE_ENV = ''
+
 
         it 'is set value from constructor if set.', ->
             process.env.NODE_ENV = 'xxxx'
             loader = new CustomConfigLoader(configDir, 'local')
 
             expect(loader.env).to.equal 'local'
+            process.env.NODE_ENV = ''
 
 
     describe 'load', ->

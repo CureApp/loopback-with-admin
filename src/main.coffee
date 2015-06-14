@@ -1,4 +1,5 @@
 
+{ normalize } = require 'path'
 Promise = require('es6-promise').Promise
 
 ConfigJSONGenerator  = require './lib/config-json-generator'
@@ -16,38 +17,55 @@ class Main
     entry point.
     run loopback with domain, config
 
+    @method runWithDomain
+    @public
+    @static
     @param {Facade} domain  (the same interface as base-domain)
     @param {String} configDir directory containing config info
     @param {Object} [options.reset] reset previously-generated settings before generation
     @param {Object} [options.env] set environment (production|development|...)
     return {Promise}
     ###
-    @runWithDomain: (@domain, @configDir, options = {}) ->
+    @runWithDomain: (domain, configDir, options = {}) ->
 
-        { @env, reset } = options
+        main = new @(domain, configDir, options.env)
 
-        modelDefinitions = @loadModelDefinitions()
+        main.reset() if options.reset
+        main.generate()
 
-        @configJSONGenerator  = new ConfigJSONGenerator(@configDir, @env)
-        @modelsGenerator      = new ModelsGenerator(@domain, modelDefinitions)
-        @buildInfoGenerator   = new BuildInfoGenerator(@domain, @configDir, @env, reset)
-
-        @reset() if reset
-        @generate()
         @startLoopback()
 
 
+    ###*
+    @constructor
+    @private
+    ###
+    constructor: (@domain, @configDir, @env) ->
+
+        @env ?= process.env.NODE_ENV ? 'development'
+
+        modelDefinitions = @loadModelDefinitions()
+
+        @configJSONGenerator = new ConfigJSONGenerator(@configDir, @env)
+        @modelsGenerator     = new ModelsGenerator(@domain, modelDefinitions)
+        @buildInfoGenerator  = new BuildInfoGenerator(@domain, @configDir, @env)
+
 
     ###*
     @private
     ###
-    @loadModelDefinitions: -> require(@configDir + '/models')
+    loadModelDefinitions: ->
+        try
+            require(@configDir + '/model-definitions')
+        catch e
+            console.log e
+            return {}
 
 
     ###*
     @private
     ###
-    @generate: ->
+    generate: ->
         @configJSONGenerator.generate()
         @modelsGenerator.generate()
         @buildInfoGenerator.generate()
@@ -56,7 +74,7 @@ class Main
     ###*
     @private
     ###
-    @reset: ->
+    reset: ->
         @configJSONGenerator.reset()
         @modelsGenerator.reset()
         @buildInfoGenerator.reset()
@@ -70,12 +88,18 @@ class Main
     ###
     @startLoopback: -> new Promise (resolve, reject) ->
 
+        console.log "startLoopback"
         timer = setTimeout ->
             reject new Error('timeout after 30sec')
         , 30 * 1000
 
-        lbProcess = require('child_process').spawn ['node', __dirname + '/../server/server.js']
+        entryPath = normalize __dirname + '/../server/server.js'
+
+        lbProcess = require('child_process').spawn 'node', [entryPath]
         lbProcess.stdout.setEncoding 'utf8'
+
+        lbProcess.on 'exit', (code) -> reject new Error "process exit with error code #{code}"
+        lbProcess.on 'error', (e) -> reject new Error e
 
         prevChunk = ''
 
@@ -84,6 +108,8 @@ class Main
 
             if data.match('LOOPBACK_WITH_DOMAIN_STARTED')
                 clearTimeout timer
+                lbProcess.removeAllListeners()
+                lbProcess.stdout.removeAllListeners()
                 resolve()
 
             prevChunk = chunk

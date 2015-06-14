@@ -24,6 +24,7 @@ class Instrument extends Entity
     ###
     @properties:
         name      : @TYPES.STRING
+        player    : @TYPES.MODEL 'player'
     ### examples
         age         : @TYPES.NUMBER
         confirmed   : @TYPES.BOOLEAN

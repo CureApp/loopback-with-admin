@@ -39,7 +39,7 @@ class ModelDefinition
     @return {String} stringifiedJSON
     ###
     toStringifiedJSON: ->
-        JSON.stringify @toJSON()
+        JSON.stringify @toJSON(), null, 2
 
 
     ###*
