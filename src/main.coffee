@@ -27,23 +27,44 @@ class Main
 
         { @env, reset } = options
 
-        configJSONGenerator  = new ConfigJSONGenerator(@configDir, @env)
-        modelConfigGenerator = new ModelConfigGenerator(@domain)
-        modelsGenerator      = new ModelsGenerator(@domain)
-        buildInfoGenerator   = new BuildInfoGenerator(@domain, @configDir, @env, reset)
+        modelsSetting = @loadModelsSetting()
 
-        if reset
-            configJSONGenerator.reset()
-            modelConfigGenerator.reset()
-            modelsGenerator.reset()
-            buildInfoGenerator.reset()
+        @configJSONGenerator  = new ConfigJSONGenerator(@configDir, @env)
+        @modelConfigGenerator = new ModelConfigGenerator(@domain)
+        @modelsGenerator      = new ModelsGenerator(@domain, modelsSetting)
+        @buildInfoGenerator   = new BuildInfoGenerator(@domain, @configDir, @env, reset)
 
-        configJSONGenerator.generate()
-        modelsGenerator.generate()
-        modelConfigGenerator.generate()
-        buildInfoGenerator.generate()
+        @reset() if reset
+        @generate()
+        @startLoopback()
 
-        return @startLoopback()
+
+
+    ###*
+    @private
+    ###
+    @loadModelsSetting: -> require(@configDir + '/models')
+
+
+    ###*
+    @private
+    ###
+    @generate: ->
+        @configJSONGenerator.generate()
+        @modelsGenerator.generate()
+        @modelConfigGenerator.generate()
+        @buildInfoGenerator.generate()
+
+
+    ###*
+    @private
+    ###
+    @reset: ->
+        @configJSONGenerator.reset()
+        @modelConfigGenerator.reset()
+        @modelsGenerator.reset()
+        @buildInfoGenerator.reset()
+
 
 
     ###*
