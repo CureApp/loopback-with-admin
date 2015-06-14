@@ -15,14 +15,14 @@ describe 'CustomConfigLoader', ->
 
         it 'is set the same as environment variable "NODE_ENV" if set.', ->
 
-            process.env.NODE_ENV = '適当な値'
+            process.env.NODE_ENV = 'xxxx'
             loader = new CustomConfigLoader(configDir)
 
-            expect(loader.env).to.equal '適当な値'
+            expect(loader.env).to.equal 'xxxx'
 
 
         it 'is set value from constructor if set.', ->
-            process.env.NODE_ENV = '適当な値'
+            process.env.NODE_ENV = 'xxxx'
             loader = new CustomConfigLoader(configDir, 'local')
 
             expect(loader.env).to.equal 'local'
