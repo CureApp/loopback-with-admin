@@ -51,7 +51,8 @@ class ModelsGenerator
     @return
     ###
     reset: ->
-        rmdirSyncRecursive @destinationDir
+        if fs.existsSync @destinationDir
+            rmdirSyncRecursive @destinationDir
 
 
     ###*

@@ -106,5 +106,20 @@ describe 'ModelsGenerator', ->
             expect(fs.readdirSync @generator.destinationDir).to.have.length 8
 
 
+    describe 'reset', ->
+
+        before ->
+            @generator = new ModelsGenerator()
+            @generator.destinationDir = __dirname + '/c'
+            mkdirSyncRecursive __dirname + '/c'
+
+
+        it 'remove dir if exists', ->
+            @generator.reset()
+            expect(fs.existsSync(@generator.destinationDir)).to.be.false
+
+        it 'do nothing if dir does not exist', ->
+            expect(=> @generator.reset()).not.to.throw Error
+
     describe 'createModelSetting', ->
     describe 'generate', ->
