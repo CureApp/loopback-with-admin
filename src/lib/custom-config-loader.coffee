@@ -5,8 +5,7 @@ fs = require 'fs'
 class CustomConfigLoader
 
 
-    constructor: (@configPath, env) ->
-        @env ?= env or process.env.NODE_ENV or 'development'
+    constructor: (@configPath, @env) ->
 
 
     ###*
