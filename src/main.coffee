@@ -4,6 +4,7 @@ Promise = require('es6-promise').Promise
 ConfigJSONGenerator  = require './lib/config-json-generator'
 ModelConfigGenerator = require './lib/model-config-generator'
 ModelsGenerator      = require './lib/models-generator'
+BuildInfoGenerator   = require './lib/build-info-generator'
 
 ###*
 entry point
@@ -29,32 +30,49 @@ class Main
         configJSONGenerator  = new ConfigJSONGenerator(@configDir, @env)
         modelConfigGenerator = new ModelConfigGenerator(@domain)
         modelsGenerator      = new ModelsGenerator(@domain)
+        buildInfoGenerator   = new BuildInfoGenerator(@domain, @configDir, @env, reset)
 
         if reset
             configJSONGenerator.reset()
             modelConfigGenerator.reset()
             modelsGenerator.reset()
-
+            buildInfoGenerator.reset()
 
         configJSONGenerator.generate()
         modelsGenerator.generate()
         modelConfigGenerator.generate()
-
+        buildInfoGenerator.generate()
 
         return @startLoopback()
 
 
     ###*
-    run loopback
+    run loopback (in child process)
 
     @private
     ###
     @startLoopback: ->
 
-        app = require('../server/server')
+        return new Promise (resolve, reject) ->
 
-        return new Promise (resolve) ->
-            app.start resolve
+            timer = setTimeout ->
+                reject new Error('timeout after 30sec')
+            , 30 * 1000
+
+            lbProcess = require('child_process').spawn ['node', __dirname + '/../server/server.js']
+            lbProcess.stdout.setEncoding 'utf8'
+
+            prevChunk = ''
+
+            lbProcess.stdout.on 'data', (chunk) ->
+                data = prevChunk + chunk
+
+                if data.match('LOOPBACK_WITH_DOMAIN_STARTED')
+                    clearTimeout timer
+                    resolve()
+
+                prevChunk = chunk
+
 
 
 module.exports = Main

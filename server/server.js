@@ -11,6 +11,9 @@ app.start = function(callback) {
       app.listen(function() {
         app.emit('started');
         console.log('Web server listening at: %s', app.get('url'));
+
+        console.log('LOOPBACK_WITH_DOMAIN_STARTED');
+
         if (callback) callback();
       });
   });
