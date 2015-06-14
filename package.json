@@ -6,6 +6,7 @@
     "test": "grunt"
   },
   "dependencies": {
+    "coffee-script": "^1.9.3",
     "compression": "^1.0.3",
     "errorhandler": "^1.1.1",
     "es6-promise": "^2.3.0",
