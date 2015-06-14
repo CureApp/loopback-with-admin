@@ -30,7 +30,7 @@ class Main
 
         main = new @(domain, configDir, options.env)
 
-        main.reset() if options.reset
+        main.reset() unless options.reset is false
         main.generate()
 
         @startLoopback()

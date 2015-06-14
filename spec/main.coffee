@@ -98,7 +98,41 @@ describe 'Main', ->
             .catch done
 
         after ->
-            # @main.reset()
+            @main.reset()
+
 
     describe 'runWithDomain', ->
+
+        beforeEach ->
+            @called = {}
+
+            @reset = Main::reset
+            @generate = Main::generate
+            @startLoopback = Main.startLoopback
+
+            Main::reset = => @called.reset = true
+            Main::generate = => @called.generate = true
+            Main.startLoopback = => @called.startLoopback = true
+
+        afterEach ->
+            Main::reset = @reset
+            Main::generate = @generate
+            Main.startLoopback = @startLoopback
+
+        it 'invokes reset() unless reset is false', ->
+
+            Main.runWithDomain(domain, configDir)
+
+            expect(@called.reset).to.be.true
+            expect(@called.generate).to.be.true
+            expect(@called.startLoopback).to.be.true
+
+
+        it 'does not invoke reset if reset is false', ->
+
+            Main.runWithDomain(domain, configDir, reset: false)
+
+            expect(@called.reset).not.to.exist
+            expect(@called.generate).to.be.true
+            expect(@called.startLoopback).to.be.true
 
