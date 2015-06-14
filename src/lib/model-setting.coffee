@@ -6,6 +6,20 @@ class ModelSetting
 
     constructor: (@Entity, @customSetting = {}) ->
 
+        @aclType = @customSetting.aclType ? 'admin'
+
+        @setting =
+            name        : @getName()
+            plural      : @getName()
+            base        : "PersistedModel"
+            idInjection : true
+            properties  : {}
+            validations : []
+
+        @setting[k] = @customSetting[k] for k, v of @customSetting
+        delete @setting.aclType
+
+
     ###*
     get model name
 
@@ -15,6 +29,7 @@ class ModelSetting
     ###
     getName: ->
         @Entity.getName()
+
 
     ###*
     get stringified JSON contents about the model
@@ -26,23 +41,47 @@ class ModelSetting
     toStringifiedJSON: ->
         JSON.stringify @toJSON()
 
+
     ###*
+    get setting of the model
+
+    @method toJSON
+    @private
+    @return {Object} setting
+    ###
+    toJSON: ->
+        @setting.acls      = @getACL()
+        @setting.relations = @getRelations()
+
+        return @setting
+
+
+    ###*
+    is model extend User?
+
+    @private
+    @return {Boolean}
+    ###
+    isUser: ->
+        @setting.base is 'User'
+
+
+    ###*
+    get ACL by aclType
 
     @private
     ###
-    toJSON: ->
-        json =
-            name        : @getName()
-            plural      : @getName()
-            base        : "User"
-            idInjection : true
-            properties  : {}
-            validations : []
-            acls        : @getACL()
-
-
     getACL: ->
-        new AclGenerator(@aclType, @isUser).generate()
+        new AclGenerator(@aclType, @isUser()).generate()
+
+
+    ###*
+    get relations by models
+
+    @private
+    ###
+    getRelations: ->
+        return {} # WIP
 
 
 

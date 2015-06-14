@@ -22,7 +22,7 @@ class AclGenerator
     ###
     generate: ->
 
-        switch aclType
+        switch @aclType
 
             when 'admin'
                 @adminACL()
@@ -34,7 +34,7 @@ class AclGenerator
                 @publicReadACL()
 
             else
-                throw new Error """unknown aclType: #{aclType}"""
+                throw new Error """unknown aclType: #{@aclType}"""
 
         return @acl
 
