@@ -59,6 +59,20 @@ class ConfigJSONGenerator
             normalize path # for returning value
 
     ###*
+    remove previously-generated JSON files
+
+    @method reset
+    @public
+    ###
+    reset: ->
+        for configName in @configNames
+            path = @getDestinationPathByName(configName)
+            if fs.existsSync path
+                fs.unlinkSync(path)
+
+
+
+    ###*
     new config path
     ###
     getDestinationPathByName: (configName) ->

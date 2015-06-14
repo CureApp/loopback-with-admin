@@ -157,3 +157,27 @@ describe 'ConfigJSONGenerator', ->
             configJSONPath = normalize @tmpdir + '/config.json'
             files = @generator.generate()
             expect(files).to.include configJSONPath
+
+
+    describe 'reset', ->
+
+        before ->
+            @tmpdir = __dirname + '/tmp2'
+            try
+                fs.mkdirSync @tmpdir
+            catch e
+
+            @generator = new ConfigJSONGenerator(__dirname + '/sample-configs')
+            @generator.destinationPath = @tmpdir
+
+        after ->
+            fs.rmdirSync @tmpdir
+
+        it 'removes all generated files', ->
+
+            @generator.generate()
+            expect(fs.readdirSync @tmpdir).to.have.length 5
+
+            @generator.reset()
+            expect(fs.readdirSync @tmpdir).to.have.length 0
+

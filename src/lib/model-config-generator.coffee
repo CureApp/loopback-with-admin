@@ -31,8 +31,4 @@ class ModelConfigGenerator extends ConfigJSONGenerator
 
         return config
 
-
-    reset: ->
-        # WIP
-
 module.exports = ModelConfigGenerator
