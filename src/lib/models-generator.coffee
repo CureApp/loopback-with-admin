@@ -17,26 +17,38 @@ class ModelsGenerator
     @param {Facade} domain facade object in [base-domain](https://github.com/CureApp/base-domain)
     @param {Object} customModelDefinitions model definition data, compatible with loopback's model-config.json and aclType
     ###
-    constructor: (@domain, @customModelDefinitions = {}) ->
+    constructor: (domain, @customModelDefinitions = {}) ->
+
+        @entityModels = @getEntityModelsFromDomain(domain)
+
+        entityNames = (entity.getName() for entity in @entityModels)
+
+        @modelConfigGenerator = new ModelConfigGenerator(entityNames)
 
 
     ###*
-    generate JSON files with empty js files into common/models
+    generate model-config.json and model definition files
 
     @method generate
     @public
     @return {Array} generatedModelNames
     ###
     generate: ->
+        @generateModelConfig()
+        @generateDefinitions()
 
-        entityModels = @getEntityModelsFromDomain(@domain)
 
-        entityNames = (entity.getName() for entity in entityModels)
-        @generateModelConfig(entityNames)
+    ###*
+    generate JSON files with empty js files into common/models
+
+    @method generateDefinitions
+    @return {Array} generatedModelNames
+    ###
+    generateDefinitions: ->
 
         mkdirSyncRecursive @destinationDir
 
-        modelNames = for EntityModel in entityModels
+        modelNames = for EntityModel in @entityModels
 
             modelDefinition = @createModelDefinition(EntityModel)
             modelName = modelDefinition.getName()
@@ -58,7 +70,7 @@ class ModelsGenerator
         if fs.existsSync @destinationDir
             rmdirSyncRecursive @destinationDir
 
-        new ModelConfigGenerator().reset()
+        @modelConfigGenerator.reset()
 
 
     ###*
@@ -79,10 +91,9 @@ class ModelsGenerator
     @method generateModelConfig
     @private
     ###
-    generateModelConfig: (entityNames) ->
+    generateModelConfig: ->
 
-        modelConfigGenerator = new ModelConfigGenerator(entityNames)
-        modelConfigGenerator.generate()
+        @modelConfigGenerator.generate()
 
 
 
@@ -118,6 +129,8 @@ class ModelsGenerator
     @private
     ###
     getEntityModelsFromDomain: (domain) ->
+        return [] if not domain
+
         # FIXME base-domain should implement their own 'getEntityModels()'
 
         domainFiles = fs.readdirSync domain.dirname

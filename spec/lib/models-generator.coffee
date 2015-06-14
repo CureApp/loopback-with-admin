@@ -111,6 +111,7 @@ describe 'ModelsGenerator', ->
         before ->
             @generator = new ModelsGenerator()
             @generator.destinationDir = __dirname + '/c'
+            @generator.modelConfigGenerator.destinationPath = __dirname + '/c'
             mkdirSyncRecursive __dirname + '/c'
 
 
