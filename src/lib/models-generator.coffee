@@ -6,6 +6,7 @@ fs = require 'fs'
 { mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
 ModelDefinition = require './model-definition'
+ModelConfigGenerator = require './model-config-generator'
 
 class ModelsGenerator
 
@@ -29,6 +30,9 @@ class ModelsGenerator
     generate: ->
 
         entityModels = @getEntityModelsFromDomain(domain)
+
+        entityNames = (entity.getName() for entity in entityModels)
+        @generateModelConfig(entityModels)
 
         mkdirSyncRecursive @destinationDir
 
@@ -54,6 +58,8 @@ class ModelsGenerator
         if fs.existsSync @destinationDir
             rmdirSyncRecursive @destinationDir
 
+        new ModelConfigGenerator().reset()
+
 
     ###*
 
@@ -67,6 +73,17 @@ class ModelsGenerator
             [modelName, ext] = filename.split('.')
             definition = require @builtinDir + '/' + filename
             @generateJSONandJS(modelName, JSON.stringify(definition, null, 4))
+
+
+    ###*
+    @method generateModelConfig
+    @private
+    ###
+    generateModelConfig: (entityNames) ->
+
+        modelConfigGenerator = new ModelConfigGenerator(entityNames)
+        modelConfigGenerator.generate()
+
 
 
     ###*

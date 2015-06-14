@@ -13,8 +13,7 @@ class ModelConfigGenerator extends ConfigJSONGenerator
     ###*
     @constructor
     ###
-    constructor: (@domain) ->
-
+    constructor: (@entityNames) ->
 
     ###*
     returns custom model-config calculated by domain
@@ -24,7 +23,16 @@ class ModelConfigGenerator extends ConfigJSONGenerator
     ###
     loadCustomConfig: ->
 
-        return {}
+        config = {}
+        for entityName in @entityNames
+            config[entityName] =
+                dataSource: 'db'
+                public: true
 
+        return config
+
+
+    reset: ->
+        # WIP
 
 module.exports = ModelConfigGenerator

@@ -2,7 +2,6 @@
 Promise = require('es6-promise').Promise
 
 ConfigJSONGenerator  = require './lib/config-json-generator'
-ModelConfigGenerator = require './lib/model-config-generator'
 ModelsGenerator      = require './lib/models-generator'
 BuildInfoGenerator   = require './lib/build-info-generator'
 
@@ -30,7 +29,6 @@ class Main
         modelDefinitions = @loadModelDefinitions()
 
         @configJSONGenerator  = new ConfigJSONGenerator(@configDir, @env)
-        @modelConfigGenerator = new ModelConfigGenerator(@domain)
         @modelsGenerator      = new ModelsGenerator(@domain, modelDefinitions)
         @buildInfoGenerator   = new BuildInfoGenerator(@domain, @configDir, @env, reset)
 
@@ -52,7 +50,6 @@ class Main
     @generate: ->
         @configJSONGenerator.generate()
         @modelsGenerator.generate()
-        @modelConfigGenerator.generate()
         @buildInfoGenerator.generate()
 
 
@@ -61,7 +58,6 @@ class Main
     ###
     @reset: ->
         @configJSONGenerator.reset()
-        @modelConfigGenerator.reset()
         @modelsGenerator.reset()
         @buildInfoGenerator.reset()
 
