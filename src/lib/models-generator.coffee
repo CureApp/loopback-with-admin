@@ -32,7 +32,7 @@ class ModelsGenerator
         entityModels = @getEntityModelsFromDomain(@domain)
 
         entityNames = (entity.getName() for entity in entityModels)
-        @generateModelConfig(entityModels)
+        @generateModelConfig(entityNames)
 
         mkdirSyncRecursive @destinationDir
 
