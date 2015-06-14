@@ -88,20 +88,22 @@ class Main
     ###
     @startLoopback: -> new Promise (resolve, reject) ->
 
-        console.log "startLoopback"
-        timer = setTimeout ->
-            reject new Error('timeout after 30sec')
-        , 30 * 1000
-
         entryPath = normalize __dirname + '/../server/server.js'
 
         lbProcess = require('child_process').spawn 'node', [entryPath]
         lbProcess.stdout.setEncoding 'utf8'
 
         lbProcess.on 'exit', (code) -> reject new Error "process exit with error code #{code}"
-        lbProcess.on 'error', (e) -> reject new Error e
+        lbProcess.on 'error', (e) ->
+            lbProcess.kill()
+            reject new Error e
 
         prevChunk = ''
+
+        timer = setTimeout ->
+            lbProcess.kill()
+            reject new Error('timeout after 30sec')
+        , 30 * 1000
 
         lbProcess.stdout.on 'data', (chunk) ->
             data = prevChunk + chunk
@@ -110,10 +112,10 @@ class Main
                 clearTimeout timer
                 lbProcess.removeAllListeners()
                 lbProcess.stdout.removeAllListeners()
-                resolve()
+
+                resolve(lbProcess)
 
             prevChunk = chunk
-
 
 
 module.exports = Main

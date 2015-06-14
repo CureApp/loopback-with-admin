@@ -81,18 +81,24 @@ describe 'Main', ->
             expect(counter).to.equal 3
 
 
-    xdescribe '@startLoopback', ->
+    describe '@startLoopback', ->
+
+        before ->
+            @main = new Main(domain, configDir)
 
         it 'spawns loopback process', (done) ->
             @timeout 30000
 
-            main = new Main(domain, configDir).generate()
+            @main.reset()
+            @main.generate()
 
-            Main.startLoopback().then ->
-                console.log "then"
+            Main.startLoopback().then (lbProcess) ->
+                lbProcess.kill()
                 done()
             .catch done
 
+        after ->
+            # @main.reset()
 
     describe 'runWithDomain', ->
 
