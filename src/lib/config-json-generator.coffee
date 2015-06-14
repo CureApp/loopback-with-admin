@@ -107,11 +107,25 @@ class ConfigJSONGenerator
 
 
     ###*
+    load custom config
+
+    @method loadCustomConfig
+    @param {String} configName
+    @protected
+    ###
+    loadCustomConfig: (configName) ->
+
+        @customConfigLoader.load(configName)
+
+
+    ###*
     load default config JSON files
 
     @private
     ###
     loadDefaultConfig: (configName) ->
+
+        console.log @defaultConfigsPath
 
         try
             require "#{@defaultConfigsPath}/#{configName}.json"
