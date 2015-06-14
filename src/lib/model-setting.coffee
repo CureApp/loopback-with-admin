@@ -1,7 +1,10 @@
 
+
+AclGenerator = require './acl-generator'
+
 class ModelSetting
 
-    constructor: (@Entity, @acl, @config) ->
+    constructor: (@Entity, @customSetting = {}) ->
 
     ###*
     get model name
@@ -10,7 +13,7 @@ class ModelSetting
     @public
     @return {String} modelName
     ###
-    getName: -> 
+    getName: ->
         @Entity.getName()
 
     ###*
@@ -35,7 +38,12 @@ class ModelSetting
             idInjection : true
             properties  : {}
             validations : []
-            acls        : []
+            acls        : @getACL()
+
+
+    getACL: ->
+        new AclGenerator(@aclType, @isUser).generate()
+
 
 
 module.exports = ModelSetting

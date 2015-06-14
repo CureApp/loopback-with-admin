@@ -8,21 +8,19 @@ ACL is Array of access control information
 ###
 class AclGenerator
 
-    constructor: (@modelSetting) ->
+    constructor: (@aclType = 'admin', @isUser = false) ->
         @acl = []
 
 
     ###*
     get ACL by aclType
 
-    @method generateByType
+    @method generate
     @public
     @param {String} aclType
     return {Array} ACL
     ###
-    generateByType: (aclType) ->
-
-        aclType ?= 'admin'
+    generate: ->
 
         switch aclType
 
@@ -50,7 +48,7 @@ class AclGenerator
     adminACL: ->
         @commonACL()
 
-        if @modelSetting.isUserModel()
+        if @isUser
             @adminUserACL()
         @
 
@@ -111,7 +109,7 @@ class AclGenerator
             principalId: 'admin'
             permission: 'ALLOW'
 
-        if @modelSetting.isUserModel()
+        if @isUser
             @userACL()
         @
 

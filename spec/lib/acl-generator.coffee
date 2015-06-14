@@ -3,13 +3,7 @@ AclGenerator = require '../../src/lib/acl-generator'
 
 describe 'AclGenerator', ->
 
-    userModelSetting =
-        isUserModel: -> true
-
-    nonUserModelSetting =
-        isUserModel: -> false
-
-    commonACL = new AclGenerator(nonUserModelSetting).commonACL().acl
+    commonACL = new AclGenerator().commonACL().acl
 
     describe 'userACL', ->
 
@@ -40,7 +34,7 @@ describe 'AclGenerator', ->
         describe 'with non-user model', ->
 
             before ->
-                @aclGenerator = new AclGenerator(nonUserModelSetting)
+                @aclGenerator = new AclGenerator()
                 @aclGenerator.commonACL()
 
             it 'appends two ACs', ->
@@ -64,13 +58,13 @@ describe 'AclGenerator', ->
         describe 'with user model', ->
 
             it 'appends four ACs', ->
-                aclGenerator = new AclGenerator(userModelSetting)
+                aclGenerator = new AclGenerator(null, true)
                 aclGenerator.commonACL()
                 expect(aclGenerator.acl).to.have.length 4
 
 
             it 'userACL() is called after basic ACL are appended', (done) ->
-                aclGenerator = new AclGenerator(userModelSetting)
+                aclGenerator = new AclGenerator(null, true)
 
                 aclGenerator.userACL = ->
                     expect(aclGenerator.acl).to.have.length 2
@@ -108,7 +102,7 @@ describe 'AclGenerator', ->
 
             it 'appends two ACs, the same as commonACL()', ->
 
-                aclGenerator = new AclGenerator(nonUserModelSetting)
+                aclGenerator = new AclGenerator()
                 aclGenerator.adminACL()
                 expect(aclGenerator.acl).to.have.length 2
                 expect(aclGenerator.acl).to.deep.equal commonACL
@@ -117,13 +111,13 @@ describe 'AclGenerator', ->
         describe 'with user model', ->
 
             it 'appends six ACs', ->
-                aclGenerator = new AclGenerator(userModelSetting)
+                aclGenerator = new AclGenerator(null, true)
                 aclGenerator.adminACL()
                 expect(aclGenerator.acl).to.have.length 6
 
 
             it 'userACL(), adminUserACL() is called after basic ACL are appended', (done) ->
-                aclGenerator = new AclGenerator(userModelSetting)
+                aclGenerator = new AclGenerator(null, true)
                 userACLCalled = false
 
                 aclGenerator.userACL = ->
@@ -140,7 +134,7 @@ describe 'AclGenerator', ->
     describe 'ownerACL', ->
         describe 'with non-user model', ->
             before ->
-                @aclGenerator = new AclGenerator(nonUserModelSetting)
+                @aclGenerator = new AclGenerator()
                 @aclGenerator.ownerACL()
 
             it 'appends five ACs, the first two are the same as commonACL()', ->
@@ -159,7 +153,7 @@ describe 'AclGenerator', ->
 
         describe 'with user model', ->
             it 'appends seven ACs', ->
-                aclGenerator = new AclGenerator(userModelSetting)
+                aclGenerator = new AclGenerator(null, true)
                 aclGenerator.ownerACL()
                 expect(aclGenerator.acl).to.have.length 7
 
@@ -167,7 +161,7 @@ describe 'AclGenerator', ->
     describe 'publicReadACL', ->
         describe 'with non-user model', ->
             before ->
-                @aclGenerator = new AclGenerator(nonUserModelSetting)
+                @aclGenerator = new AclGenerator()
                 @aclGenerator.publicReadACL()
 
             it 'appends three ACs, the first two are the same as commonACL()', ->
@@ -185,12 +179,9 @@ describe 'AclGenerator', ->
 
         describe 'with user model', ->
             it 'appends five ACs', ->
-                aclGenerator = new AclGenerator(userModelSetting)
+                aclGenerator = new AclGenerator(null, true)
                 aclGenerator.publicReadACL()
                 expect(aclGenerator.acl).to.have.length 5
 
 
-
-
-
-    describe 'generateByType', ->
+    describe 'generate', ->
