@@ -125,8 +125,6 @@ class ConfigJSONGenerator
     ###
     loadDefaultConfig: (configName) ->
 
-        console.log @defaultConfigsPath
-
         try
             require "#{@defaultConfigsPath}/#{configName}.json"
         catch e
