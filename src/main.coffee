@@ -27,11 +27,11 @@ class Main
 
         { @env, reset } = options
 
-        modelsSetting = @loadModelsSetting()
+        modelDefinitions = @loadModelDefinitions()
 
         @configJSONGenerator  = new ConfigJSONGenerator(@configDir, @env)
         @modelConfigGenerator = new ModelConfigGenerator(@domain)
-        @modelsGenerator      = new ModelsGenerator(@domain, modelsSetting)
+        @modelsGenerator      = new ModelsGenerator(@domain, modelDefinitions)
         @buildInfoGenerator   = new BuildInfoGenerator(@domain, @configDir, @env, reset)
 
         @reset() if reset
@@ -43,7 +43,7 @@ class Main
     ###*
     @private
     ###
-    @loadModelsSetting: -> require(@configDir + '/models')
+    @loadModelDefinitions: -> require(@configDir + '/models')
 
 
     ###*

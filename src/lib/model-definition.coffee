@@ -2,13 +2,13 @@
 
 AclGenerator = require './acl-generator'
 
-class ModelSetting
+class ModelDefinition
 
-    constructor: (@Entity, @customSetting = {}) ->
+    constructor: (@Entity, @customDefinition = {}) ->
 
-        @aclType = @customSetting.aclType ? 'admin'
+        @aclType = @customDefinition.aclType ? 'admin'
 
-        @setting =
+        @definition =
             name        : @getName()
             plural      : @getName()
             base        : "PersistedModel"
@@ -16,8 +16,8 @@ class ModelSetting
             properties  : {}
             validations : []
 
-        @setting[k] = @customSetting[k] for k, v of @customSetting
-        delete @setting.aclType
+        @definition[k] = @customDefinition[k] for k, v of @customDefinition
+        delete @definition.aclType
 
 
     ###*
@@ -43,17 +43,17 @@ class ModelSetting
 
 
     ###*
-    get setting of the model
+    get definition of the model
 
     @method toJSON
     @private
-    @return {Object} setting
+    @return {Object} definition
     ###
     toJSON: ->
-        @setting.acls      = @getACL()
-        @setting.relations = @getRelations()
+        @definition.acls      = @getACL()
+        @definition.relations = @getRelations()
 
-        return @setting
+        return @definition
 
 
     ###*
@@ -63,7 +63,7 @@ class ModelSetting
     @return {Boolean}
     ###
     isUser: ->
-        @setting.base is 'User'
+        @definition.base is 'User'
 
 
     ###*
@@ -85,4 +85,4 @@ class ModelSetting
 
 
 
-module.exports = ModelSetting
+module.exports = ModelDefinition

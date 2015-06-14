@@ -5,7 +5,7 @@ fs = require 'fs'
 
 { mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
-ModelSetting = require './model-setting'
+ModelDefinition = require './model-definition'
 
 class ModelsGenerator
 
@@ -14,9 +14,9 @@ class ModelsGenerator
 
     ###*
     @param {Facade} domain facade object in [base-domain](https://github.com/CureApp/base-domain)
-    @param {Object} customModelsSetting model setting data, compatible with loopback's model-config.json and aclType
+    @param {Object} customModelDefinitions model definition data, compatible with loopback's model-config.json and aclType
     ###
-    constructor: (@domain, @customModelsSetting = {}) ->
+    constructor: (@domain, @customModelDefinitions = {}) ->
 
 
     ###*
@@ -34,9 +34,9 @@ class ModelsGenerator
 
         modelNames = for EntityModel in entityModels
 
-            modelSetting = @createModelSetting(EntityModel)
-            modelName = modelSetting.getName()
-            @generateJSONandJS(modelName, modelSetting.toStringifiedJSON())
+            modelDefinition = @createModelDefinition(EntityModel)
+            modelName = modelDefinition.getName()
+            @generateJSONandJS(modelName, modelDefinition.toStringifiedJSON())
 
         builtinModelNames = @generateBuiltinModels()
 
@@ -65,8 +65,8 @@ class ModelsGenerator
         for filename in fs.readdirSync @builtinDir
 
             [modelName, ext] = filename.split('.')
-            setting = require @builtinDir + '/' + filename
-            @generateJSONandJS(modelName, JSON.stringify(setting, null, 4))
+            definition = require @builtinDir + '/' + filename
+            @generateJSONandJS(modelName, JSON.stringify(definition, null, 4))
 
 
     ###*
@@ -120,16 +120,16 @@ class ModelsGenerator
 
 
     ###*
-    create ModelSetting instance
+    create ModelDefinition instance
 
     @private
     ###
-    createModelSetting: (EntityModel) ->
+    createModelDefinition: (EntityModel) ->
 
         entityName = EntityModel.getName()
-        customModelSetting = @customModelsSetting[entityName]
+        customModelDefinition = @customModelDefinitions[entityName]
 
-        return new ModelSetting(EntityModel, customModelSetting)
+        return new ModelDefinition(EntityModel, customModelDefinition)
 
 
 module.exports = ModelsGenerator

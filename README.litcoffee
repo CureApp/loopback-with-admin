@@ -21,13 +21,14 @@ before running, you can prepare a directory which contains custom config informa
 
 ```text
 (config-dir) # any name is acceptable
+|-- model-definitions.coffee
 |-- common
 |   |-- server.coffee
 |   `-- admin.coffee
 |-- development
 |   `-- datasources.coffee
-|-- production
-|   `-- datasources.coffee
+`-- production
+    `-- datasources.coffee
 ```
 
 

@@ -121,5 +121,5 @@ describe 'ModelsGenerator', ->
         it 'do nothing if dir does not exist', ->
             expect(=> @generator.reset()).not.to.throw Error
 
-    describe 'createModelSetting', ->
+    describe 'createModelDefinition', ->
     describe 'generate', ->
