@@ -1,6 +1,5 @@
 
-{ normalize } = require 'path'
-Promise = require('es6-promise').Promise
+LoopbackLauncher = require './lib/loopback-launcher'
 
 ConfigJSONGenerator  = require './lib/config-json-generator'
 ModelsGenerator      = require './lib/models-generator'
@@ -86,36 +85,7 @@ class Main
 
     @private
     ###
-    @startLoopback: -> new Promise (resolve, reject) ->
-
-        entryPath = normalize __dirname + '/../server/server.js'
-
-        lbProcess = require('child_process').spawn 'node', [entryPath]
-        lbProcess.stdout.setEncoding 'utf8'
-
-        lbProcess.on 'exit', (code) -> reject new Error "process exit with error code #{code}"
-        lbProcess.on 'error', (e) ->
-            lbProcess.kill()
-            reject new Error e
-
-        prevChunk = ''
-
-        timer = setTimeout ->
-            lbProcess.kill()
-            reject new Error('timeout after 30sec')
-        , 30 * 1000
-
-        lbProcess.stdout.on 'data', (chunk) ->
-            data = prevChunk + chunk
-
-            if data.match('LOOPBACK_WITH_DOMAIN_STARTED')
-                clearTimeout timer
-                lbProcess.removeAllListeners()
-                lbProcess.stdout.removeAllListeners()
-
-                resolve(lbProcess)
-
-            prevChunk = chunk
-
+    @startLoopback: ->
+        new LoopbackLauncher().launch()
 
 module.exports = Main

@@ -2,10 +2,10 @@
 { normalize } = require 'path'
 
 Main = require '../src/main'
+LoopbackLauncher = require '../src/lib/loopback-launcher'
 
 domainDir = normalize __dirname + '/lib/domains/music-live'
 domain = require('base-domain').createInstance dirname: domainDir
-
 configDir = normalize __dirname + '/lib/music-live-configs'
 
 describe 'Main', ->
@@ -84,21 +84,15 @@ describe 'Main', ->
     describe '@startLoopback', ->
 
         before ->
-            @main = new Main(domain, configDir)
-
-        it 'spawns loopback process', (done) ->
-            @timeout 30000
-
-            @main.reset()
-            @main.generate()
-
-            Main.startLoopback().then (lbProcess) ->
-                lbProcess.kill()
-                done()
-            .catch done
+            @launch = LoopbackLauncher::launch
+            LoopbackLauncher::launch = => @cb()
 
         after ->
-            @main.reset()
+            LoopbackLauncher::launch = @launch
+
+        it 'launch loopback-launcher', (done) ->
+            @cb = done
+            Main.startLoopback()
 
 
     describe 'runWithDomain', ->
