@@ -65,7 +65,7 @@ describe 'ModelDefinition', ->
 
 
     describe 'getRelations', ->
-        it 'returns relations by EntityModel\'s property', ->
+        it 'returns "belongsTo" relations by EntityModel\'s property', ->
 
             rels = new ModelDefinition(EntityModel).getRelations()
 
@@ -73,6 +73,25 @@ describe 'ModelDefinition', ->
             expect(rels.em).to.have.property 'type', 'belongsTo'
             expect(rels.em).to.have.property 'model', 'ext-model'
             expect(rels.em).to.have.property 'foreignKey', 'extModelId'
+
+
+    describe 'setHasManyRelation', ->
+
+        it 'set "hasMany" relation with given model name', ->
+            def = new ModelDefinition(EntityModel)
+            def.setHasManyRelation('abcd')
+
+            rels = def.definition.relations
+
+            expect(rels).to.have.property 'abcd'
+            expect(rels.abcd).to.have.property 'type', 'hasMany'
+            expect(rels.abcd).to.have.property 'model', 'abcd'
+            expect(rels.abcd).to.have.property 'foreignKey', ''
+
+
+
+
+
 
 
     describe 'toJSON', ->

@@ -19,10 +19,9 @@ class ModelsGenerator
     ###
     constructor: (domain, @customModelDefinitions = {}) ->
 
-        @entityModels = @getEntityModelsFromDomain(domain)
+        @definitions = @createModelDefinitionsFromDomain(domain)
 
-        entityNames = (entity.getName() for entity in @entityModels)
-
+        entityNames = (entity.getName() for entity in @definitions)
         @modelConfigGenerator = new ModelConfigGenerator(entityNames)
 
 
@@ -36,7 +35,7 @@ class ModelsGenerator
     generate: ->
 
         modelConfig = @generateModelConfig()
-        modelNames  = @generateDefinitions()
+        modelNames  = @generateDefinitionFiles()
 
         config: modelConfig
         names : modelNames
@@ -45,18 +44,16 @@ class ModelsGenerator
     ###*
     generate JSON files with empty js files into common/models
 
-    @method generateDefinitions
+    @method generateDefinitionFiles
     @return {Array} generatedModelNames
     ###
-    generateDefinitions: ->
+    generateDefinitionFiles: ->
 
         mkdirSyncRecursive @destinationDir
 
-        modelNames = for EntityModel in @entityModels
+        modelNames = for name, definition of @definitions
 
-            modelDefinition = @createModelDefinition(EntityModel)
-            modelName = modelDefinition.getName()
-            @generateJSONandJS(modelName, modelDefinition.toStringifiedJSON())
+            @generateJSONandJS(name, definition.toStringifiedJSON())
 
         builtinModelNames = @generateBuiltinModels()
 
@@ -128,6 +125,39 @@ class ModelsGenerator
 
 
     ###*
+    create ModelDefinition instances
+
+    @private
+    ###
+    createModelDefinitionsFromDomain: (domain) ->
+
+        definitions = {}
+
+        for EntityModel in @getEntityModelsFromDomain(domain)
+
+            entityName = EntityModel.getName()
+            customModelDefinition = @customModelDefinitions[entityName]
+
+            definitions[entityName] = new ModelDefinition(EntityModel, customModelDefinition)
+
+        @setHasManyRelations(definitions)
+
+        return definitions
+
+
+    ###*
+    set "hasMany" relations
+
+    @private
+    ###
+    setHasManyRelations: (definitions) ->
+
+        for modelName, definition of definitions
+            for relModelName of definition.getEntityPropInfo()
+                definitions[relModelName].setHasManyRelation(modelName)
+
+
+    ###*
     get entity models from domain
 
     @private
@@ -151,19 +181,6 @@ class ModelsGenerator
                 console.log e.stack
 
         return entityModels
-
-
-    ###*
-    create ModelDefinition instance
-
-    @private
-    ###
-    createModelDefinition: (EntityModel) ->
-
-        entityName = EntityModel.getName()
-        customModelDefinition = @customModelDefinitions[entityName]
-
-        return new ModelDefinition(EntityModel, customModelDefinition)
 
 
 module.exports = ModelsGenerator

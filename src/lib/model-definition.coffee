@@ -19,6 +19,9 @@ class ModelDefinition
         @definition[k] = @customDefinition[k] for k, v of @customDefinition
         delete @definition.aclType
 
+        @definition.acls      = @getACL()
+        @definition.relations = @getRelations()
+
 
     ###*
     get model name
@@ -50,8 +53,6 @@ class ModelDefinition
     @return {Object} definition
     ###
     toJSON: ->
-        @definition.acls      = @getACL()
-        @definition.relations = @getRelations()
 
         return @definition
 
@@ -75,17 +76,30 @@ class ModelDefinition
         new AclGenerator(@aclType, @isUser()).generate()
 
 
+
     ###*
-    get relations by models
+    get property info of sub-entities
+
+    @method getEntityPropInfo
+    ###
+    getEntityPropInfo: ->
+        info = {}
+        propInfo = @Entity.getPropInfo()
+
+        for prop in @Entity.getEntityProps()
+            info[prop] = propInfo.dic[prop]
+
+        return info
+
+
+    ###*
+    get "belongsTo" relations
 
     @private
     ###
     getRelations: ->
         rels = {}
-        propInfo = @Entity.getPropInfo()
-
-        for prop in @Entity.getEntityProps()
-            typeInfo = propInfo.dic[prop]
+        for prop, typeInfo of @getEntityPropInfo()
 
             rels[prop] =
                 type       : 'belongsTo'
@@ -93,6 +107,21 @@ class ModelDefinition
                 foreignKey : typeInfo.idPropName
 
         return rels
+
+
+    ###*
+    set "hasMany" relations
+
+    @method setHasManyRelation
+    @param {String} relModel
+    ###
+    setHasManyRelation: (relModel) ->
+        rel =
+            type       : 'hasMany'
+            model      : relModel
+            foreignKey : ''
+
+        @definition.relations[relModel] = rel
 
 
 module.exports = ModelDefinition

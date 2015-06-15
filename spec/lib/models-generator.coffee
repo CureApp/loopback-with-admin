@@ -4,7 +4,8 @@
 fs = require 'fs'
 
 ModelsGenerator = require '../../src/lib/models-generator'
-
+ModelDefinition = require '../../src/lib/model-definition'
+BaseDomain = require('base-domain')
 
 describe 'ModelsGenerator', ->
 
@@ -18,6 +19,34 @@ describe 'ModelsGenerator', ->
             context = vm.createContext module: {}
 
             vm.runInContext(mGenerator.getEmptyJSContent(), context)
+
+
+    describe 'setHasManyRelations', ->
+
+        before ->
+            @domain = BaseDomain.createInstance()
+
+            class A extends BaseDomain.Entity
+                @properties:
+                    b: @TYPES.MODEL 'b'
+
+            class B extends BaseDomain.Entity
+
+            @domain.addClass('a', A)
+            @domain.addClass('b', B)
+
+        it 'set has many relations to related model-definitions', ->
+
+            mGenerator = new ModelsGenerator()
+
+            defA = new ModelDefinition @domain.getModel 'a'
+            defB = new ModelDefinition @domain.getModel 'b'
+
+            mGenerator.setHasManyRelations(a: defA, b: defB)
+
+            expect(defB.toJSON().relations).to.have.property 'a'
+            expect(defB.toJSON().relations.a).to.have.property 'type', 'hasMany'
+
 
 
     describe 'getEntityModelsFromDomain', ->
@@ -122,7 +151,6 @@ describe 'ModelsGenerator', ->
         it 'do nothing if dir does not exist', ->
             expect(=> @generator.reset()).not.to.throw Error
 
-    describe 'createModelDefinition', ->
 
     describe 'generate', ->
 
