@@ -86,6 +86,34 @@ you can set the same properties as these JSONs.
  apnsKeyData     | key pem contents for APNs
 
 
+# model definitions
+
+    module.exports =
+        player: # model name
+            base: 'User'  # the same as loopback model settings.base
+            aclType: 'admin' # specific for this system
+
+        instrument:
+            aclType: 'owner-read'
+
+
+
+the same format as [loopback model definition](http://docs.strongloop.com/display/public/LB/Customizing+models)
+except "aclType" value.
+name, base, relations and properties are automatically set from domain information.
+
+## aclType
+loopback-with-domain generates acls from aclType.
+
+three types are available.
+
+ aclType     | meaning
+-------------|-----------------------------------------------------
+ admin       | only admin can CRUD the model
+ owner       | admin and the owner of the model can CRUD
+ public-read | everyone can READ the model and admin can CRUD
+
+
 # switching environment
 
 running script with environment variable "NODE\_ENV" like
@@ -125,7 +153,6 @@ then, loopback-with-domain selects configs in "local" directory.
     lbWithDomain.runWithDomain(domain, configDir, env)
 
 env is prior to NODE\_ENV settings.
-
 
 # modified loopback-datasource-juggler
 
