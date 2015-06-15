@@ -6,7 +6,7 @@ fs = require 'fs'
 BuildInfoGenerator = require '../../src/lib/build-info-generator'
 
 
-describe 'ModelConfigGenerator', ->
+describe 'BuildInfoGenerator', ->
 
 
     describe 'getDestinationPathByName', ->
@@ -14,7 +14,7 @@ describe 'ModelConfigGenerator', ->
         it 'returns build-info.json', ->
             generator = new BuildInfoGenerator()
             path = generator.getDestinationPathByName('build-info')
-            expect(path).to.equal normalize __dirname + '/../../server/build-info.json'
+            expect(path).to.equal normalize __dirname + '/../../loopback/server/build-info.json'
 
 
     describe 'loadDefaultConfig', ->

@@ -10,7 +10,7 @@ ModelConfigGenerator = require './model-config-generator'
 
 class ModelsGenerator
 
-    destinationDir : normalize "#{__dirname}/../../common/models"
+    destinationDir : normalize "#{__dirname}/../../loopback/common/models"
     builtinDir     : normalize "#{__dirname}/../data/models"
 
     ###*

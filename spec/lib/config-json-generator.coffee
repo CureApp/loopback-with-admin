@@ -16,12 +16,12 @@ describe 'ConfigJSONGenerator', ->
 
         it 'returns #{configName}.json', ->
             path = @generator.getDestinationPathByName('admin')
-            expect(path).to.equal normalize __dirname + '/../../server/admin.json'
+            expect(path).to.equal normalize __dirname + '/../../loopback/server/admin.json'
 
 
         it 'returns config.json when "server" is given', ->
             path = @generator.getDestinationPathByName('server')
-            expect(path).to.equal normalize __dirname + '/../../server/config.json'
+            expect(path).to.equal normalize __dirname + '/../../loopback/server/config.json'
 
 
     describe 'merge', ->

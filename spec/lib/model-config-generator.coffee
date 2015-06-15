@@ -14,7 +14,7 @@ describe 'ModelConfigGenerator', ->
         it 'returns model-config.json', ->
             generator = new ModelConfigGenerator()
             path = generator.getDestinationPathByName('model-config')
-            expect(path).to.equal normalize __dirname + '/../../server/model-config.json'
+            expect(path).to.equal normalize __dirname + '/../../loopback/server/model-config.json'
 
 
     describe 'loadDefaultConfig', ->

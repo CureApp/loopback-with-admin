@@ -4,7 +4,7 @@ Promise = require('es6-promise').Promise
 
 class LoopbackLauncher
 
-    entryPath: normalize __dirname + '/../../server/server.js'
+    entryPath: normalize __dirname + '/../../loopback/server/server.js'
 
     constructor: (@options = {}) ->
 
