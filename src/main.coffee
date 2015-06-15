@@ -22,7 +22,7 @@ class Main
     @public
     @static
     @param {Facade} domain  (the same interface as base-domain)
-    @param {String} configDir directory containing config info
+    @param {String} [configDir] directory containing config info
     @param {Boolean} [options.reset] reset previously-generated settings before generation
     @param {String} [options.env] set environment (production|development|...)
     @param {Boolean} [options.spawn] if true, spawns child process of loopback
