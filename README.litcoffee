@@ -6,6 +6,12 @@ domain is in this context business logic, the same as Domain-Driven Design (DDD)
 
 connection with [base-domain](https://github.com/CureApp/base-domain)
 
+also, this loopback extends original [loopback](https://github.com/strongloop/loopback).
+
+- admin
+- push notification
+
+follow these section to see how to use admin and push notification
 
 # install
 
@@ -13,8 +19,19 @@ connection with [base-domain](https://github.com/CureApp/base-domain)
 npm install loopback-with-domain
 ```
 
+# simplest run, without domain
 
-# run
+you can just run loopback without domain information by
+
+    require('loopback-with-domain').runWithoutDomain().then (lbInfo) ->
+
+        console.log lbInfo.getURL()         # loopback api root
+        console.log lbInfo.getAccessToken() # access token of admin
+
+then loopback server (with admin, push-notification function) runs
+
+
+# run with domain
 
 before running, you can prepare a directory which contains custom config information.
 
@@ -41,6 +58,11 @@ before running, you can prepare a directory which contains custom config informa
     lbWithDomain.runWithDomain(domain, configDir).then ->
         # loopback started
 
+# admin
+(coming soon)
+
+# push notification 
+(coming soon)
 
 # configs
 
@@ -153,6 +175,7 @@ then, loopback-with-domain selects configs in "local" directory.
     lbWithDomain.runWithDomain(domain, configDir, env)
 
 env is prior to NODE\_ENV settings.
+
 
 # modified loopback-datasource-juggler
 
