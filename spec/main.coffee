@@ -3,7 +3,7 @@
 { mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
 Main = require '../src/main'
-LoopbackLauncher = require '../src/lib/loopback-launcher'
+LoopbackProcessLauncher = require '../src/lib/loopback-process-launcher'
 Promise = require('es6-promise').Promise
 
 domainDir = normalize __dirname + '/lib/domains/music-live'
@@ -106,11 +106,11 @@ describe 'Main', ->
     describe '@launchLoopback', ->
 
         before ->
-            @launch = LoopbackLauncher::launch
-            LoopbackLauncher::launch = => @cb()
+            @launch = LoopbackProcessLauncher::launch
+            LoopbackProcessLauncher::launch = => @cb()
 
         after ->
-            LoopbackLauncher::launch = @launch
+            LoopbackProcessLauncher::launch = @launch
 
         it 'launch loopback-launcher', (done) ->
             @cb = done

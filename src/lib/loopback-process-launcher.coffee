@@ -2,7 +2,12 @@
 { normalize } = require 'path'
 Promise = require('es6-promise').Promise
 
-class LoopbackLauncher
+###*
+launches child process for loopback server
+
+@class LoopbackProcessLauncher
+###
+class LoopbackProcessLauncher
 
     entryPath: normalize __dirname + '/../../loopback/server/server.js'
 
@@ -60,4 +65,4 @@ class LoopbackLauncher
             prevChunk = chunk
 
 
-module.exports = LoopbackLauncher
+module.exports = LoopbackProcessLauncher

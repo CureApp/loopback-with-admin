@@ -1,6 +1,6 @@
 
-LoopbackLauncher = require './lib/loopback-launcher'
-LoopbackInfo     = require './lib/loopback-info'
+LoopbackProcessLauncher = require './lib/loopback-process-launcher'
+LoopbackInfo = require './lib/loopback-info'
 
 ConfigJSONGenerator  = require './lib/config-json-generator'
 ModelsGenerator      = require './lib/models-generator'
@@ -83,11 +83,11 @@ class Main
 
 
     ###*
-    run loopback (in child process)
+    run loopback
 
     @private
     ###
     @launchLoopback: ->
-        new LoopbackLauncher().launch()
+        new LoopbackProcessLauncher().launch()
 
 module.exports = Main
