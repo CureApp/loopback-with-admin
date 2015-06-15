@@ -5,7 +5,7 @@ ConfigJSONGenerator = require './config-json-generator'
 
 class ModelConfigGenerator extends ConfigJSONGenerator
 
-    defaultConfigsPath: normalize "#{__dirname}/../data"
+    defaultConfigsPath: normalize "#{__dirname}/../../default-values"
 
     configNames: [ 'model-config' ]
 

@@ -52,7 +52,7 @@ these are the config names.
 - server
 - push-credentials
 
-see JSON files in "default-configs" directory.
+see JSON files in "default-values/non-model-configs" directory.
 you can set the same properties as these JSONs.
 
 

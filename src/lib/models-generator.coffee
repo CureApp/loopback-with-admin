@@ -11,7 +11,7 @@ ModelConfigGenerator = require './model-config-generator'
 class ModelsGenerator
 
     destinationDir : normalize "#{__dirname}/../../loopback/common/models"
-    builtinDir     : normalize "#{__dirname}/../data/models"
+    builtinDir     : normalize "#{__dirname}/../../default-values/models"
 
     ###*
     @param {Facade} domain facade object in [base-domain](https://github.com/CureApp/base-domain)

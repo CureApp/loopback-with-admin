@@ -5,7 +5,7 @@ ConfigJSONGenerator = require './config-json-generator'
 
 class BuildInfoGenerator extends ConfigJSONGenerator
 
-    defaultConfigsPath: normalize "#{__dirname}/../data"
+    defaultConfigsPath: normalize "#{__dirname}/../../default-values"
 
     configNames: [ 'build-info' ]
 

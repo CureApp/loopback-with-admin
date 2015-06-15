@@ -7,7 +7,7 @@ CustomConfigLoader = require './custom-config-loader'
 
 class ConfigJSONGenerator
 
-    defaultConfigsPath: normalize "#{__dirname}/../../default-configs"
+    defaultConfigsPath: normalize "#{__dirname}/../../default-values/non-model-configs"
     destinationPath   : normalize "#{__dirname}/../../loopback/server"
 
     configNames: [
