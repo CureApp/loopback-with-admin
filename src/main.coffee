@@ -1,6 +1,7 @@
 
 LoopbackProcessLauncher = require './lib/loopback-process-launcher'
-LoopbackInfo = require './lib/loopback-info'
+LoopbackInfo   = require './lib/loopback-info'
+LoopbackServer = require './lib/loopback-server'
 
 ConfigJSONGenerator  = require './lib/config-json-generator'
 ModelsGenerator      = require './lib/models-generator'
@@ -22,8 +23,9 @@ class Main
     @static
     @param {Facade} domain  (the same interface as base-domain)
     @param {String} configDir directory containing config info
-    @param {Object} [options.reset] reset previously-generated settings before generation
-    @param {Object} [options.env] set environment (production|development|...)
+    @param {Boolean} [options.reset] reset previously-generated settings before generation
+    @param {String} [options.env] set environment (production|development|...)
+    @param {Boolean} [options.spawn] if true, spawns child process of loopback
     return {Promise(LoopbackInfo)}
     ###
     @runWithDomain: (domain, configDir, options = {}) ->
@@ -34,8 +36,8 @@ class Main
 
         generated = main.generate()
 
-        @launchLoopback().then (lbProcess) =>
-            return new LoopbackInfo(lbProcess, generated)
+        @launchLoopback(options.spawn).then (server) =>
+            return new LoopbackInfo(server, generated)
 
 
     ###*
@@ -87,7 +89,11 @@ class Main
 
     @private
     ###
-    @launchLoopback: ->
-        new LoopbackProcessLauncher().launch()
+    @launchLoopback: (spawnChildProcess) ->
+
+        if spawnChildProcess
+            new LoopbackProcessLauncher().launch()
+        else
+            new LoopbackServer().launch()
 
 module.exports = Main

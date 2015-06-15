@@ -1,15 +1,13 @@
 
-{ normalize } = require 'path'
 Promise = require('es6-promise').Promise
+LoopbackServer = require './loopback-server'
 
 ###*
 launches child process for loopback server
 
 @class LoopbackProcessLauncher
 ###
-class LoopbackProcessLauncher
-
-    entryPath: normalize __dirname + '/../../loopback/server/server.js'
+class LoopbackProcessLauncher extends LoopbackServer
 
     constructor: (@options = {}) ->
 

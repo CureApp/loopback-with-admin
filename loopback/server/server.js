@@ -14,7 +14,7 @@ app.start = function(callback) {
 
         console.log('LOOPBACK_WITH_DOMAIN_STARTED');
 
-        if (callback) callback();
+        if (callback) callback(app);
       });
   });
 };

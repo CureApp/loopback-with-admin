@@ -4,6 +4,7 @@
 
 Main = require '../src/main'
 LoopbackProcessLauncher = require '../src/lib/loopback-process-launcher'
+LoopbackServer = require '../src/lib/loopback-server'
 Promise = require('es6-promise').Promise
 
 domainDir = normalize __dirname + '/lib/domains/music-live'
@@ -106,15 +107,28 @@ describe 'Main', ->
     describe '@launchLoopback', ->
 
         before ->
-            @launch = LoopbackProcessLauncher::launch
-            LoopbackProcessLauncher::launch = => @cb()
 
         after ->
-            LoopbackProcessLauncher::launch = @launch
 
-        it 'launch loopback-launcher', (done) ->
-            @cb = done
+        it 'launches loopback-server by default', (done) ->
+            @launch = LoopbackServer::launch
+            LoopbackServer::launch = =>
+                LoopbackServer::launch = @launch
+                done()
+
             Main.launchLoopback()
+
+
+        it 'launches loopback-process-launcher when spawn is true', (done) ->
+            @launch = LoopbackProcessLauncher::launch
+            LoopbackProcessLauncher::launch = =>
+                LoopbackProcessLauncher::launch = @launch
+                done()
+
+            spawn = true
+            Main.launchLoopback(spawn)
+
+
 
 
     describe 'runWithDomain', ->

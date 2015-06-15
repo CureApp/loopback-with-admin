@@ -6,7 +6,11 @@ Loopback info
 ###
 class LoopbackInfo
 
-    constructor: (@process, generatedInMain = {}) ->
+    constructor: (server = {}, generatedInMain = {}) ->
+        if typeof server.kill is 'function'
+            @process = server
+        else
+            @app = server
 
         { @config, @models, @buildInfo } = generatedInMain
 
@@ -53,7 +57,7 @@ class LoopbackInfo
     @public
     ###
     kill: ->
-        @process.kill()
+        @process?.kill()
 
 
 module.exports = LoopbackInfo
