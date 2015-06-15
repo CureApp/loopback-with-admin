@@ -3,11 +3,28 @@
 { mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 fs = require 'fs'
 
-ModelsGenerator = require '../../src/lib/models-generator'
-ModelDefinition = require '../../src/lib/model-definition'
+ModelsGenerator      = require '../../src/lib/models-generator'
+ModelDefinition      = require '../../src/lib/model-definition'
+ModelConfigGenerator = require '../../src/lib/model-config-generator'
 BaseDomain = require('base-domain')
 
 describe 'ModelsGenerator', ->
+
+    describe 'constructor', ->
+        before ->
+            { @createModelDefinitionsFromDomain } = ModelsGenerator::
+            ModelsGenerator::createModelDefinitionsFromDomain = ->
+                model1: true
+                model2: true
+
+        after ->
+            ModelsGenerator::createModelDefinitionsFromDomain = @createModelDefinitionsFromDomain
+
+        it 'generate ModelConfigGenerator with array of models', ->
+            mGenerator = new ModelsGenerator()
+            expect(mGenerator.modelConfigGenerator).to.be.instanceof ModelConfigGenerator
+            expect(mGenerator.modelConfigGenerator.entityNames).to.eql ['model1', 'model2']
+
 
     describe 'getEmptyJSContent', ->
 

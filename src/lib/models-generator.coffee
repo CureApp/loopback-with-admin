@@ -21,7 +21,7 @@ class ModelsGenerator
 
         @definitions = @createModelDefinitionsFromDomain(domain)
 
-        entityNames = (entity.getName() for entity in @definitions)
+        entityNames = Object.keys @definitions
         @modelConfigGenerator = new ModelConfigGenerator(entityNames)
 
 
