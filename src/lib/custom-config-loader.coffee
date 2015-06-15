@@ -18,6 +18,8 @@ class CustomConfigLoader
     ###
     load: (configName) ->
 
+        return {} if not @configPath
+
         envFilePath = "#{@configPath}/#{@env}/#{configName}.coffee"
 
         if fs.existsSync envFilePath

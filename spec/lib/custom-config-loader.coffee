@@ -23,3 +23,11 @@ describe 'CustomConfigLoader', ->
 
             expect(plainConfig.key1).to.equal 'from common'
 
+        it 'returns empty object when configPath is not given', ->
+
+            loader = new CustomConfigLoader()
+
+            plainConfig = loader.load('plain')
+
+            expect(plainConfig).to.eql {}
+
