@@ -34,7 +34,7 @@ describe 'LoopbackInfo', ->
     describe 'getURL', ->
 
         it 'returns URL with host, port and api root info', ->
-            expect(@lbInfo.getURL()).to.equal('0.0.0.0:3000/api')
+            expect(@lbInfo.getURL()).to.equal('localhost:3000/api')
 
 
     describe 'getEnv', ->
