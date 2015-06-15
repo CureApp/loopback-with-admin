@@ -52,6 +52,13 @@ describe 'Main', ->
             expect(definitions.instrument).to.have.property 'aclType', 'owner'
 
 
+        it 'returns empty object if configDir is not given', ->
+
+            definitions = new Main(domain).loadModelDefinitions()
+            expect(definitions).to.eql {}
+
+
+
     describe 'generate', ->
 
         it 'invokes three generator\'s generate()', ->

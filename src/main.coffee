@@ -59,6 +59,9 @@ class Main
     @private
     ###
     loadModelDefinitions: ->
+
+        return {} if not @configDir
+
         try
             require(@configDir + '/model-definitions')
         catch e
