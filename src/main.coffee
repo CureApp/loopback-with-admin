@@ -1,4 +1,6 @@
 
+{ normalize } = require 'path'
+
 LoopbackProcessLauncher = require './lib/loopback-process-launcher'
 LoopbackInfo   = require './lib/loopback-info'
 LoopbackServer = require './lib/loopback-server'
@@ -41,12 +43,32 @@ class Main
 
 
     ###*
+    entry point.
+    run loopback without domain
+
+    @method runWithoutDomain
+    @public
+    @static
+    @param {String} [configDir] directory containing config info
+    @param {Boolean} [options.reset] reset previously-generated settings before generation
+    @param {String} [options.env] set environment (production|development|...)
+    @param {Boolean} [options.spawn] if true, spawns child process of loopback
+    return {Promise(LoopbackInfo)}
+    ###
+    @runWithoutDomain: (configDir, options) ->
+        emptyDir = normalize __dirname + '/../default-values/empty-domain-dir'
+        domain = require('base-domain').createInstance(dirname: emptyDir)
+        @runWithDomain(domain, configDir, options)
+
+
+
+    ###*
     @constructor
     @private
     ###
     constructor: (@domain, @configDir, @env) ->
 
-        @env ?= process.env.NODE_ENV ? 'development'
+        @env ?= process.env.NODE_ENV or 'development'
 
         modelDefinitions = @loadModelDefinitions()
 

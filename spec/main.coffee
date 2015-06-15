@@ -173,3 +173,16 @@ describe 'Main', ->
             expect(@called.generate).to.be.true
             expect(@called.launchLoopback).to.be.true
 
+
+    describe 'runWithoutDomain', ->
+
+        it 'launches loopback without any arguments', (done) ->
+
+            @timeout 5000
+
+            Main.runWithoutDomain().then (lbInfo) ->
+                expect(lbInfo.getEnv()).to.equal 'development'
+                expect(lbInfo.getURL()).to.equal 'localhost:3000/api'
+                expect(lbInfo.models.names).to.have.length 4
+                done()
+            .catch done
