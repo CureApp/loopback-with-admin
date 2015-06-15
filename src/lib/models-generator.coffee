@@ -153,8 +153,10 @@ class ModelsGenerator
     setHasManyRelations: (definitions) ->
 
         for modelName, definition of definitions
-            for relModelName of definition.getEntityPropInfo()
-                definitions[relModelName].setHasManyRelation(modelName)
+            for prop, typeInfo of definition.getEntityPropInfo()
+                relModelName = typeInfo.model
+                relModelDefinition = definitions[relModelName]
+                relModelDefinition?.setHasManyRelation(modelName)
 
 
     ###*

@@ -45,7 +45,7 @@ describe 'ModelsGenerator', ->
 
             class A extends BaseDomain.Entity
                 @properties:
-                    b: @TYPES.MODEL 'b'
+                    prop1: @TYPES.MODEL 'b'
 
             class B extends BaseDomain.Entity
 
