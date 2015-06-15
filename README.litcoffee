@@ -9,7 +9,7 @@ connection with [base-domain](https://github.com/CureApp/base-domain)
 
 # install
 
-```
+```bash
 npm install loopback-with-domain
 ```
 
