@@ -1,5 +1,6 @@
 
 LoopbackLauncher = require './lib/loopback-launcher'
+LoopbackInfo     = require './lib/loopback-info'
 
 ConfigJSONGenerator  = require './lib/config-json-generator'
 ModelsGenerator      = require './lib/models-generator'
@@ -23,16 +24,18 @@ class Main
     @param {String} configDir directory containing config info
     @param {Object} [options.reset] reset previously-generated settings before generation
     @param {Object} [options.env] set environment (production|development|...)
-    return {Promise}
+    return {Promise(LoopbackInfo)}
     ###
     @runWithDomain: (domain, configDir, options = {}) ->
 
         main = new @(domain, configDir, options.env)
 
         main.reset() unless options.reset is false
-        main.generate()
 
-        @launchLoopback()
+        generated = main.generate()
+
+        @launchLoopback().then (lbProcess) =>
+            return new LoopbackInfo(lbProcess, generated)
 
 
     ###*
@@ -65,10 +68,9 @@ class Main
     @private
     ###
     generate: ->
-        @configJSONGenerator.generate()
-        @modelsGenerator.generate()
-        @buildInfoGenerator.generate()
-
+        config    : @configJSONGenerator.generate()
+        models    : @modelsGenerator.generate()
+        buildInfo : @buildInfoGenerator.generate()
 
     ###*
     @private

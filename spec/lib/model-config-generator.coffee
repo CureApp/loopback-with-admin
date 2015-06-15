@@ -1,5 +1,6 @@
 
 { normalize } = require 'path'
+{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
 fs = require 'fs'
 
@@ -50,5 +51,21 @@ describe 'ModelConfigGenerator', ->
             config = new ModelConfigGenerator(entityNames).getMergedConfig('model-config')
             expect(Object.keys config).to.have.length 10 + 3
 
+
+    describe 'generate', ->
+
+        before ->
+            @generator = new ModelConfigGenerator(['e1', 'e2'])
+            @generator.destinationPath = __dirname + '/d'
+            mkdirSyncRecursive __dirname + '/d'
+
+        after ->
+            rmdirSyncRecursive __dirname + '/d'
+
+
+        it 'returns model config', ->
+
+            generated = @generator.generate()
+            expect(Object.keys generated).to.have.length 10 + 2
 
 

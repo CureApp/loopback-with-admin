@@ -44,9 +44,11 @@ class ConfigJSONGenerator
 
     @method generate
     @public
-    @return {Array} generatedFileNames
+    @return {Object} generatedContents
     ###
     generate: ->
+
+        generatedContents = {}
 
         for configName in @configNames
 
@@ -56,7 +58,9 @@ class ConfigJSONGenerator
 
             fs.writeFileSync(path, JSON.stringify config, null, 2)
 
-            normalize path # for returning value
+            generatedContents[configName] = config
+
+        return generatedContents
 
     ###*
     remove previously-generated JSON files

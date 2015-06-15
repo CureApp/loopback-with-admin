@@ -31,11 +31,15 @@ class ModelsGenerator
 
     @method generate
     @public
-    @return {Array} generatedModelNames
+    @return {Object} generatedInfo
     ###
     generate: ->
-        @generateModelConfig()
-        @generateDefinitions()
+
+        modelConfig = @generateModelConfig()
+        modelNames  = @generateDefinitions()
+
+        config: modelConfig
+        names : modelNames
 
 
     ###*

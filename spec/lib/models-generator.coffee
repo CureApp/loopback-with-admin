@@ -123,4 +123,24 @@ describe 'ModelsGenerator', ->
             expect(=> @generator.reset()).not.to.throw Error
 
     describe 'createModelDefinition', ->
+
     describe 'generate', ->
+
+        before ->
+            @generator = new ModelsGenerator()
+            @generator.destinationDir = __dirname + '/d'
+            @generator.modelConfigGenerator.destinationPath = __dirname + '/d'
+            mkdirSyncRecursive __dirname + '/d'
+
+        after ->
+            rmdirSyncRecursive __dirname + '/d'
+
+        it 'returns generated models and configs', ->
+
+            generated = @generator.generate()
+
+            expect(generated).to.have.property 'config'
+            expect(generated).to.have.property 'names'
+            expect(generated.names).to.be.instanceof Array
+            expect(generated.names).to.have.length 4
+            expect(generated.config).to.be.an 'object'

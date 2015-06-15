@@ -1,8 +1,10 @@
 
 { normalize } = require 'path'
+{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
 Main = require '../src/main'
 LoopbackLauncher = require '../src/lib/loopback-launcher'
+Promise = require('es6-promise').Promise
 
 domainDir = normalize __dirname + '/lib/domains/music-live'
 domain = require('base-domain').createInstance dirname: domainDir
@@ -65,6 +67,26 @@ describe 'Main', ->
             expect(counter).to.equal 3
 
 
+        it 'returns generated contents', ->
+
+            mkdirSyncRecursive(__dirname + '/main-test/config')
+            mkdirSyncRecursive(__dirname + '/main-test/models')
+
+            main = new Main(domain, configDir)
+            main.configJSONGenerator.destinationPath = __dirname + '/main-test/config'
+            main.modelsGenerator.destinationDir = __dirname + '/main-test/models'
+            main.modelsGenerator.modelConfigGenerator.destinationPath = __dirname + '/main-test/config'
+            main.modelsGenerator.buildInfoGenerator = __dirname + '/main-test/config'
+
+            generated = main.generate()
+
+            expect(generated).to.have.property 'config'
+            expect(generated).to.have.property 'buildInfo'
+            expect(generated).to.have.property 'models'
+
+            rmdirSyncRecursive __dirname + '/main-test'
+
+
     describe 'reset', ->
 
         it 'invokes three generator\'s reset()', ->
@@ -106,7 +128,7 @@ describe 'Main', ->
 
             Main::reset = => @called.reset = true
             Main::generate = => @called.generate = true
-            Main.launchLoopback = => @called.launchLoopback = true
+            Main.launchLoopback = => Promise.resolve @called.launchLoopback = true
 
         afterEach ->
             Main::reset = @reset

@@ -141,6 +141,7 @@ describe 'ConfigJSONGenerator', ->
 
             @generator = new ConfigJSONGenerator(__dirname + '/sample-configs')
             @generator.destinationPath = @tmpdir
+            @generatedContents = @generator.generate()
 
         after ->
             for fname in fs.readdirSync @tmpdir
@@ -149,14 +150,15 @@ describe 'ConfigJSONGenerator', ->
 
         it 'generates five json files', ->
 
-            @generator.generate()
             expect(fs.readdirSync @tmpdir).to.have.length 5
 
         it 'generates config.json', ->
 
-            configJSONPath = normalize @tmpdir + '/config.json'
-            files = @generator.generate()
-            expect(files).to.include configJSONPath
+            expect(fs.readdirSync @tmpdir).to.include 'config.json'
+
+        it 'returns generated contents', ->
+
+            expect(Object.keys @generatedContents).to.have.length 5
 
 
     describe 'reset', ->

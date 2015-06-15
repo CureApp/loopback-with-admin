@@ -1,5 +1,6 @@
 
 { normalize } = require 'path'
+{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
 fs = require 'fs'
 
@@ -49,4 +50,28 @@ describe 'BuildInfoGenerator', ->
 
         it 'contains env info', ->
             expect(@info).to.have.property 'env', 'production'
+
+
+    describe 'generate', ->
+
+        before ->
+            domain = dirname: 'dummy'
+            configDir = 'dummy2'
+            @generator = new BuildInfoGenerator(domain, configDir, 'development')
+            @generator.destinationPath = __dirname + '/d'
+            mkdirSyncRecursive __dirname + '/d'
+
+        after ->
+            rmdirSyncRecursive __dirname + '/d'
+
+
+        it 'returns build info', ->
+
+            generated = @generator.generate()
+            expect(generated).to.have.property 'env', 'development'
+            expect(generated).to.have.property 'buildAt'
+            expect(generated).to.have.property 'domainType'
+            expect(generated).to.have.property 'domainDir', 'dummy'
+            expect(generated).to.have.property 'configDir', 'dummy2'
+
 

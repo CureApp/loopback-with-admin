@@ -15,6 +15,12 @@ class ModelConfigGenerator extends ConfigJSONGenerator
     ###
     constructor: (@entityNames = []) ->
 
+
+    generate: ->
+        generated = super()
+        return generated['model-config']
+
+
     ###*
     returns custom model-config calculated by domain
 

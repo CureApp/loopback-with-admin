@@ -16,6 +16,11 @@ class BuildInfoGenerator extends ConfigJSONGenerator
     constructor: (@domain, @configDir, @env) ->
 
 
+    generate: ->
+        generated = super()
+        return generated['build-info']
+
+
     ###*
     returns custom config
 
