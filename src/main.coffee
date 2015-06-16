@@ -77,7 +77,7 @@ class Main
         configObj        = customConfigs.toObject()
 
         @configJSONGenerator = new ConfigJSONGenerator(configObj, @env)
-        @modelsGenerator     = new ModelsGenerator(@domain, modelDefinitions)
+        @modelsGenerator     = new ModelsGenerator(modelDefinitions, @domain)
         @buildInfoGenerator  = new BuildInfoGenerator(@domain, configObj, @env)
 
 

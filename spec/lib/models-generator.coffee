@@ -4,6 +4,7 @@
 fs = require 'fs'
 
 ModelsGenerator      = require '../../src/lib/models-generator'
+EmptyModelDefinition = require '../../src/lib/empty-model-definition'
 ModelDefinition      = require '../../src/lib/model-definition'
 ModelConfigGenerator = require '../../src/lib/model-config-generator'
 BaseDomain = require('base-domain')
@@ -12,17 +13,87 @@ describe 'ModelsGenerator', ->
 
     describe 'constructor', ->
         before ->
-            { @createModelDefinitionsFromDomain } = ModelsGenerator::
-            ModelsGenerator::createModelDefinitionsFromDomain = ->
+            { @createModelDefinitions } = ModelsGenerator::
+            ModelsGenerator::createModelDefinitions = ->
                 model1: true
                 model2: true
 
         after ->
-            ModelsGenerator::createModelDefinitionsFromDomain = @createModelDefinitionsFromDomain
+            ModelsGenerator::createModelDefinitions = @createModelDefinitions
 
         it 'generate ModelConfigGenerator with array of models', ->
             mGenerator = new ModelsGenerator()
             expect(mGenerator.modelConfigGenerator).to.be.instanceof ModelConfigGenerator
+
+
+    describe 'createDefinition', ->
+
+        it 'returns ModelDefinition with EntityModel when domain and model exists', ->
+
+            domain = BaseDomain.createInstance()
+            domain.addClass('a', class A extends BaseDomain.Entity)
+
+            customDefinition = {}
+
+            def = new ModelsGenerator().createDefinition(customDefinition, 'a', domain)
+            expect(def).to.have.property 'Entity', domain.getModel 'a'
+
+
+        it 'returns EmptyModelDefinition when model is not Entity', ->
+
+            domain = BaseDomain.createInstance()
+            domain.addClass('a', class A extends BaseDomain.BaseModel)
+
+            customDefinition = {}
+
+            def = new ModelsGenerator().createDefinition(customDefinition, 'a', domain)
+            expect(def).to.be.instanceof EmptyModelDefinition
+            expect(def.getName()).to.equal 'a'
+
+        it 'returns EmptyModelDefinition when model does not exist', ->
+
+            domain = BaseDomain.createInstance()
+            customDefinition = {}
+
+            def = new ModelsGenerator().createDefinition(customDefinition, 'a', domain)
+            expect(def).to.be.instanceof EmptyModelDefinition
+            expect(def.getName()).to.equal 'a'
+
+
+        it 'returns EmptyModelDefinition when domain does not exist', ->
+            customDefinition = {}
+
+            def = new ModelsGenerator().createDefinition(customDefinition, 'a')
+            expect(def).to.be.instanceof EmptyModelDefinition
+            expect(def.getName()).to.equal 'a'
+
+
+    describe 'createModelDefinitions', ->
+
+        it 'creates models only included in customDefinitions', ->
+            domain = BaseDomain.createInstance()
+            domain.addClass('a', class A extends BaseDomain.Entity)
+            domain.addClass('b', class B extends BaseDomain.Entity)
+
+            customDefinitions = a: {}
+            defs = new ModelsGenerator().createModelDefinitions(customDefinitions, domain)
+            expect(defs).to.have.property 'a'
+            expect(defs).not.to.have.property 'b'
+
+
+    describe 'modelConfigGenerator', ->
+
+        it 'has model config with models included in customDefinitions', ->
+            domain = BaseDomain.createInstance()
+            domain.addClass('a', class A extends BaseDomain.Entity)
+            domain.addClass('b', class B extends BaseDomain.Entity)
+
+            customDefinitions = a: {}
+            mcGenerator = new ModelsGenerator(customDefinitions, domain).modelConfigGenerator
+            mergedConfig = mcGenerator.getMergedConfig('model-config')
+            expect(mergedConfig).to.have.property 'a'
+            expect(mergedConfig).not.to.have.property 'b'
+
 
 
     describe 'getEmptyJSContent', ->
@@ -62,43 +133,6 @@ describe 'ModelsGenerator', ->
 
             expect(defB.toJSON().relations).to.have.property 'a'
             expect(defB.toJSON().relations.a).to.have.property 'type', 'hasMany'
-
-
-
-    describe 'getEntityModelsFromDomain', ->
-
-        it 'returns empty array if no entities found', ->
-
-            domainDir = normalize __dirname + '/domains/no-entities'
-            domain = require('base-domain').createInstance dirname: domainDir
-
-            mGenerator = new ModelsGenerator()
-
-            entityModels = mGenerator.getEntityModelsFromDomain(domain)
-
-
-        it 'returns entities from domain directory', ->
-
-            domainDir = normalize __dirname + '/domains/music-live'
-            domain = require('base-domain').createInstance dirname: domainDir
-
-            mGenerator = new ModelsGenerator()
-
-
-            entityModels = mGenerator.getEntityModelsFromDomain(domain)
-            expect(entityModels).to.have.length.above 2
-
-            entityNames = [
-                'song'
-                'player'
-                'instrument'
-            ].sort()
-
-            names = (e.getName() for e in entityModels).sort()
-            expect(names).to.eql entityNames
-
-            for entityModel in entityModels
-                expect(entityModel).to.have.property 'isEntity', true
 
 
     describe 'generateJSONandJS', ->
@@ -151,6 +185,8 @@ describe 'ModelsGenerator', ->
             expect(fs.readdirSync @generator.destinationDir).to.have.length 8
 
 
+    describe 'generateDefinitionFiles', ->
+
     describe 'reset', ->
 
         before ->
@@ -188,3 +224,6 @@ describe 'ModelsGenerator', ->
             expect(generated.names).to.be.instanceof Array
             expect(generated.names).to.have.length 4
             expect(generated.config).to.be.an 'object'
+
+
+

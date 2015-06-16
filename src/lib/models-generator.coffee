@@ -6,6 +6,7 @@ fs = require 'fs'
 { mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
 ModelDefinition = require './model-definition'
+EmptyModelDefinition = require './empty-model-definition'
 ModelConfigGenerator = require './model-config-generator'
 
 class ModelsGenerator
@@ -14,12 +15,12 @@ class ModelsGenerator
     builtinDir     : normalize "#{__dirname}/../../default-values/models"
 
     ###*
-    @param {Facade} domain facade object in [base-domain](https://github.com/CureApp/base-domain)
     @param {Object} customModelDefinitions model definition data, compatible with loopback's model-config.json and aclType
+    @param {Facade} domain facade object in [base-domain](https://github.com/CureApp/base-domain)
     ###
-    constructor: (domain, @customModelDefinitions = {}) ->
+    constructor: (customModelDefinitions, domain) ->
 
-        @definitions = @createModelDefinitionsFromDomain(domain)
+        @definitions = @createModelDefinitions(customModelDefinitions, domain)
 
         entityNames = Object.keys @definitions
         @modelConfigGenerator = new ModelConfigGenerator(entityNames)
@@ -129,20 +130,33 @@ class ModelsGenerator
 
     @private
     ###
-    createModelDefinitionsFromDomain: (domain) ->
+    createModelDefinitions: (customModelDefinitions, domain) ->
 
         definitions = {}
 
-        for EntityModel in @getEntityModelsFromDomain(domain)
+        for modelName, customModelDefinition of customModelDefinitions
 
-            entityName = EntityModel.getName()
-            customModelDefinition = @customModelDefinitions[entityName]
-
-            definitions[entityName] = new ModelDefinition(EntityModel, customModelDefinition)
+            definitions[modelName] = @createDefinition(customModelDefinition, modelName, domain)
 
         @setHasManyRelations(definitions)
 
         return definitions
+
+
+    ###*
+    @method createDefinition
+    @private
+    @return {ModelDefinition}
+    ###
+    createDefinition: (customModelDefinition, modelName, domain) ->
+
+        if domain?.hasClass(modelName) and domain.getModel(modelName).isEntity
+
+            Entity = domain.getModel modelName
+            return new ModelDefinition(Entity, customModelDefinition)
+
+        else
+            return new EmptyModelDefinition(modelName, customModelDefinition)
 
 
     ###*
@@ -157,32 +171,6 @@ class ModelsGenerator
                 relModelName = typeInfo.model
                 relModelDefinition = definitions[relModelName]
                 relModelDefinition?.setHasManyRelation(modelName)
-
-
-    ###*
-    get entity models from domain
-
-    @private
-    ###
-    getEntityModelsFromDomain: (domain) ->
-        return [] if not domain
-
-        # FIXME base-domain should implement their own 'getEntityModels()'
-
-        domainFiles = fs.readdirSync domain.dirname
-        entityModels = []
-
-        for filename in domainFiles
-            try
-                klass = require normalize domain.dirname + '/' + filename
-                continue if not klass.isEntity
-                name = klass.getName()
-                entityModels.push domain.getModel name
-            catch e
-                console.log e
-                console.log e.stack
-
-        return entityModels
 
 
 module.exports = ModelsGenerator

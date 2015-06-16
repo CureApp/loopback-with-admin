@@ -2,6 +2,9 @@
 
 AclGenerator = require './acl-generator'
 
+###*
+@class ModelDefinition
+###
 class ModelDefinition
 
     constructor: (@Entity, @customDefinition = {}) ->
@@ -70,7 +73,6 @@ class ModelDefinition
     ###*
     get ACL by aclType
 
-    @private
     ###
     getACL: ->
         new AclGenerator(@aclType, @isUser()).generate()
@@ -95,7 +97,6 @@ class ModelDefinition
     ###*
     get "belongsTo" relations
 
-    @private
     ###
     getRelations: ->
         rels = {}
