@@ -73,7 +73,7 @@ class Main
 
         @env ?= process.env.NODE_ENV or 'development'
 
-        modelDefinitions = customConfigs.loadModelDefinitions()
+        modelDefinitions = customConfigs.getModelDefinitions()
         configObj        = customConfigs.toObject()
 
         @configJSONGenerator = new ConfigJSONGenerator(configObj, @env)
