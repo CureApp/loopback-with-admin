@@ -31,11 +31,11 @@ class CustomConfigs
                 [configName, ext] = configFile.split('.')
                 configs[configName] = require(envDir + '/' + configFile) if ext in ['coffee', 'js', 'json']
 
-        # if not exists, put it.
         commonDir = "#{configDir}/common"
-        for configFile in fs.readdirSync(commonDir)
-            [configName, ext] = configFile.split('.')
-            configs[configName] ?= require(commonDir + '/' + configFile) if ext in ['coffee', 'js', 'json']
+        if fs.existsSync commonDir
+            for configFile in fs.readdirSync(commonDir)
+                [configName, ext] = configFile.split('.')
+                configs[configName] ?= require(commonDir + '/' + configFile) if ext in ['coffee', 'js', 'json']
 
         return configs
 
