@@ -1,40 +1,24 @@
-# loopback-with-domain
+# loopback-with-admin
 
-run loopback server with "domain"
-
-domain is in this context business logic, the same as Domain-Driven Design (DDD).
-
-connection with [base-domain](https://github.com/CureApp/base-domain)
-
-also, this loopback extends original [loopback](https://github.com/strongloop/loopback).
-
-- admin
-- push notification
-
-follow these section to see how to use admin and push notification
+run loopback server with admin and push notification features.
 
 # install
 
 ```bash
-npm install loopback-with-domain
+npm install loopback-with-admin
 ```
 
-# simplest run, without domain
+# simplest run
 
-you can just run loopback without domain information by
-
-    require('loopback-with-domain').runWithoutDomain().then (lbInfo) ->
+    require('loopback-with-admin').run().then (lbInfo) ->
 
         console.log lbInfo.getURL()         # loopback api root
         console.log lbInfo.getAccessToken() # access token of admin
 
-then loopback server (with admin, push-notification function) runs
 
-
-# run with domain
+# run with config dir
 
 before running, you can prepare a directory which contains custom config information.
-
 
 ```text
 (config-dir) # any name is acceptable
@@ -48,21 +32,26 @@ before running, you can prepare a directory which contains custom config informa
     `-- datasources.coffee
 ```
 
-
-    lbWithDomain = require 'loopback-with-domain'
+    lbWithAdmin = require 'loopback-with-admin'
 
     configDir = '/path/to/config-dir'
 
-    domain = require('base-domain').createInstance(dirname: 'domain')
-
-    lbWithDomain.runWithDomain(domain, configDir).then ->
+    lbWithAdmin.run(configDir).then ->
         # loopback started
+
+# run with config dir
+
+    lbWithAdmin = require 'loopback-with-admin'
+
+    lbWithAdmin.run(server: port: 3001).then ->
+
 
 # admin
 (coming soon)
 
 # push notification 
 (coming soon)
+
 
 # configs
 
@@ -89,7 +78,7 @@ you can set the same properties as these JSONs.
  config key  | meaning
 -------------|-----------------------
  memory      | on memory datasource
- db          | datasource for domain entities
+ db          | datasource for custom entities
 
 ## server
 
@@ -122,10 +111,11 @@ you can set the same properties as these JSONs.
 
 the same format as [loopback model definition](http://docs.strongloop.com/display/public/LB/Customizing+models)
 except "aclType" value.
-name, base, relations and properties are automatically set from domain information.
+name is automatically set from definition information.
+plural is set to the same value as name if not set manually.
 
 ## aclType
-loopback-with-domain generates acls from aclType.
+loopback-with-admin generates acls from aclType.
 
 three types are available.
 
@@ -167,13 +157,13 @@ and launching script like
 ```bash
 $ NODE_ENV=local node app.js
 ```
-then, loopback-with-domain selects configs in "local" directory.
+then, loopback-with-admin selects configs in "local" directory.
 
 ## passing custom environment with argument
 
     env = 'production'
 
-    lbWithDomain.runWithDomain(domain, configDir, env)
+    lbWithAdmin.run(configDir, env)
 
 env is prior to NODE\_ENV settings.
 

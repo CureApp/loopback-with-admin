@@ -1,5 +1,5 @@
 {
-  "name": "loopback-with-domain",
+  "name": "loopback-with-admin",
   "version": "1.4.4",
   "main": "server/server.js",
   "scripts": {
@@ -31,5 +31,5 @@
     "type": "",
     "url": ""
   },
-  "description": "loopback-with-domain"
+  "description": "launch loopback with admin, push-notifications"
 }
