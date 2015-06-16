@@ -16,6 +16,22 @@ ExtModel    = domain.addClass('ext-model', ExtModel)
 
 describe 'ModelDefinition', ->
 
+    describe 'constructor', ->
+
+        it 'use custom acls setting if exists', ->
+            customDefinition =
+                acls: 'xxx'
+            def = new ModelDefinition(EntityModel, customDefinition)
+            expect(def.definition.acls).to.equal 'xxx'
+
+
+        it 'use custom relations setting if exists', ->
+            customDefinition =
+                relations: 'xxx'
+            def = new ModelDefinition(EntityModel, customDefinition)
+            expect(def.definition.relations).to.equal 'xxx'
+
+
     describe 'getName', ->
 
         it 'returns name of entity', ->

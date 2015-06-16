@@ -19,8 +19,8 @@ class ModelDefinition
         @definition[k] = @customDefinition[k] for k, v of @customDefinition
         delete @definition.aclType
 
-        @definition.acls      = @getACL()
-        @definition.relations = @getRelations()
+        @definition.acls      ?= @getACL()
+        @definition.relations ?= @getRelations()
 
 
     ###*
