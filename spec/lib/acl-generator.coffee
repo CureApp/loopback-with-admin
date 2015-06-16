@@ -185,3 +185,13 @@ describe 'AclGenerator', ->
 
 
     describe 'generate', ->
+
+        it 'appends no ACL when aclType is "none"', ->
+
+            aclGenerator = new AclGenerator('none', false)
+            expect(aclGenerator.acl).to.eql []
+
+        it 'appends no ACL when aclType is "none" even if it is user model', ->
+
+            aclGenerator = new AclGenerator('none', true)
+            expect(aclGenerator.acl).to.eql []

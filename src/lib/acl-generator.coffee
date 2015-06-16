@@ -33,6 +33,9 @@ class AclGenerator
             when 'public-read'
                 @publicReadACL()
 
+            when 'none'
+                return @acl = []
+
             else
                 throw new Error """unknown aclType: #{@aclType}"""
 

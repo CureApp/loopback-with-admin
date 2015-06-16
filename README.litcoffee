@@ -134,6 +134,7 @@ three types are available.
  admin       | only admin can CRUD the model
  owner       | admin and the owner of the model can CRUD
  public-read | everyone can READ the model and admin can CRUD
+ none        | everyone can CRUD the model
 
 
 # switching environment
