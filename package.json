@@ -1,6 +1,6 @@
 {
   "name": "loopback-with-domain",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "main": "server/server.js",
   "scripts": {
     "test": "grunt"
