@@ -13,26 +13,21 @@ class BuildInfoGenerator extends ConfigJSONGenerator
     ###*
     @constructor
     ###
-    constructor: (@domain, @configDir, @env) ->
+    constructor: (@domain, @customConfigs, @env) ->
+
+
+    getMergedConfig: ->
+        env           : @env
+        customConfigs : @customConfigs
+        domainType    : if @domain then @domain.constructor?.name ? 'object' else null
+        domainDir     : @domain?.dirname
+        buildAt       : new Date().toISOString()
 
 
     generate: ->
         generated = super()
         return generated['build-info']
 
-
-    ###*
-    returns custom config
-
-    @method loadCustomConfig
-    @return {Object} customConfig
-    ###
-    loadCustomConfig: ->
-        env        : @env
-        configDir  : @configDir
-        domainType : @domain.constructor?.name ? 'object'
-        domainDir  : @domain.dirname
-        buildAt    : new Date().toISOString()
 
 
 module.exports = BuildInfoGenerator

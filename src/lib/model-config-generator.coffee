@@ -13,7 +13,10 @@ class ModelConfigGenerator extends ConfigJSONGenerator
     ###*
     @constructor
     ###
-    constructor: (@entityNames = []) ->
+    constructor: (entityNames = []) ->
+
+        @customConfigObj =
+            'model-config': @getConfigByEntityNames(entityNames)
 
 
     generate: ->
@@ -22,15 +25,14 @@ class ModelConfigGenerator extends ConfigJSONGenerator
 
 
     ###*
-    returns custom model-config calculated by domain
-
-    @method loadCustomConfig
-    @return {Object} customModelConfig
+    get config object by entity names
+    @private
+    @param {Array(String)} entityNames
     ###
-    loadCustomConfig: ->
+    getConfigByEntityNames: (entityNames = []) ->
 
         config = {}
-        for entityName in @entityNames
+        for entityName in entityNames
             config[entityName] =
                 dataSource: 'db'
                 public: true

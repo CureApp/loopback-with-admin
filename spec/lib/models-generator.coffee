@@ -23,7 +23,6 @@ describe 'ModelsGenerator', ->
         it 'generate ModelConfigGenerator with array of models', ->
             mGenerator = new ModelsGenerator()
             expect(mGenerator.modelConfigGenerator).to.be.instanceof ModelConfigGenerator
-            expect(mGenerator.modelConfigGenerator.entityNames).to.eql ['model1', 'model2']
 
 
     describe 'getEmptyJSContent', ->

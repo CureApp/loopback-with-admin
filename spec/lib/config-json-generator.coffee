@@ -115,14 +115,15 @@ describe 'ConfigJSONGenerator', ->
 
         it 'merges custom and default configs', ->
 
-            generator = new ConfigJSONGenerator()
-
-            generator.customConfigLoader =
-                load: ->
+            customConfigObj =
+                admin:
                     accessToken: 'MySecretOne'
                     account:
                         password: 'xxxyyy'
+                models: {}
+                xxx: 'yyy'
 
+            generator = new ConfigJSONGenerator(customConfigObj)
 
             merged = generator.getMergedConfig('admin')
 

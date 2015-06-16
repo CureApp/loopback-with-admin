@@ -10,6 +10,33 @@ BuildInfoGenerator = require '../../src/lib/build-info-generator'
 describe 'BuildInfoGenerator', ->
 
 
+    describe 'getMergedConfig', ->
+
+        before ->
+
+            domain = require('base-domain').createInstance(dirname: 'dummy-domain-dir')
+            configObj = server: port: 3001
+            env    = 'production'
+
+            @info = new BuildInfoGenerator(domain, configObj, env).getMergedConfig()
+
+        it 'contains domain info', ->
+            expect(@info).to.have.property 'domainType', 'Facade'
+            expect(@info).to.have.property 'domainDir', 'dummy-domain-dir'
+
+        it 'contains custom configs', ->
+            expect(@info).to.have.property 'customConfigs'
+
+        it 'contains buildAt', ->
+            expect(@info).to.have.property 'buildAt'
+            buildAt = @info.buildAt
+            time = new Date(buildAt)
+            expect(new Date() - time).to.be.lessThan 1000
+
+        it 'contains env info', ->
+            expect(@info).to.have.property 'env', 'production'
+
+
     describe 'getDestinationPathByName', ->
 
         it 'returns build-info.json', ->
@@ -24,40 +51,11 @@ describe 'BuildInfoGenerator', ->
             config = new BuildInfoGenerator().loadDefaultConfig('build-info')
             expect(config).to.be.an 'object'
 
-
-    describe 'loadCustomConfig', ->
-
-        before ->
-
-            domain = require('base-domain').createInstance(dirname: 'dummy-domain-dir')
-            configDir = 'dummy-config-dir'
-            env    = 'production'
-
-            @info = new BuildInfoGenerator(domain, configDir, env).loadCustomConfig()
-
-        it 'contains domain info', ->
-            expect(@info).to.have.property 'domainType', 'Facade'
-            expect(@info).to.have.property 'domainDir', 'dummy-domain-dir'
-
-        it 'contains configDir', ->
-            expect(@info).to.have.property 'configDir', 'dummy-config-dir'
-
-        it 'contains buildAt', ->
-            expect(@info).to.have.property 'buildAt'
-            buildAt = @info.buildAt
-            time = new Date(buildAt)
-            expect(new Date() - time).to.be.lessThan 1000
-
-        it 'contains env info', ->
-            expect(@info).to.have.property 'env', 'production'
-
-
     describe 'generate', ->
 
         before ->
             domain = dirname: 'dummy'
-            configDir = 'dummy2'
-            @generator = new BuildInfoGenerator(domain, configDir, 'development')
+            @generator = new BuildInfoGenerator(domain, {}, 'development')
             @generator.destinationPath = __dirname + '/d'
             mkdirSyncRecursive __dirname + '/d'
 
@@ -72,6 +70,6 @@ describe 'BuildInfoGenerator', ->
             expect(generated).to.have.property 'buildAt'
             expect(generated).to.have.property 'domainType'
             expect(generated).to.have.property 'domainDir', 'dummy'
-            expect(generated).to.have.property 'configDir', 'dummy2'
+            expect(generated).to.have.property 'customConfigs'
 
 

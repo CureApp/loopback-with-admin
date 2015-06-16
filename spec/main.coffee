@@ -39,26 +39,6 @@ describe 'Main', ->
             process.env.NODE_ENV = ''
 
 
-    describe 'loadModelDefinitions', ->
-
-        it 'returns custom model-definitions object', ->
-
-            definitions = new Main(domain, configDir).loadModelDefinitions()
-
-            expect(definitions).to.have.property 'player'
-            expect(definitions.player).to.have.property 'base', 'User'
-
-            expect(definitions).to.have.property 'instrument'
-            expect(definitions.instrument).to.have.property 'aclType', 'owner'
-
-
-        it 'returns empty object if configDir is not given', ->
-
-            definitions = new Main(domain).loadModelDefinitions()
-            expect(definitions).to.eql {}
-
-
-
     describe 'generate', ->
 
         it 'invokes three generator\'s generate()', ->
@@ -176,13 +156,13 @@ describe 'Main', ->
 
     describe 'runWithoutDomain', ->
 
-        it 'launches loopback without any arguments', (done) ->
+        it 'creates empty domain', (done) ->
 
-            @timeout 5000
+            runWithDomain = Main.runWithDomain
 
-            Main.runWithoutDomain().then (lbInfo) ->
-                expect(lbInfo.getEnv()).to.equal 'development'
-                expect(lbInfo.getURL()).to.equal 'localhost:3000/api'
-                expect(lbInfo.models.names).to.have.length 4
+            Main.runWithDomain = (domain) ->
+                expect(domain).to.be.instanceof require('base-domain')
+                Main.runWithDomain = runWithDomain
                 done()
-            .catch done
+
+            Main.runWithoutDomain()

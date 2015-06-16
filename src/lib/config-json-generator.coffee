@@ -3,8 +3,6 @@
 
 fs = require 'fs'
 
-CustomConfigLoader = require './custom-config-loader'
-
 class ConfigJSONGenerator
 
     defaultConfigsPath: normalize "#{__dirname}/../../default-values/non-model-configs"
@@ -31,12 +29,10 @@ class ConfigJSONGenerator
     ###*
 
     @constructor
-    @param {String} customConfigsPath
+    @param {Object} customConfigObj
     @param {String} env
     ###
-    constructor: (customConfigsPath, env) ->
-
-        @customConfigLoader = new CustomConfigLoader customConfigsPath, env
+    constructor: (@customConfigObj = {}, env) ->
 
 
     ###*
@@ -94,7 +90,7 @@ class ConfigJSONGenerator
     getMergedConfig: (configName) ->
 
         defaultConfig = @loadDefaultConfig(configName)
-        customConfig  = @loadCustomConfig(configName)
+        customConfig  = @customConfigObj[configName]
 
         return @merge customConfig, defaultConfig
 
@@ -122,18 +118,6 @@ class ConfigJSONGenerator
                 merged[k] = sub
 
         return merged
-
-
-    ###*
-    load custom config
-
-    @method loadCustomConfig
-    @param {String} configName
-    @protected
-    ###
-    loadCustomConfig: (configName) ->
-
-        @customConfigLoader.load(configName)
 
 
     ###*

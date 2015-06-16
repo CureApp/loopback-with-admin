@@ -6,13 +6,15 @@ Main = require '../../src/main'
 
 domainDir = normalize __dirname + '/domains/music-live'
 domain = require('base-domain').createInstance dirname: domainDir
-configDir = normalize __dirname + '/music-live-configs'
 
 
 describe 'LoopbackProcessLauncher', ->
 
     before ->
-        @main = new Main(domain, configDir)
+        customConfigs =
+            server: port: 3002
+
+        @main = new Main(domain, customConfigs)
         @main.reset()
         @main.generate()
 

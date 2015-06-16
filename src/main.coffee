@@ -8,6 +8,7 @@ LoopbackServer = require './lib/loopback-server'
 ConfigJSONGenerator  = require './lib/config-json-generator'
 ModelsGenerator      = require './lib/models-generator'
 BuildInfoGenerator   = require './lib/build-info-generator'
+CustomConfigs        = require './lib/custom-configs'
 
 ###*
 entry point
@@ -24,15 +25,15 @@ class Main
     @public
     @static
     @param {Facade} domain  (the same interface as base-domain)
-    @param {String} [configDir] directory containing config info
+    @param {Object|String} [config] config object or config directory containing config info
     @param {Boolean} [options.reset] reset previously-generated settings before generation
     @param {String} [options.env] set environment (production|development|...)
     @param {Boolean} [options.spawn] if true, spawns child process of loopback
     return {Promise(LoopbackInfo)}
     ###
-    @runWithDomain: (domain, configDir, options = {}) ->
+    @runWithDomain: (domain, config, options = {}) ->
 
-        main = new @(domain, configDir, options.env)
+        main = new @(domain, config, options.env)
 
         main.reset() unless options.reset is false
 
@@ -49,16 +50,16 @@ class Main
     @method runWithoutDomain
     @public
     @static
-    @param {String} [configDir] directory containing config info
+    @param {Object|String} [config] config object or config directory containing config info
     @param {Boolean} [options.reset] reset previously-generated settings before generation
     @param {String} [options.env] set environment (production|development|...)
     @param {Boolean} [options.spawn] if true, spawns child process of loopback
     return {Promise(LoopbackInfo)}
     ###
-    @runWithoutDomain: (configDir, options) ->
+    @runWithoutDomain: (config, options) ->
         emptyDir = normalize __dirname + '/../default-values/empty-domain-dir'
         domain = require('base-domain').createInstance(dirname: emptyDir)
-        @runWithDomain(domain, configDir, options)
+        @runWithDomain(domain, config, options)
 
 
 
@@ -66,29 +67,18 @@ class Main
     @constructor
     @private
     ###
-    constructor: (@domain, @configDir, @env) ->
+    constructor: (@domain, configs, @env) ->
+
+        customConfigs = new CustomConfigs(configs)
 
         @env ?= process.env.NODE_ENV or 'development'
 
-        modelDefinitions = @loadModelDefinitions()
+        modelDefinitions = customConfigs.loadModelDefinitions()
+        configObj        = customConfigs.toObject()
 
-        @configJSONGenerator = new ConfigJSONGenerator(@configDir, @env)
+        @configJSONGenerator = new ConfigJSONGenerator(configObj, @env)
         @modelsGenerator     = new ModelsGenerator(@domain, modelDefinitions)
-        @buildInfoGenerator  = new BuildInfoGenerator(@domain, @configDir, @env)
-
-
-    ###*
-    @private
-    ###
-    loadModelDefinitions: ->
-
-        return {} if not @configDir
-
-        try
-            require(@configDir + '/model-definitions')
-        catch e
-            console.log e
-            return {}
+        @buildInfoGenerator  = new BuildInfoGenerator(@domain, configObj, @env)
 
 
     ###*

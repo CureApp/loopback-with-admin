@@ -26,15 +26,15 @@ describe 'ModelConfigGenerator', ->
             expect(Object.keys config).to.have.length 10
 
 
-    describe 'loadCustomConfig', ->
+    describe 'customConfigObj', ->
 
-        it 'returns model config for each entity names', ->
+        it 'contains model config for each entity names', ->
             entityNames = [
                 'player'
                 'instrument'
                 'song'
             ]
-            config = new ModelConfigGenerator(entityNames).loadCustomConfig()
+            config = new ModelConfigGenerator(entityNames).customConfigObj['model-config']
             expect(Object.keys config).to.have.length 3
             expect(config.player).to.have.property 'dataSource', 'db'
             expect(config.player).to.have.property 'public', true
