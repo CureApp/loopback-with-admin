@@ -10,7 +10,12 @@ npm install loopback-with-admin
 
 # simplest run
 
-    require('loopback-with-admin').run().then (lbInfo) ->
+    models =
+        'user':
+            base: 'User'
+
+
+    require('loopback-with-admin').run(models).then (lbInfo) ->
 
         console.log lbInfo.getURL()         # loopback api root
         console.log lbInfo.getAccessToken() # access token of admin
@@ -22,7 +27,6 @@ before running, you can prepare a directory which contains custom config informa
 
 ```text
 (config-dir) # any name is acceptable
-|-- model-definitions.coffee
 |-- common
 |   |-- server.coffee
 |   `-- admin.coffee
@@ -39,11 +43,11 @@ before running, you can prepare a directory which contains custom config informa
     lbWithAdmin.run(configDir).then ->
         # loopback started
 
-# run with config dir
+# run with config
 
     lbWithAdmin = require 'loopback-with-admin'
 
-    lbWithAdmin.run(server: port: 3001).then ->
+    lbWithAdmin.run(models, server: port: 3001).then ->
 
 
 # admin
@@ -99,14 +103,13 @@ you can set the same properties as these JSONs.
 
 # model definitions
 
-    module.exports =
+    models =
         player: # model name
-            base: 'User'  # the same as loopback model settings.base
+            base: 'User'  
             aclType: 'admin' # specific for this system
 
         instrument:
             aclType: 'owner-read'
-
 
 
 the same format as [loopback model definition](http://docs.strongloop.com/display/public/LB/Customizing+models)
