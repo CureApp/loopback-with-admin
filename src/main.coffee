@@ -51,7 +51,7 @@ class Main
 
         @env ?= process.env.NODE_ENV or 'development'
 
-        customConfigs = new CustomConfigs(configs)
+        customConfigs = new CustomConfigs(configs, @env)
         configObj = customConfigs.toObject()
 
         @configJSONGenerator = new ConfigJSONGenerator(configObj, @env)
