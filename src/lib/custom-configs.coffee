@@ -7,18 +7,13 @@ class CustomConfigs
         if typeof configs is 'string' # parse is as a configDir
             configDir = configs
             @configs = @loadDir(configDir, env)
-            @modelDefinitions = @loadModelDefinitions(configDir)
         else
             @configs = @clone configs
-            @modelDefinitions = @configs.models ? {}
             delete @configs.models
 
 
     toObject: ->
         return @clone @configs
-
-    getModelDefinitions: ->
-        return @clone @modelDefinitions
 
 
     loadDir: (configDir, env) ->
@@ -38,17 +33,6 @@ class CustomConfigs
                 configs[configName] ?= require(commonDir + '/' + configFile) if ext in ['coffee', 'js', 'json']
 
         return configs
-
-
-    loadModelDefinitions: (configDir) ->
-
-        return {} if not configDir
-
-        try
-            require(configDir + '/model-definitions')
-        catch e
-            console.log e
-            return {}
 
 
     clone: (obj) ->
