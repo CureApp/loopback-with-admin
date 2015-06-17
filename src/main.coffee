@@ -19,7 +19,7 @@ class Main
 
     ###*
     entry point.
-    run loopback with model definition, config
+    run loopback with model definitions, config
 
     @method run
     @public
