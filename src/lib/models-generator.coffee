@@ -6,7 +6,6 @@ fs = require 'fs'
 { mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
 ModelDefinition = require './model-definition'
-EmptyModelDefinition = require './empty-model-definition'
 ModelConfigGenerator = require './model-config-generator'
 
 class ModelsGenerator

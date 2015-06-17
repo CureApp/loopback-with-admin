@@ -4,7 +4,6 @@
 fs = require 'fs'
 
 ModelsGenerator      = require '../../src/lib/models-generator'
-EmptyModelDefinition = require '../../src/lib/empty-model-definition'
 ModelDefinition      = require '../../src/lib/model-definition'
 ModelConfigGenerator = require '../../src/lib/model-config-generator'
 
@@ -25,77 +24,29 @@ describe 'ModelsGenerator', ->
             expect(mGenerator.modelConfigGenerator).to.be.instanceof ModelConfigGenerator
 
 
-    xdescribe 'createDefinition', ->
+    describe 'createModelDefinitions', ->
 
-        it 'returns ModelDefinition with EntityModel when domain and model exists', ->
-
-            domain = BaseDomain.createInstance()
-            domain.addClass('a', class A extends BaseDomain.Entity)
-
-            customDefinition = {}
-
-            def = new ModelsGenerator().createDefinition(customDefinition, 'a', domain)
-            expect(def).to.have.property 'Entity', domain.getModel 'a'
-
-
-        it 'returns EmptyModelDefinition when model is not Entity', ->
-
-            domain = BaseDomain.createInstance()
-            domain.addClass('a', class A extends BaseDomain.BaseModel)
-
-            customDefinition = {}
-
-            def = new ModelsGenerator().createDefinition(customDefinition, 'a', domain)
-            expect(def).to.be.instanceof EmptyModelDefinition
-            expect(def.getName()).to.equal 'a'
-
-        it 'returns EmptyModelDefinition when model does not exist', ->
-
-            domain = BaseDomain.createInstance()
-            customDefinition = {}
-
-            def = new ModelsGenerator().createDefinition(customDefinition, 'a', domain)
-            expect(def).to.be.instanceof EmptyModelDefinition
-            expect(def.getName()).to.equal 'a'
-
-
-        it 'returns EmptyModelDefinition when domain does not exist', ->
-            customDefinition = {}
-
-            def = new ModelsGenerator().createDefinition(customDefinition, 'a')
-            expect(def).to.be.instanceof EmptyModelDefinition
-            expect(def.getName()).to.equal 'a'
-
-
-    xdescribe 'createModelDefinitions', ->
-
-        it 'creates models only included in customDefinitions', ->
-            domain = BaseDomain.createInstance()
-            domain.addClass('a', class A extends BaseDomain.Entity)
-            domain.addClass('b', class B extends BaseDomain.Entity)
+        it 'creates models included in customDefinitions', ->
 
             customDefinitions = a: {}
-            defs = new ModelsGenerator().createModelDefinitions(customDefinitions, domain)
+            defs = new ModelsGenerator().createModelDefinitions(customDefinitions)
             expect(defs).to.have.property 'a'
             expect(defs).not.to.have.property 'b'
 
 
-    xdescribe 'modelConfigGenerator', ->
+    describe 'modelConfigGenerator', ->
 
         it 'has model config with models included in customDefinitions', ->
-            domain = BaseDomain.createInstance()
-            domain.addClass('a', class A extends BaseDomain.Entity)
-            domain.addClass('b', class B extends BaseDomain.Entity)
 
             customDefinitions = a: {}
-            mcGenerator = new ModelsGenerator(customDefinitions, domain).modelConfigGenerator
+            mcGenerator = new ModelsGenerator(customDefinitions).modelConfigGenerator
             mergedConfig = mcGenerator.getMergedConfig('model-config')
             expect(mergedConfig).to.have.property 'a'
             expect(mergedConfig).not.to.have.property 'b'
 
 
 
-    xdescribe 'getEmptyJSContent', ->
+    describe 'getEmptyJSContent', ->
 
         it 'returns valid JS code', ->
 
