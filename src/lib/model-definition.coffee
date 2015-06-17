@@ -7,24 +7,12 @@ AclGenerator = require './acl-generator'
 ###
 class ModelDefinition
 
-    constructor: (@Entity, @customDefinition = {}) ->
+    constructor: (@modelName, @customDefinition = {}) ->
 
-        @aclType = @customDefinition.aclType ? 'admin'
-
-        @definition =
-            name        : @getName()
-            plural      : @getName()
-            base        : "PersistedModel"
-            idInjection : true
-            properties  : {}
-            validations : []
-
+        @definition = @getDefaultDefinition()
         @definition[k] = @customDefinition[k] for k, v of @customDefinition
-        delete @definition.aclType
 
-        @definition.acls      ?= @getACL()
-        @definition.relations ?= @getRelations()
-
+        @setACL()
 
     ###*
     get model name
@@ -71,58 +59,35 @@ class ModelDefinition
 
 
     ###*
-    get ACL by aclType
+    set ACL to definition by aclType
 
     ###
-    getACL: ->
-        new AclGenerator(@aclType, @isUser()).generate()
+    setACL: ->
+        @aclType = @definition.aclType
+        delete @definition.aclType
 
+        if not @aclType and Array.isArray @definition.acls
+            @aclType = 'custom'
+            return
+
+        @aclType ?= 'admin'
+        @definition.acls = new AclGenerator(@aclType, @isUser()).generate()
 
 
     ###*
-    get property info of sub-entities
+    get default definition object
 
-    @method getEntityPropInfo
+    @private
     ###
-    getEntityPropInfo: ->
-        info = {}
-        propInfo = @Entity.getPropInfo()
+    getDefaultDefinition: ->
+        name        : @modelName
+        plural      : @modelName
+        base        : "PersistedModel"
+        idInjection : true
+        properties  : {}
+        validations : []
+        relations   : {}
 
-        for prop in @Entity.getEntityProps()
-            info[prop] = propInfo.dic[prop]
-
-        return info
-
-
-    ###*
-    get "belongsTo" relations
-
-    ###
-    getRelations: ->
-        rels = {}
-        for prop, typeInfo of @getEntityPropInfo()
-
-            rels[prop] =
-                type       : 'belongsTo'
-                model      : typeInfo.model
-                foreignKey : typeInfo.idPropName
-
-        return rels
-
-
-    ###*
-    set "hasMany" relations
-
-    @method setHasManyRelation
-    @param {String} relModel
-    ###
-    setHasManyRelation: (relModel) ->
-        rel =
-            type       : 'hasMany'
-            model      : relModel
-            foreignKey : ''
-
-        @definition.relations[relModel] = rel
 
 
 module.exports = ModelDefinition

@@ -1,18 +1,6 @@
 
 ModelDefinition = require '../../src/lib/model-definition'
 
-Domain = require('base-domain')
-
-domain = Domain.createInstance()
-
-class EntityModel extends Domain.Entity
-    @properties:
-        em: @TYPES.MODEL 'ext-model'
-
-class ExtModel extends Domain.Entity
-
-EntityModel = domain.addClass('entity-model', EntityModel)
-ExtModel    = domain.addClass('ext-model', ExtModel)
 
 describe 'ModelDefinition', ->
 
@@ -20,100 +8,60 @@ describe 'ModelDefinition', ->
 
         it 'use custom acls setting if exists', ->
             customDefinition =
-                acls: 'xxx'
-            def = new ModelDefinition(EntityModel, customDefinition)
-            expect(def.definition.acls).to.equal 'xxx'
+                acls: ['xxx']
+            def = new ModelDefinition('entity-model', customDefinition)
+            expect(def.definition.acls).to.eql ['xxx']
 
 
-        it 'use custom relations setting if exists', ->
+        it 'set acls by aclType', ->
+            customDefinition = aclType: 'owner'
+            def = new ModelDefinition('entity-model', customDefinition)
+            expect(def.definition.acls).to.be.instanceof Array
+            expect(def.definition.acls).to.have.length.above 1
+
+
+        it 'use custom relations setting', ->
             customDefinition =
                 relations: 'xxx'
-            def = new ModelDefinition(EntityModel, customDefinition)
+            def = new ModelDefinition('entity-model', customDefinition)
             expect(def.definition.relations).to.equal 'xxx'
 
-
-    describe 'getName', ->
-
-        it 'returns name of entity', ->
-            modelDefinition = new ModelDefinition(EntityModel)
-            expect(modelDefinition.getName()).to.equal 'entity-model'
 
     describe 'isUser', ->
 
         it 'returns false by default', ->
-            modelDefinition = new ModelDefinition(EntityModel)
+            modelDefinition = new ModelDefinition('xxx')
             expect(modelDefinition.isUser()).to.be.false
 
         it 'returns true if base is User', ->
-            modelDefinition = new ModelDefinition(EntityModel, base: 'User')
+            modelDefinition = new ModelDefinition('xxx', base: 'User')
             expect(modelDefinition.isUser()).to.be.true
 
         it 'returns true if base is not User', ->
-            modelDefinition = new ModelDefinition(EntityModel, base: 'Users')
+            modelDefinition = new ModelDefinition('xxx', base: 'Users')
             expect(modelDefinition.isUser()).to.be.false
 
 
     describe 'aclType', ->
 
         it 'is admin by default', ->
-            modelDefinition = new ModelDefinition(EntityModel)
+            modelDefinition = new ModelDefinition('xxx')
             expect(modelDefinition.aclType).to.equal 'admin'
 
         it 'follows customDefinition value', ->
-            modelDefinition = new ModelDefinition(EntityModel, aclType: 'public-read')
+            modelDefinition = new ModelDefinition('xxx', aclType: 'public-read')
             expect(modelDefinition.aclType).to.equal 'public-read'
 
 
-
-    describe 'getACL', ->
-
-        it 'returns acl by aclType and isUser or not', ->
-
-            adminACL     = new ModelDefinition(EntityModel).getACL()
-            adminACL2    = new ModelDefinition(EntityModel, aclType: 'admin').getACL()
-            adminUserACL = new ModelDefinition(EntityModel, base: 'User').getACL()
-            ownerUserACL = new ModelDefinition(EntityModel, base: 'User', aclType: 'owner').getACL()
-
-            expect(adminACL).to.eql adminACL2
-            expect(adminUserACL).not.to.eql adminACL
-            expect(adminUserACL).not.to.eql ownerUserACL
-            expect(adminACL).not.to.eql ownerUserACL
-
-
-    describe 'getRelations', ->
-        it 'returns "belongsTo" relations by EntityModel\'s property', ->
-
-            rels = new ModelDefinition(EntityModel).getRelations()
-
-            expect(rels).to.have.property 'em'
-            expect(rels.em).to.have.property 'type', 'belongsTo'
-            expect(rels.em).to.have.property 'model', 'ext-model'
-            expect(rels.em).to.have.property 'foreignKey', 'extModelId'
-
-
-    describe 'setHasManyRelation', ->
-
-        it 'set "hasMany" relation with given model name', ->
-            def = new ModelDefinition(EntityModel)
-            def.setHasManyRelation('abcd')
-
-            rels = def.definition.relations
-
-            expect(rels).to.have.property 'abcd'
-            expect(rels.abcd).to.have.property 'type', 'hasMany'
-            expect(rels.abcd).to.have.property 'model', 'abcd'
-            expect(rels.abcd).to.have.property 'foreignKey', ''
-
-
-
-
-
+        it 'returns "custom" when aclType is not set and acls exist', ->
+            modelDefinition = new ModelDefinition('xxx', acls: [])
+            expect(modelDefinition.aclType).to.equal 'custom'
 
 
     describe 'toJSON', ->
 
         before ->
-            @def = new ModelDefinition(EntityModel, base: 'User')
+            @def = new ModelDefinition('entity-model', base: 'User')
             @json = @def.toJSON()
 
         it 'has name', ->
@@ -130,18 +78,17 @@ describe 'ModelDefinition', ->
 
         it 'has acls', ->
             expect(@json).to.have.property 'acls'
-            expect(@json.acls).to.eql @def.getACL()
+            expect(@json.acls).to.be.instanceof Array
 
         it 'has relations', ->
             expect(@json).to.have.property 'relations'
-            expect(@json.relations).to.eql @def.getRelations()
 
 
     describe 'toStringifiedJSON', ->
 
         it 'returns stringified definition', ->
 
-            def = new ModelDefinition(EntityModel)
+            def = new ModelDefinition('xxx')
             stringifiedJSON = def.toStringifiedJSON()
             expect(-> JSON.parse(stringifiedJSON)).not.to.throw Error
 

@@ -8,15 +8,16 @@ lbProcess =
     kill: -> @cb()
 
 
-domainDir = __dirname + '/domains/music-live'
 configDir = __dirname + '/music-live-configs'
-domain = require('base-domain').createInstance dirname: domainDir
+
+modelDefinitions = {}
+
 
 describe 'LoopbackInfo', ->
 
     before ->
         env = 'xxxyyyzzz'
-        main = new Main(domain, configDir, env)
+        main = new Main(modelDefinitions, configDir, env)
         main.configJSONGenerator.destinationPath                  = __dirname + '/lbi-test/config'
         main.modelsGenerator.destinationDir                       = __dirname + '/lbi-test/models'
         main.modelsGenerator.modelConfigGenerator.destinationPath = __dirname + '/lbi-test/config'

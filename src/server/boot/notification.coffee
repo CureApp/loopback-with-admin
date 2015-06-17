@@ -4,7 +4,7 @@ module.exports = (app, cb) ->
     Installation = app.models.installation
 
     Installation.beforeSave = (next) ->
-        @appId = 'loopback-with-domain'
+        @appId = 'loopback-with-admin'
         next()
 
     registerApp(app, cb)
@@ -22,12 +22,12 @@ registerApp = (app, cb) ->
     buildInfo = require('../build-info')
 
     Application.beforeSave = (next) ->
-        @id = 'loopback-with-domain'
+        @id = 'loopback-with-admin'
         next()
 
     Application.register(
         'CureApp, Inc.'
-        'loopback-with-domain'
+        'loopback-with-admin'
         {
             descriptions: ''
             pushSettings:

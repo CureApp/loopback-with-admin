@@ -16,11 +16,10 @@ class ModelsGenerator
 
     ###*
     @param {Object} customModelDefinitions model definition data, compatible with loopback's model-config.json and aclType
-    @param {Facade} domain facade object in [base-domain](https://github.com/CureApp/base-domain)
     ###
-    constructor: (customModelDefinitions, domain) ->
+    constructor: (customModelDefinitions) ->
 
-        @definitions = @createModelDefinitions(customModelDefinitions, domain)
+        @definitions = @createModelDefinitions(customModelDefinitions)
 
         entityNames = Object.keys @definitions
         @modelConfigGenerator = new ModelConfigGenerator(entityNames)
@@ -130,47 +129,15 @@ class ModelsGenerator
 
     @private
     ###
-    createModelDefinitions: (customModelDefinitions, domain) ->
+    createModelDefinitions: (customModelDefinitions) ->
 
         definitions = {}
 
         for modelName, customModelDefinition of customModelDefinitions
 
-            definitions[modelName] = @createDefinition(customModelDefinition, modelName, domain)
-
-        @setHasManyRelations(definitions)
+            definitions[modelName] = new ModelDefinition(modelName, customModelDefinition)
 
         return definitions
-
-
-    ###*
-    @method createDefinition
-    @private
-    @return {ModelDefinition}
-    ###
-    createDefinition: (customModelDefinition, modelName, domain) ->
-
-        if domain?.hasClass(modelName) and domain.getModel(modelName).isEntity
-
-            Entity = domain.getModel modelName
-            return new ModelDefinition(Entity, customModelDefinition)
-
-        else
-            return new EmptyModelDefinition(modelName, customModelDefinition)
-
-
-    ###*
-    set "hasMany" relations
-
-    @private
-    ###
-    setHasManyRelations: (definitions) ->
-
-        for modelName, definition of definitions
-            for prop, typeInfo of definition.getEntityPropInfo()
-                relModelName = typeInfo.model
-                relModelDefinition = definitions[relModelName]
-                relModelDefinition?.setHasManyRelation(modelName)
 
 
 module.exports = ModelsGenerator

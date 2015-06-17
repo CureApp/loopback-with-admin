@@ -7,8 +7,8 @@ LoopbackProcessLauncher = require '../src/lib/loopback-process-launcher'
 LoopbackServer = require '../src/lib/loopback-server'
 Promise = require('es6-promise').Promise
 
-domainDir = normalize __dirname + '/lib/domains/music-live'
-domain = require('base-domain').createInstance dirname: domainDir
+modelDefinitions = {}
+
 configDir = normalize __dirname + '/lib/music-live-configs'
 
 describe 'Main', ->
@@ -17,7 +17,7 @@ describe 'Main', ->
 
         it 'is "development" by default', ->
 
-            main = new Main(domain, configDir)
+            main = new Main(modelDefinitions, configDir)
             expect(main.env).to.equal 'development'
 
 
@@ -25,7 +25,7 @@ describe 'Main', ->
 
             process.env.NODE_ENV = 'xxxx'
 
-            main = new Main(domain, configDir)
+            main = new Main(modelDefinitions, configDir)
             expect(main.env).to.equal 'xxxx'
 
             process.env.NODE_ENV = ''
@@ -33,7 +33,7 @@ describe 'Main', ->
 
         it 'is set value from constructor if set.', ->
             process.env.NODE_ENV = 'xxxx'
-            main = new Main(domain, configDir, 'local')
+            main = new Main(modelDefinitions, configDir, 'local')
 
             expect(main.env).to.equal 'local'
             process.env.NODE_ENV = ''
@@ -43,7 +43,7 @@ describe 'Main', ->
 
         it 'invokes three generator\'s generate()', ->
 
-            main = new Main(domain, configDir)
+            main = new Main(modelDefinitions, configDir)
             counter = 0
             generate = -> counter++
             main.configJSONGenerator = generate: generate
@@ -60,7 +60,7 @@ describe 'Main', ->
             mkdirSyncRecursive(__dirname + '/main-test/config')
             mkdirSyncRecursive(__dirname + '/main-test/models')
 
-            main = new Main(domain, configDir)
+            main = new Main(modelDefinitions, configDir)
             main.configJSONGenerator.destinationPath = __dirname + '/main-test/config'
             main.modelsGenerator.destinationDir = __dirname + '/main-test/models'
             main.modelsGenerator.modelConfigGenerator.destinationPath = __dirname + '/main-test/config'
@@ -79,7 +79,7 @@ describe 'Main', ->
 
         it 'invokes three generator\'s reset()', ->
 
-            main = new Main(domain, configDir)
+            main = new Main(modelDefinitions, configDir)
             counter = 0
             reset = -> counter++
             main.configJSONGenerator = reset: reset
@@ -116,9 +116,7 @@ describe 'Main', ->
             Main.launchLoopback(spawn)
 
 
-
-
-    describe 'runWithDomain', ->
+    describe 'run', ->
 
         beforeEach ->
             @called = {}
@@ -138,7 +136,7 @@ describe 'Main', ->
 
         it 'invokes reset() unless reset is false', ->
 
-            Main.runWithDomain(domain, configDir)
+            Main.run(modelDefinitions, configDir)
 
             expect(@called.reset).to.be.true
             expect(@called.generate).to.be.true
@@ -147,22 +145,9 @@ describe 'Main', ->
 
         it 'does not invoke reset if reset is false', ->
 
-            Main.runWithDomain(domain, configDir, reset: false)
+            Main.run(modelDefinitions, configDir, reset: false)
 
             expect(@called.reset).not.to.exist
             expect(@called.generate).to.be.true
             expect(@called.launchLoopback).to.be.true
 
-
-    describe 'runWithoutDomain', ->
-
-        it 'creates empty domain', (done) ->
-
-            runWithDomain = Main.runWithDomain
-
-            Main.runWithDomain = (domain) ->
-                expect(domain).to.be.instanceof require('base-domain')
-                Main.runWithDomain = runWithDomain
-                done()
-
-            Main.runWithoutDomain()

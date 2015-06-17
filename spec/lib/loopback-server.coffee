@@ -4,14 +4,11 @@
 LoopbackServer = require '../../src/lib/loopback-server'
 Main = require '../../src/main'
 
-domainDir = normalize __dirname + '/domains/music-live'
-domain = require('base-domain').createInstance dirname: domainDir
-
 
 describe 'LoopbackServer', ->
 
     before ->
-        @main = new Main(domain, server: port: 3001)
+        @main = new Main({}, server: port: 3001)
         @main.reset()
         @main.generate()
 

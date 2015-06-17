@@ -14,15 +14,15 @@ describe 'BuildInfoGenerator', ->
 
         before ->
 
-            domain = require('base-domain').createInstance(dirname: 'dummy-domain-dir')
+            modelDefinitions = player: 'base': 'User'
             configObj = server: port: 3001
             env    = 'production'
 
-            @info = new BuildInfoGenerator(domain, configObj, env).getMergedConfig()
+            @info = new BuildInfoGenerator(modelDefinitions, configObj, env).getMergedConfig()
 
-        it 'contains domain info', ->
-            expect(@info).to.have.property 'domainType', 'Facade'
-            expect(@info).to.have.property 'domainDir', 'dummy-domain-dir'
+        it 'contains modelDefinitions', ->
+            expect(@info).to.have.property 'modelDefinitions'
+            expect(@info.modelDefinitions.player.base).to.equal 'User'
 
         it 'contains custom configs', ->
             expect(@info).to.have.property 'customConfigs'
@@ -54,8 +54,7 @@ describe 'BuildInfoGenerator', ->
     describe 'generate', ->
 
         before ->
-            domain = dirname: 'dummy'
-            @generator = new BuildInfoGenerator(domain, {}, 'development')
+            @generator = new BuildInfoGenerator({}, {}, 'development')
             @generator.destinationPath = __dirname + '/d'
             mkdirSyncRecursive __dirname + '/d'
 
@@ -68,8 +67,7 @@ describe 'BuildInfoGenerator', ->
             generated = @generator.generate()
             expect(generated).to.have.property 'env', 'development'
             expect(generated).to.have.property 'buildAt'
-            expect(generated).to.have.property 'domainType'
-            expect(generated).to.have.property 'domainDir', 'dummy'
+            expect(generated).to.have.property 'modelDefinitions'
             expect(generated).to.have.property 'customConfigs'
 
 

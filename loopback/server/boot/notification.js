@@ -5,7 +5,7 @@ module.exports = function(app, cb) {
   var Installation;
   Installation = app.models.installation;
   Installation.beforeSave = function(next) {
-    this.appId = 'loopback-with-domain';
+    this.appId = 'loopback-with-admin';
     return next();
   };
   return registerApp(app, cb);
@@ -24,10 +24,10 @@ registerApp = function(app, cb) {
   config = require('../push-credentials');
   buildInfo = require('../build-info');
   Application.beforeSave = function(next) {
-    this.id = 'loopback-with-domain';
+    this.id = 'loopback-with-admin';
     return next();
   };
-  return Application.register('CureApp, Inc.', 'loopback-with-domain', {
+  return Application.register('CureApp, Inc.', 'loopback-with-admin', {
     descriptions: '',
     pushSettings: {
       apns: {

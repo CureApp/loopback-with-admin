@@ -6,7 +6,6 @@
     "test": "grunt"
   },
   "dependencies": {
-    "base-domain": "^1.4.0",
     "coffee-script": "^1.9.3",
     "compression": "^1.0.3",
     "errorhandler": "^1.1.1",

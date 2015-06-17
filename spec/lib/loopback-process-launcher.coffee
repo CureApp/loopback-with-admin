@@ -4,9 +4,7 @@
 LoopbackProcessLauncher = require '../../src/lib/loopback-process-launcher'
 Main = require '../../src/main'
 
-domainDir = normalize __dirname + '/domains/music-live'
-domain = require('base-domain').createInstance dirname: domainDir
-
+modelDefinitions = {}
 
 describe 'LoopbackProcessLauncher', ->
 
@@ -14,7 +12,7 @@ describe 'LoopbackProcessLauncher', ->
         customConfigs =
             server: port: 3002
 
-        @main = new Main(domain, customConfigs)
+        @main = new Main(modelDefinitions, customConfigs)
         @main.reset()
         @main.generate()
 
