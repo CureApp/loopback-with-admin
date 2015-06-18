@@ -14,6 +14,7 @@
     "loopback-boot": "^2.6.5",
     "loopback-component-push": "~1.4.4",
     "loopback-connector-mongodb": "^1.11.1",
+    "loopback-connector-memory-idstr": "^1.0.0",
     "loopback-datasource-juggler": "^2.30.1",
     "serve-favicon": "^2.0.1",
     "wrench": "^1.5.8"

@@ -1,11 +1,11 @@
 {
     "memory": {
         "name": "memory",
-        "connector": "memory"
+        "connector": "memory-idstr"
     },
     "db": {
         "name": "db",
-        "connector": "memory"
+        "connector": "memory-idstr"
     },
     "push": {
         "name": "push",
