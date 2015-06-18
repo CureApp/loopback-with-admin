@@ -8,8 +8,11 @@ run loopback server with admin and push notification features.
 npm install loopback-with-admin
 ```
 
-# simplest run
+# usage
+## simplest run
 
+    # model definitions
+    # see "models" section for more detail
     models =
         'user':
             base: 'User'
@@ -17,11 +20,12 @@ npm install loopback-with-admin
 
     require('loopback-with-admin').run(models).then (lbInfo) ->
 
+        # see "LoopbackInfo" section for more detail
         console.log lbInfo.getURL()         # loopback api root
         console.log lbInfo.getAccessToken() # access token of admin
 
 
-# run with config dir
+## run with config dir
 
 before running, you can prepare a directory which contains custom config information.
 
@@ -40,65 +44,57 @@ before running, you can prepare a directory which contains custom config informa
 
     configDir = '/path/to/config-dir'
 
-    lbWithAdmin.run(configDir).then ->
+    lbWithAdmin.run(models, configDir).then ->
         # loopback started
 
-# run with config
+## run with config
 
     lbWithAdmin = require 'loopback-with-admin'
 
     lbWithAdmin.run(models, server: port: 3001).then ->
 
+## passing custom environment with argument
 
-# admin
-(coming soon)
+    env = 'production'
 
-# push notification 
-(coming soon)
+    require('loopback-with-admin').run(models, configDir, env)
 
+env is defined as
 
-# configs
-
-these are the config names.
-
-- admin
-- datasources
-- middleware
-- server
-- push-credentials
-
-see JSON files in "default-values/non-model-configs" directory.
-you can set the same properties as these JSONs.
+```coffee
+    env ?= process.env.NODE_ENV or 'development'
+```
+- use custom value if passed
+- use NODE\_ENV if exists
+- default value is 'development'
 
 
-## admin
+```bash
+$ NODE_ENV=production node app.js
+```
 
- config key  | meaning
--------------|-----------------------
- accessToken | accessToken for admin
+when your config dir is
 
-## datasources
+```text
+(config-dir) # any name is acceptable
+|-- common
+|   |-- server.coffee
+|   `-- admin.coffee
+|-- development
+|   `-- datasources.coffee
+|-- local
+|   `-- datasources.coffee
+|-- production
+|   `-- datasources.coffee
+```
 
- config key  | meaning
--------------|-----------------------
- memory      | on memory datasource
- db          | datasource for custom entities
+and launching script like
 
-## server
+```bash
+$ NODE_ENV=local node app.js
+```
+then, loopback-with-admin selects configs in "local" directory.
 
- config key  | meaning       | default
--------------|---------------|----------------
- restApiRoot | REST api root | /api
- port        | port number   | 3000
-
-
-## push-credentials
-
- config key      | meaning
------------------|-------------------------------------------
- gcmServerApiKey | api key for Google Cloud Messaging (GCM)
- apnsCertData    | certificate pem contents for APNs
- apnsKeyData     | key pem contents for APNs
 
 
 # model definitions
@@ -124,56 +120,75 @@ three types are available.
 
  aclType     | meaning
 -------------|-----------------------------------------------------
- admin       | only admin can CRUD the model
+ admin       | only admin can CRUD the model (_default_)
  owner       | admin and the owner of the model can CRUD
  public-read | everyone can READ the model and admin can CRUD
  none        | everyone can CRUD the model
 
 
-# switching environment
+# configs
 
-running script with environment variable "NODE\_ENV" like
+these are the config names.
 
-```bash
-$ NODE_ENV=production node app.js
-```
+- admin
+- datasources
+- middleware
+- server
+- push-credentials
 
-"development" is selected by default.
-
-when your config dir is
-
-```text
-(config-dir) # any name is acceptable
-|-- common
-|   |-- server.coffee
-|   `-- admin.coffee
-|-- development
-|   `-- datasources.coffee
-|-- local
-|   `-- datasources.coffee
-|-- production
-|   `-- datasources.coffee
-```
-
-and launching script like
-
-```bash
-$ NODE_ENV=local node app.js
-```
-then, loopback-with-admin selects configs in "local" directory.
-
-## passing custom environment with argument
-
-    env = 'production'
-
-    lbWithAdmin.run(configDir, env)
-
-env is prior to NODE\_ENV settings.
+see JSON files in "default-values/non-model-configs" directory.
+you can set the same properties as these JSONs.
 
 
-# modified loopback-datasource-juggler
+## admin
 
-using [CureApp/loopback-datasource-juggler](https://github.com/CureApp/loopback-datasource-juggler).
+ config key  | meaning
+-------------|-----------------------
+ accessToken | accessToken for admin
 
-this repository is almost the same as original one except 'memory' connector handles id as string
-(orignally integer).
+## datasources
+
+ config key  | meaning
+-------------|---------------------------------
+ memory      | on memory datasource
+ db          | datasource for custom entities
+
+Each datasource name has its connectors.
+
+### available loopback connectors
+
+available datasources are 
+- mongodb
+- memory
+- memory-idstr
+
+"memory-idstr" is the default connector, which stores data only in memory,
+and id type is string whereas id type of "memory" is number.
+
+
+
+## server
+
+ config key  | meaning       | default
+-------------|---------------|----------------
+ restApiRoot | REST api root | /api
+ port        | port number   | 3000
+
+
+## push-credentials
+
+ config key      | meaning
+-----------------|-------------------------------------------
+ gcmServerApiKey | api key for Google Cloud Messaging (GCM)
+ apnsCertData    | certificate pem contents for APNs
+ apnsKeyData     | key pem contents for APNs
+
+
+# admin
+(coming soon)
+
+# push notification 
+(coming soon)
+
+
+
