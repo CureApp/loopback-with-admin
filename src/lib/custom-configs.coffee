@@ -18,21 +18,35 @@ class CustomConfigs
 
     loadDir: (configDir, env) ->
 
-        configs = {}
-
-        if env
-            envDir = "#{configDir}/#{env}"
-            for configFile in fs.readdirSync(envDir)
-                [configName, ext] = configFile.split('.')
-                configs[configName] = require(envDir + '/' + configFile) if ext in ['coffee', 'js', 'json']
-
-        commonDir = "#{configDir}/common"
-        if fs.existsSync commonDir
-            for configFile in fs.readdirSync(commonDir)
-                [configName, ext] = configFile.split('.')
-                configs[configName] ?= require(commonDir + '/' + configFile) if ext in ['coffee', 'js', 'json']
+        configs = @loadEnvDir(configDir, env)
+        @appendCommonConfigs(configDir, configs)
 
         return configs
+
+
+    loadEnvDir: (configDir, env) ->
+        configs = {}
+        envDir = "#{configDir}/#{env}"
+
+        return configs if not env or not fs.existsSync envDir
+
+        for configFile in fs.readdirSync(envDir)
+            [configName, ext] = configFile.split('.')
+            configs[configName] = require(envDir + '/' + configFile) if ext in ['coffee', 'js', 'json']
+
+        return configs
+
+
+
+    appendCommonConfigs: (configDir, configs) ->
+
+        commonDir = "#{configDir}/common"
+        return if not fs.existsSync commonDir
+
+        for configFile in fs.readdirSync(commonDir)
+            [configName, ext] = configFile.split('.')
+            configs[configName] ?= require(commonDir + '/' + configFile) if ext in ['coffee', 'js', 'json']
+
 
 
     clone: (obj) ->
