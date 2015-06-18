@@ -183,6 +183,43 @@ and id type is string whereas id type of "memory" is number.
  apnsCertData    | certificate pem contents for APNs
  apnsKeyData     | key pem contents for APNs
 
+# LoopbackInfo
+    require('loopback-with-admin').run().then (lbInfo) ->
+        lbInfo instanceof LoopbackInfo # true
+
+instance of LoopbackInfo is obtained after loopback is launched
+
+## getURL()
+returns hosting URL
+
+    lbInfo.getURL() # e.g. localhost:3000/api
+
+## getEnv()
+returns environment name where loopback launched
+
+    lbInfo.getEnv() # development|production or other custom environments
+
+## getAccessToken()
+returns access token of admin
+
+    lbInfo.getAccessToken()
+
+## config
+contains all config values used to build loopback.
+
+- admin
+- datasources
+- middleware
+- server
+- push-credentials
+
+see configs section above.
+
+## models
+contains model definitions used to build loopback
+
+see models section above.
+
 
 # admin
 (coming soon)
