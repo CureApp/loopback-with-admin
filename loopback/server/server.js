@@ -12,7 +12,7 @@ app.start = function(callback) {
         app.emit('started');
         console.log('Web server listening at: %s', app.get('url'));
 
-        console.log('LOOPBACK_WITH_DOMAIN_STARTED');
+        console.log('LOOPBACK_WITH_ADMIN_STARTED');
 
         if (callback) callback(app);
       });

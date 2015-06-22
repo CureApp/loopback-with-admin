@@ -56,7 +56,7 @@ class LoopbackProcessLauncher extends LoopbackServer
         @lbProcess.stdout.on 'data', (chunk) =>
             data = prevChunk + chunk
 
-            if data.match('LOOPBACK_WITH_DOMAIN_STARTED')
+            if data.match('LOOPBACK_WITH_ADMIN_STARTED')
                 @removeListeners()
                 resolve(@lbProcess)
 
