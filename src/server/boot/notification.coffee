@@ -3,8 +3,9 @@ module.exports = (app, cb) ->
 
     Installation = app.models.installation
 
-    Installation.beforeSave = (next) ->
-        @appId = 'loopback-with-admin'
+    Installation.observe 'before save', (ctx, next) ->
+        if ctx.instance
+            ctx.instance.appId = 'loopback-with-admin'
         next()
 
     registerApp(app, cb)
@@ -21,8 +22,8 @@ registerApp = (app, cb) ->
     config    = require('../push-credentials')
     buildInfo = require('../build-info')
 
-    Application.beforeSave = (next) ->
-        @id = 'loopback-with-admin'
+    Application.observe 'before save', (ctx, next) ->
+        ctx.instance.id = 'loopback-with-admin'
         next()
 
     Application.register(
