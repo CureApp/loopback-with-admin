@@ -62,17 +62,14 @@ module.exports = function(app, done) {
       };
 
 
-      var originalBeforeCreate = AccessToken.beforeCreate;
-
-      AccessToken.beforeCreate = function(next, data) {
-        data = data || {};
-        data.id = adminToken;
+      AccessToken.observe('before save', function(ctx, next) {
+        ctx.instance.id = adminToken;
         next();
-      };
+      });
 
 
       User.login(loginInfo, function(err, result) {
-          AccessToken.beforeCreate = originalBeforeCreate;
+          AccessToken._observers['before save'].pop() // unobserve
           done(err);
       });
     });
