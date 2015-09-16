@@ -166,6 +166,10 @@ available datasources are
 and id type is string whereas id type of "memory" is number.
 
 
+when using mongodb, add dependencies in package.json of your repository
+
+- loopback-connector-mongodb: "1.13.0"
+- mongodb: "2.0.35"
 
 ## server
 
