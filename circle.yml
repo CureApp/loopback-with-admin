@@ -9,6 +9,7 @@ machine:
         VERSION_PREFIX: v
         CREATE_GH_PAGES: 1
         GH_PAGES_DIR: doc
+        NODE_ENV: ''
     pre:
         - "git config --global user.name 'CircleCI'"
         - "git config --global user.email 'circleci@cureapp.jp'"

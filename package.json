@@ -45,6 +45,11 @@
   },
   "description": "launch loopback with admin, push-notifications",
   "node-circleci-autorelease": {
+    "machine": {
+      "environment": {
+        "NODE_ENV": ""
+      }
+    },
     "config": {
       "git-user-name": "CircleCI",
       "git-user-email": "circleci@cureapp.jp",
