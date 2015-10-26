@@ -14,6 +14,8 @@
     "post-release": "echo post-release",
     "gh-pages": "echo gh-pages"
   },
+  "author": "CureApp, Inc.",
+  "license": "MIT",
   "dependencies": {
     "coffee-script": "^1.9.3",
     "compression": "^1.0.3",
