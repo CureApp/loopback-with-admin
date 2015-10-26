@@ -10,9 +10,9 @@
     "bmp-j": "cc-bmp -j",
     "circle": "cc-generate-yml",
     "post-dependencies": "echo post-dependencies",
-    "pre-release": "grunt yuidoc",
+    "pre-release": "grunt build",
     "post-release": "echo post-release",
-    "gh-pages": "echo gh-pages"
+    "gh-pages": "grunt yuidoc"
   },
   "author": "CureApp, Inc.",
   "license": "MIT",

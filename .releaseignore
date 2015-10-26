@@ -10,6 +10,7 @@ npm-debug.log
 README.litcoffee
 Gruntfile.coffee
 src
+doc
 
 loopback/common/models
 loopback/server/*.json
