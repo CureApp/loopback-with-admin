@@ -1,0 +1,763 @@
+{
+    "project": {},
+    "files": {
+        "src/lib/acl-generator.coffee": {
+            "name": "src/lib/acl-generator.coffee",
+            "modules": {},
+            "classes": {
+                "AclGenerator": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/build-info-generator.coffee": {
+            "name": "src/lib/build-info-generator.coffee",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/config-json-generator.coffee": {
+            "name": "src/lib/config-json-generator.coffee",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/loopback-info.coffee": {
+            "name": "src/lib/loopback-info.coffee",
+            "modules": {},
+            "classes": {
+                "LoopbackInfo": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/loopback-process-launcher.coffee": {
+            "name": "src/lib/loopback-process-launcher.coffee",
+            "modules": {},
+            "classes": {
+                "LoopbackProcessLauncher": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/loopback-server.coffee": {
+            "name": "src/lib/loopback-server.coffee",
+            "modules": {},
+            "classes": {
+                "LoopbackServer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/model-config-generator.coffee": {
+            "name": "src/lib/model-config-generator.coffee",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/model-definition.coffee": {
+            "name": "src/lib/model-definition.coffee",
+            "modules": {},
+            "classes": {
+                "ModelDefinition": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/models-generator.coffee": {
+            "name": "src/lib/models-generator.coffee",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/server/boot/notification.coffee": {
+            "name": "src/server/boot/notification.coffee",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/main.coffee": {
+            "name": "src/main.coffee",
+            "modules": {},
+            "classes": {
+                "Main": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "AclGenerator": {
+            "name": "AclGenerator",
+            "shortname": "AclGenerator",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/lib/acl-generator.coffee",
+            "line": 3,
+            "description": "generate ACL\nACL is Array of access control information"
+        },
+        "LoopbackInfo": {
+            "name": "LoopbackInfo",
+            "shortname": "LoopbackInfo",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/lib/loopback-info.coffee",
+            "line": 2,
+            "description": "Loopback info"
+        },
+        "LoopbackProcessLauncher": {
+            "name": "LoopbackProcessLauncher",
+            "shortname": "LoopbackProcessLauncher",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/lib/loopback-process-launcher.coffee",
+            "line": 5,
+            "description": "launches child process for loopback server"
+        },
+        "LoopbackServer": {
+            "name": "LoopbackServer",
+            "shortname": "LoopbackServer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/lib/loopback-server.coffee",
+            "line": 5,
+            "description": "launches loopback server"
+        },
+        "ModelDefinition": {
+            "name": "ModelDefinition",
+            "shortname": "ModelDefinition",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/lib/model-definition.coffee",
+            "line": 5
+        },
+        "Main": {
+            "name": "Main",
+            "shortname": "Main",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/main.coffee",
+            "line": 13,
+            "description": "entry point"
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "src/lib/acl-generator.coffee",
+            "line": 15,
+            "description": "get ACL by aclType",
+            "itemtype": "method",
+            "name": "generate",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "aclType\nreturn",
+                    "description": "{Array} ACL",
+                    "type": "String"
+                }
+            ],
+            "class": "AclGenerator"
+        },
+        {
+            "file": "src/lib/acl-generator.coffee",
+            "line": 62,
+            "description": "append ACL allowing accesses only from admin",
+            "itemtype": "method",
+            "name": "adminACL",
+            "access": "private",
+            "tagname": "",
+            "class": "AclGenerator"
+        },
+        {
+            "file": "src/lib/acl-generator.coffee",
+            "line": 74,
+            "description": "append ACL allowing accesses from the accessToken of model's owners",
+            "itemtype": "method",
+            "name": "ownerACL",
+            "access": "private",
+            "tagname": "",
+            "class": "AclGenerator"
+        },
+        {
+            "file": "src/lib/acl-generator.coffee",
+            "line": 92,
+            "description": "append ACL allowing READ accesses from authenticated users",
+            "itemtype": "method",
+            "name": "memberReadACL",
+            "access": "private",
+            "tagname": "",
+            "class": "AclGenerator"
+        },
+        {
+            "file": "src/lib/acl-generator.coffee",
+            "line": 107,
+            "description": "append ACL allowing accesses from READ access to everyone",
+            "itemtype": "method",
+            "name": "publicReadACL",
+            "access": "private",
+            "tagname": "",
+            "class": "AclGenerator"
+        },
+        {
+            "file": "src/lib/acl-generator.coffee",
+            "line": 122,
+            "description": "append basic ACL, which allow accesses only from admin",
+            "itemtype": "method",
+            "name": "commonACL",
+            "access": "private",
+            "tagname": "",
+            "class": "AclGenerator"
+        },
+        {
+            "file": "src/lib/acl-generator.coffee",
+            "line": 147,
+            "description": "append ACL for User model",
+            "itemtype": "method",
+            "name": "userACL",
+            "access": "private",
+            "tagname": "",
+            "class": "AclGenerator"
+        },
+        {
+            "file": "src/lib/acl-generator.coffee",
+            "line": 171,
+            "description": "append ACL for User model handled by admin,\ndenying login from everyone. Login must be executed via admin access.",
+            "itemtype": "method",
+            "name": "adminUserACL",
+            "access": "private",
+            "tagname": "",
+            "class": "AclGenerator"
+        },
+        {
+            "file": "src/lib/build-info-generator.coffee",
+            "line": 13,
+            "is_constructor": 1,
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/config-json-generator.coffee",
+            "line": 19,
+            "description": "default-configs/server.json will be server/config.json",
+            "itemtype": "property",
+            "name": "destinationNamePairs",
+            "access": "private",
+            "tagname": "",
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/config-json-generator.coffee",
+            "line": 29,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "customConfigObj",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "env",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/config-json-generator.coffee",
+            "line": 38,
+            "description": "generate JSON files into server dir",
+            "itemtype": "method",
+            "name": "generate",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "generatedContents",
+                "type": "Object"
+            },
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/config-json-generator.coffee",
+            "line": 61,
+            "description": "remove previously-generated JSON files",
+            "itemtype": "method",
+            "name": "reset",
+            "access": "public",
+            "tagname": "",
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/config-json-generator.coffee",
+            "line": 75,
+            "description": "new config path",
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/config-json-generator.coffee",
+            "line": 85,
+            "description": "merge custom and default for each config names",
+            "access": "private",
+            "tagname": "",
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/config-json-generator.coffee",
+            "line": 99,
+            "description": "merge two objects into one new object\nobject at 1st argument overrides that at 2nd",
+            "params": [
+                {
+                    "name": "dominant",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "base",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "merged",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/config-json-generator.coffee",
+            "line": 123,
+            "description": "load default config JSON files",
+            "access": "private",
+            "tagname": "",
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/loopback-info.coffee",
+            "line": 18,
+            "description": "get hosting URL",
+            "itemtype": "method",
+            "name": "getURL",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "hostName",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "url",
+                "type": "String"
+            },
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/loopback-info.coffee",
+            "line": 33,
+            "description": "get environment",
+            "itemtype": "method",
+            "name": "getEnv",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "env",
+                "type": "String"
+            },
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/loopback-info.coffee",
+            "line": 43,
+            "description": "get access token of admin",
+            "itemtype": "method",
+            "name": "getAccessToken",
+            "access": "public",
+            "tagname": "return {String}",
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/loopback-info.coffee",
+            "line": 53,
+            "description": "kill loopback process",
+            "itemtype": "method",
+            "name": "kill",
+            "access": "public",
+            "tagname": "",
+            "class": "LoopbackInfo"
+        },
+        {
+            "file": "src/lib/model-config-generator.coffee",
+            "line": 13,
+            "is_constructor": 1,
+            "class": "ModelDefinition"
+        },
+        {
+            "file": "src/lib/model-config-generator.coffee",
+            "line": 27,
+            "description": "get config object by entity names",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "entityNames",
+                    "description": "",
+                    "type": "Array(String)"
+                }
+            ],
+            "class": "ModelDefinition"
+        },
+        {
+            "file": "src/lib/model-definition.coffee",
+            "line": 17,
+            "description": "get model name",
+            "itemtype": "method",
+            "name": "getName",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "modelName",
+                "type": "String"
+            },
+            "class": "ModelDefinition"
+        },
+        {
+            "file": "src/lib/model-definition.coffee",
+            "line": 28,
+            "description": "get stringified JSON contents about the model",
+            "itemtype": "method",
+            "name": "toStringifiedJSON",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "stringifiedJSON",
+                "type": "String"
+            },
+            "class": "ModelDefinition"
+        },
+        {
+            "file": "src/lib/model-definition.coffee",
+            "line": 39,
+            "description": "get definition of the model",
+            "itemtype": "method",
+            "name": "toJSON",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "definition",
+                "type": "Object"
+            },
+            "class": "ModelDefinition"
+        },
+        {
+            "file": "src/lib/model-definition.coffee",
+            "line": 51,
+            "description": "is model extend User?",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "ModelDefinition"
+        },
+        {
+            "file": "src/lib/model-definition.coffee",
+            "line": 61,
+            "description": "set ACL to definition by aclType",
+            "class": "ModelDefinition"
+        },
+        {
+            "file": "src/lib/model-definition.coffee",
+            "line": 77,
+            "description": "get default definition object",
+            "access": "private",
+            "tagname": "",
+            "class": "ModelDefinition"
+        },
+        {
+            "file": "src/lib/models-generator.coffee",
+            "line": 16,
+            "params": [
+                {
+                    "name": "customModelDefinitions",
+                    "description": "model definition data, compatible with loopback's model-config.json and aclType",
+                    "type": "Object"
+                }
+            ],
+            "class": "Main"
+        },
+        {
+            "file": "src/lib/models-generator.coffee",
+            "line": 27,
+            "description": "generate model-config.json and model definition files",
+            "itemtype": "method",
+            "name": "generate",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "generatedInfo",
+                "type": "Object"
+            },
+            "class": "Main"
+        },
+        {
+            "file": "src/lib/models-generator.coffee",
+            "line": 43,
+            "description": "generate JSON files with empty js files into common/models",
+            "itemtype": "method",
+            "name": "generateDefinitionFiles",
+            "return": {
+                "description": "generatedModelNames",
+                "type": "Array"
+            },
+            "class": "Main"
+        },
+        {
+            "file": "src/lib/models-generator.coffee",
+            "line": 62,
+            "description": "reset",
+            "itemtype": "method",
+            "name": "reset",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": ""
+            },
+            "class": "Main"
+        },
+        {
+            "file": "src/lib/models-generator.coffee",
+            "line": 76,
+            "itemtype": "method",
+            "name": "generateBuiltinModels",
+            "access": "private",
+            "tagname": "",
+            "class": "Main"
+        },
+        {
+            "file": "src/lib/models-generator.coffee",
+            "line": 90,
+            "itemtype": "method",
+            "name": "generateModelConfig",
+            "access": "private",
+            "tagname": "",
+            "class": "Main"
+        },
+        {
+            "file": "src/lib/models-generator.coffee",
+            "line": 100,
+            "description": "generate JSON file and JS file of modelName",
+            "access": "private",
+            "tagname": "",
+            "reurn": "{String} modelName",
+            "class": "Main"
+        },
+        {
+            "file": "src/lib/models-generator.coffee",
+            "line": 117,
+            "description": "get empty js content",
+            "access": "private",
+            "tagname": "",
+            "class": "Main"
+        },
+        {
+            "file": "src/lib/models-generator.coffee",
+            "line": 126,
+            "description": "create ModelDefinition instances",
+            "access": "private",
+            "tagname": "",
+            "class": "Main"
+        },
+        {
+            "file": "src/server/boot/notification.coffee",
+            "line": 14,
+            "description": "registers an application instance for push notification service",
+            "itemtype": "method",
+            "name": "registerApp",
+            "class": "Main"
+        },
+        {
+            "file": "src/main.coffee",
+            "line": 20,
+            "description": "entry point.\nrun loopback with model definitions, config",
+            "itemtype": "method",
+            "name": "run",
+            "access": "public",
+            "tagname": "",
+            "static": 1,
+            "params": [
+                {
+                    "name": "modelDefinitions",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "config",
+                    "description": "config object or config directory containing config info",
+                    "type": "Object|String",
+                    "optional": true
+                },
+                {
+                    "name": "options.reset",
+                    "description": "reset previously-generated settings before generation",
+                    "type": "Boolean",
+                    "optional": true
+                },
+                {
+                    "name": "options.env",
+                    "description": "set environment (production|development|...)",
+                    "type": "String",
+                    "optional": true
+                },
+                {
+                    "name": "options.spawn",
+                    "description": "if true, spawns child process of loopback\nreturn {Promise(LoopbackInfo)}",
+                    "type": "Boolean",
+                    "optional": true
+                }
+            ],
+            "class": "Main"
+        },
+        {
+            "file": "src/main.coffee",
+            "line": 46,
+            "is_constructor": 1,
+            "access": "private",
+            "tagname": "",
+            "class": "Main"
+        },
+        {
+            "file": "src/main.coffee",
+            "line": 62,
+            "access": "private",
+            "tagname": "",
+            "class": "Main"
+        },
+        {
+            "file": "src/main.coffee",
+            "line": 70,
+            "access": "private",
+            "tagname": "",
+            "class": "Main"
+        },
+        {
+            "file": "src/main.coffee",
+            "line": 80,
+            "description": "run loopback",
+            "access": "private",
+            "tagname": "",
+            "class": "Main"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: reurn",
+            "line": " src/lib/models-generator.coffee:100"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/lib/build-info-generator.coffee:13"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/lib/config-json-generator.coffee:29"
+        },
+        {
+            "message": "Missing item type\nnew config path",
+            "line": " src/lib/config-json-generator.coffee:75"
+        },
+        {
+            "message": "Missing item type\nmerge custom and default for each config names",
+            "line": " src/lib/config-json-generator.coffee:85"
+        },
+        {
+            "message": "Missing item type\nmerge two objects into one new object\nobject at 1st argument overrides that at 2nd",
+            "line": " src/lib/config-json-generator.coffee:99"
+        },
+        {
+            "message": "Missing item type\nload default config JSON files",
+            "line": " src/lib/config-json-generator.coffee:123"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/lib/model-config-generator.coffee:13"
+        },
+        {
+            "message": "Missing item type\nget config object by entity names",
+            "line": " src/lib/model-config-generator.coffee:27"
+        },
+        {
+            "message": "Missing item type\nis model extend User?",
+            "line": " src/lib/model-definition.coffee:51"
+        },
+        {
+            "message": "Missing item type\nset ACL to definition by aclType",
+            "line": " src/lib/model-definition.coffee:61"
+        },
+        {
+            "message": "Missing item type\nget default definition object",
+            "line": " src/lib/model-definition.coffee:77"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/lib/models-generator.coffee:16"
+        },
+        {
+            "message": "Missing item type\ngenerate JSON file and JS file of modelName",
+            "line": " src/lib/models-generator.coffee:100"
+        },
+        {
+            "message": "Missing item type\nget empty js content",
+            "line": " src/lib/models-generator.coffee:117"
+        },
+        {
+            "message": "Missing item type\ncreate ModelDefinition instances",
+            "line": " src/lib/models-generator.coffee:126"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/main.coffee:46"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/main.coffee:62"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/main.coffee:70"
+        },
+        {
+            "message": "Missing item type\nrun loopback",
+            "line": " src/main.coffee:80"
+        }
+    ]
+}
