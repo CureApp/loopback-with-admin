@@ -25,12 +25,29 @@ class AclGenerator
         switch @aclType
 
             when 'admin'
+                @commonACL()
                 @adminACL()
 
             when 'owner'
+                @commonACL()
                 @ownerACL()
 
+            when 'public-read-by-owner'
+                @commonACL()
+                @ownerACL()
+                @publicReadACL()
+
+            when 'member-read-by-owner'
+                @commonACL()
+                @ownerACL()
+                @memberReadACL()
+
+            when 'member-read'
+                @commonACL()
+                @memberReadACL()
+
             when 'public-read'
+                @commonACL()
                 @publicReadACL()
 
             when 'none'
@@ -49,8 +66,6 @@ class AclGenerator
     @private
     ###
     adminACL: ->
-        @commonACL()
-
         if @isUser
             @adminUserACL()
         @
@@ -64,8 +79,6 @@ class AclGenerator
     ###
     ownerACL: ->
 
-        @commonACL()
-
         accessTypes = ['READ', 'WRITE', 'EXECUTE']
 
         for accessType in accessTypes
@@ -77,13 +90,27 @@ class AclGenerator
         @
 
     ###*
+    append ACL allowing READ accesses from authenticated users
+
+    @method memberReadACL
+    @private
+    ###
+    memberReadACL: ->
+
+        @acl.push
+            accessType: 'READ'
+            principalType: 'ROLE'
+            principalId: '$authenticated'
+            permission: 'ALLOW'
+        @
+
+    ###*
     append ACL allowing accesses from READ access to everyone
 
     @method publicReadACL
     @private
     ###
     publicReadACL: ->
-        @commonACL()
         @acl.push
             accessType: 'READ'
             principalType: 'ROLE'

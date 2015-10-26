@@ -118,12 +118,15 @@ loopback-with-admin generates acls from aclType.
 
 three types are available.
 
- aclType     | meaning
--------------|-----------------------------------------------------
- admin       | only admin can CRUD the model (_default_)
- owner       | admin and the owner of the model can CRUD
- public-read | everyone can READ the model and admin can CRUD
- none        | everyone can CRUD the model
+ aclType              | meaning
+----------------------|-----------------------------------------------------
+ admin                | only admin can CRUD the model (_default_)
+ owner                | the owner of the model can CRUD
+ public-read          | everyone can READ the model and admin can CRUD
+ member-read          | authenticated users can READ the model and admin can CRUD
+ public-read-by-owner | CRUD by the owner, and read by everyone
+ member-read-by-owner | CRUD by the owner, and read by authenticated users
+ none                 | everyone can CRUD the model
 
 
 # configs
