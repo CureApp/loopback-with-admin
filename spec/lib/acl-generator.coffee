@@ -11,8 +11,8 @@ describe 'AclGenerator', ->
             @aclGenerator = new AclGenerator()
             @aclGenerator.userACL()
 
-        it 'appends two ACs', ->
-            expect(@aclGenerator.acl).to.have.length 2
+        it 'appends three ACs', ->
+            expect(@aclGenerator.acl).to.have.length 3
 
         it 'appends AC denying logout by admin', ->
             ac = @aclGenerator.acl[0]
@@ -26,6 +26,13 @@ describe 'AclGenerator', ->
             expect(ac).to.have.property 'principalType', 'ROLE'
             expect(ac).to.have.property 'principalId', '$everyone'
             expect(ac).to.have.property 'permission', 'DENY'
+            expect(ac).to.have.property 'property', 'create'
+
+        it 'appends AC allowing creation by admin', ->
+            ac = @aclGenerator.acl[2]
+            expect(ac).to.have.property 'principalType', 'ROLE'
+            expect(ac).to.have.property 'principalId', 'admin'
+            expect(ac).to.have.property 'permission', 'ALLOW'
             expect(ac).to.have.property 'property', 'create'
 
 
@@ -57,10 +64,10 @@ describe 'AclGenerator', ->
 
         describe 'with user model', ->
 
-            it 'appends four ACs', ->
+            it 'appends five ACs', ->
                 aclGenerator = new AclGenerator(null, true)
                 aclGenerator.commonACL()
-                expect(aclGenerator.acl).to.have.length 4
+                expect(aclGenerator.acl).to.have.length 5
 
 
             it 'userACL() is called after basic ACL are appended', (done) ->
@@ -123,13 +130,13 @@ describe 'AclGenerator', ->
                 expect(acl).to.deep.equal commonACL
 
 
-            it 'appends six ACs with user model', ->
+            it 'appends seven ACs with user model', ->
 
                 aclType = 'admin'
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 6
+                expect(acl).to.have.length 7
 
 
         describe 'when aclType is "owner",', ->
@@ -158,12 +165,12 @@ describe 'AclGenerator', ->
                     expect(ac).to.have.property 'permission', 'ALLOW'
                     expect(accessTypes).to.include ac.accessType
 
-            it 'appends seven ACs with user model', ->
+            it 'appends eight ACs with user model', ->
                 aclType = 'owner'
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 7
+                expect(acl).to.have.length 8
 
 
         describe 'when aclType is "public-read",', ->
@@ -195,7 +202,7 @@ describe 'AclGenerator', ->
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 5
+                expect(acl).to.have.length 6
 
 
         describe 'when aclType is "member-read",', ->
@@ -227,7 +234,7 @@ describe 'AclGenerator', ->
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 5
+                expect(acl).to.have.length 6
 
 
 
@@ -274,7 +281,7 @@ describe 'AclGenerator', ->
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 8
+                expect(acl).to.have.length 9
 
 
         describe 'when aclType is "public-read-by-owner",', ->
@@ -324,7 +331,7 @@ describe 'AclGenerator', ->
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 8
+                expect(acl).to.have.length 9
 
 
 

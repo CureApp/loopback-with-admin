@@ -168,6 +168,15 @@ class AclGenerator
             property: 'create'
         @
 
+        # user creation is allowed by admin.
+        @acl.push
+            accessType: 'WRITE'
+            principalType: 'ROLE'
+            principalId: 'admin'
+            permission: 'ALLOW'
+            property: 'create'
+        @
+
     ###*
     append ACL for User model handled by admin,
     denying login from everyone. Login must be executed via admin access.
