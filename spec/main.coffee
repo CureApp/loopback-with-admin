@@ -5,7 +5,6 @@
 Main = require '../src/main'
 LoopbackProcessLauncher = require '../src/lib/loopback-process-launcher'
 LoopbackServer = require '../src/lib/loopback-server'
-require('es6-promise').polyfill()
 
 modelDefinitions = {}
 

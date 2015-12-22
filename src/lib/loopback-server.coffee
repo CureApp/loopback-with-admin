@@ -1,6 +1,5 @@
 
 { normalize } = require 'path'
-require('es6-promise').polyfill()
 
 ###*
 launches loopback server

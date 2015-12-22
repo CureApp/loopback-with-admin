@@ -20,7 +20,6 @@
     "coffee-script": "^1.9.3",
     "compression": "^1.0.3",
     "errorhandler": "^1.1.1",
-    "es6-promise": "^2.3.0",
     "loopback": "^2.8.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-push": "~1.4.4",

@@ -1,5 +1,4 @@
 
-require('es6-promise').polyfill()
 LoopbackServer = require './loopback-server'
 
 ###*
