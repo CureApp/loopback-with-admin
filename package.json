@@ -1,6 +1,6 @@
 {
   "name": "loopback-with-admin",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "main": "dist/main.js",
   "scripts": {
     "test": "grunt",
