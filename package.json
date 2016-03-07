@@ -3,16 +3,16 @@
   "version": "1.7.4",
   "main": "dist/main.js",
   "scripts": {
-    "test": "grunt",
+    "test": "mocha -r spec/global.js spec/main.coffee spec/lib/*.coffee",
     "bmp": "cc-bmp",
     "bmp-p": "cc-bmp -p",
     "bmp-m": "cc-bmp -m",
     "bmp-j": "cc-bmp -j",
     "circle": "cc-generate-yml",
     "post-dependencies": "echo post-dependencies",
-    "pre-release": "grunt build",
+    "pre-release": "gulp coffee",
     "post-release": "echo post-release",
-    "gh-pages": "grunt yuidoc"
+    "gh-pages": "gulp yuidoc"
   },
   "author": "CureApp, Inc.",
   "license": "MIT",
@@ -32,10 +32,12 @@
     "loopback-explorer": "^1.1.0"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-coffee": "^0.13.0",
-    "grunt-contrib-yuidoc": "^0.10.0",
-    "grunt-mocha-chai-sinon": "0.0.9",
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-coffee": "^2.3.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-yuidoc": "^0.1.2",
+    "mocha": "^2.4.5",
     "node-circleci-autorelease": "^1.5.11"
   },
   "repository": {
