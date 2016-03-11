@@ -51,6 +51,8 @@ class AclConditions
 
 
     isAdminOnly: ->
+        return false if Object.keys(@customPermissions).length > 0
+
         for name, regularPermissions of @basicPermissions
             return false if regularPermissions.length > 0
         return true
