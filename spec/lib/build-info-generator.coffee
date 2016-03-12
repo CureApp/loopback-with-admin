@@ -21,20 +21,20 @@ describe 'BuildInfoGenerator', ->
             @info = new BuildInfoGenerator(modelDefinitions, configObj, env).getMergedConfig()
 
         it 'contains modelDefinitions', ->
-            expect(@info).to.have.property 'modelDefinitions'
-            expect(@info.modelDefinitions.player.base).to.equal 'User'
+            assert @info.hasOwnProperty 'modelDefinitions'
+            assert @info.modelDefinitions.player.base is 'User'
 
         it 'contains custom configs', ->
-            expect(@info).to.have.property 'customConfigs'
+            assert @info.hasOwnProperty 'customConfigs'
 
         it 'contains buildAt', ->
-            expect(@info).to.have.property 'buildAt'
+            assert @info.hasOwnProperty 'buildAt'
             buildAt = @info.buildAt
             time = new Date(buildAt)
-            expect(new Date() - time).to.be.lessThan 1000
+            assert new Date() - time < 1000
 
         it 'contains env info', ->
-            expect(@info).to.have.property 'env', 'production'
+            assert @info.env is 'production'
 
 
     describe 'getDestinationPathByName', ->
@@ -42,14 +42,14 @@ describe 'BuildInfoGenerator', ->
         it 'returns build-info.json', ->
             generator = new BuildInfoGenerator()
             path = generator.getDestinationPathByName('build-info')
-            expect(path).to.equal normalize __dirname + '/../../loopback/server/build-info.json'
+            assert path is normalize __dirname + '/../../loopback/server/build-info.json'
 
 
     describe 'loadDefaultConfig', ->
 
         it 'loads build-info', ->
             config = new BuildInfoGenerator().loadDefaultConfig('build-info')
-            expect(config).to.be.an 'object'
+            assert typeof config is 'object'
 
     describe 'generate', ->
 
@@ -65,9 +65,9 @@ describe 'BuildInfoGenerator', ->
         it 'returns build info', ->
 
             generated = @generator.generate()
-            expect(generated).to.have.property 'env', 'development'
-            expect(generated).to.have.property 'buildAt'
-            expect(generated).to.have.property 'modelDefinitions'
-            expect(generated).to.have.property 'customConfigs'
+            assert generated.env is 'development'
+            assert generated.hasOwnProperty 'buildAt'
+            assert generated.hasOwnProperty 'modelDefinitions'
+            assert generated.hasOwnProperty 'customConfigs'
 
 

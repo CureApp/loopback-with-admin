@@ -12,28 +12,28 @@ describe 'AclGenerator', ->
             @aclGenerator.userACL()
 
         it 'appends three ACs', ->
-            expect(@aclGenerator.acl).to.have.length 3
+            assert @aclGenerator.acl.length is 3
 
         it 'appends AC denying logout by admin', ->
             ac = @aclGenerator.acl[0]
-            expect(ac).to.have.property 'principalType', 'ROLE'
-            expect(ac).to.have.property 'principalId', 'admin'
-            expect(ac).to.have.property 'permission', 'DENY'
-            expect(ac).to.have.property 'property', 'logout'
+            assert ac.principalType is 'ROLE'
+            assert ac.principalId is 'admin'
+            assert ac.permission is 'DENY'
+            assert ac.property is 'logout'
 
         it 'appends AC denying creation by everyone', ->
             ac = @aclGenerator.acl[1]
-            expect(ac).to.have.property 'principalType', 'ROLE'
-            expect(ac).to.have.property 'principalId', '$everyone'
-            expect(ac).to.have.property 'permission', 'DENY'
-            expect(ac).to.have.property 'property', 'create'
+            assert ac.principalType is 'ROLE'
+            assert ac.principalId is '$everyone'
+            assert ac.permission is 'DENY'
+            assert ac.property is 'create'
 
         it 'appends AC allowing creation by admin', ->
             ac = @aclGenerator.acl[2]
-            expect(ac).to.have.property 'principalType', 'ROLE'
-            expect(ac).to.have.property 'principalId', 'admin'
-            expect(ac).to.have.property 'permission', 'ALLOW'
-            expect(ac).to.have.property 'property', 'create'
+            assert ac.principalType is 'ROLE'
+            assert ac.principalId is 'admin'
+            assert ac.permission is 'ALLOW'
+            assert ac.property is 'create'
 
 
     describe 'commonACL', ->
@@ -45,21 +45,21 @@ describe 'AclGenerator', ->
                 @aclGenerator.commonACL()
 
             it 'appends two ACs', ->
-                expect(@aclGenerator.acl).to.have.length 2
+                assert @aclGenerator.acl.length is 2
 
             it 'appends AC denying everyone\'s access in the first place', ->
                 ac = @aclGenerator.acl[0]
 
-                expect(ac).to.have.property 'principalType', 'ROLE'
-                expect(ac).to.have.property 'principalId', '$everyone'
-                expect(ac).to.have.property 'permission', 'DENY'
+                assert ac.principalType is 'ROLE'
+                assert ac.principalId is '$everyone'
+                assert ac.permission is 'DENY'
 
             it 'appends AC allowing admin\'s access', ->
                 ac = @aclGenerator.acl[1]
 
-                expect(ac).to.have.property 'principalType', 'ROLE'
-                expect(ac).to.have.property 'principalId', 'admin'
-                expect(ac).to.have.property 'permission', 'ALLOW'
+                assert ac.principalType is 'ROLE'
+                assert ac.principalId is 'admin'
+                assert ac.permission is 'ALLOW'
 
 
         describe 'with user model', ->
@@ -67,14 +67,14 @@ describe 'AclGenerator', ->
             it 'appends five ACs', ->
                 aclGenerator = new AclGenerator(null, true)
                 aclGenerator.commonACL()
-                expect(aclGenerator.acl).to.have.length 5
+                assert aclGenerator.acl.length is 5
 
 
             it 'userACL() is called after basic ACL are appended', (done) ->
                 aclGenerator = new AclGenerator(null, true)
 
                 aclGenerator.userACL = ->
-                    expect(aclGenerator.acl).to.have.length 2
+                    assert aclGenerator.acl.length is 2
                     done()
 
                 aclGenerator.commonACL()
@@ -86,21 +86,21 @@ describe 'AclGenerator', ->
             @aclGenerator.adminUserACL()
 
         it 'appends two ACs', ->
-            expect(@aclGenerator.acl).to.have.length 2
+            assert @aclGenerator.acl.length is 2
 
         it 'appends AC denying login by everyone', ->
             ac = @aclGenerator.acl[0]
-            expect(ac).to.have.property 'principalType', 'ROLE'
-            expect(ac).to.have.property 'principalId', '$everyone'
-            expect(ac).to.have.property 'permission', 'DENY'
-            expect(ac).to.have.property 'property', 'login'
+            assert ac.principalType is 'ROLE'
+            assert ac.principalId is '$everyone'
+            assert ac.permission is 'DENY'
+            assert ac.property is 'login'
 
         it 'appends AC denying creation by everyone', ->
             ac = @aclGenerator.acl[1]
-            expect(ac).to.have.property 'principalType', 'ROLE'
-            expect(ac).to.have.property 'principalId', 'admin'
-            expect(ac).to.have.property 'permission', 'ALLOW'
-            expect(ac).to.have.property 'property', 'login'
+            assert ac.principalType is 'ROLE'
+            assert ac.principalId is 'admin'
+            assert ac.permission is 'ALLOW'
+            assert ac.property is 'login'
 
 
 
@@ -126,7 +126,7 @@ describe 'AclGenerator', ->
                 isUser = false
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 2
+                assert acl.length is 2
                 expect(acl).to.deep.equal commonACL
 
 
@@ -136,7 +136,7 @@ describe 'AclGenerator', ->
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 7
+                assert acl.length is 7
 
 
         describe 'when aclType is "owner",', ->
@@ -147,7 +147,7 @@ describe 'AclGenerator', ->
                 isUser = false
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 5
+                assert acl.length is 5
                 expect(acl.slice(0,2)).to.deep.equal commonACL
 
 
@@ -160,17 +160,17 @@ describe 'AclGenerator', ->
                 accessTypes = ['READ', 'WRITE', 'EXECUTE']
 
                 for ac in acl.slice(2)
-                    expect(ac).to.have.property 'principalType', 'ROLE'
-                    expect(ac).to.have.property 'principalId', '$owner'
-                    expect(ac).to.have.property 'permission', 'ALLOW'
-                    expect(accessTypes).to.include ac.accessType
+                    assert ac.principalType is 'ROLE'
+                    assert ac.principalId is '$owner'
+                    assert ac.permission is 'ALLOW'
+                    assert ac.accessType in accessTypes
 
             it 'appends eight ACs with user model', ->
                 aclType = 'owner'
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 8
+                assert acl.length is 8
 
 
         describe 'when aclType is "public-read",', ->
@@ -181,7 +181,7 @@ describe 'AclGenerator', ->
                 isUser = false
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 3
+                assert acl.length is 3
                 expect(acl.slice(0,2)).to.deep.equal commonACL
 
             it 'appends AC allowing everyone to READ with nonUser model', ->
@@ -191,10 +191,10 @@ describe 'AclGenerator', ->
                 acl = new AclGenerator(aclType, isUser).generate()
 
                 for ac in acl.slice(2)
-                    expect(ac).to.have.property 'principalType', 'ROLE'
-                    expect(ac).to.have.property 'principalId', '$everyone'
-                    expect(ac).to.have.property 'permission', 'ALLOW'
-                    expect(ac).to.have.property 'accessType', 'READ'
+                    assert ac.principalType is 'ROLE'
+                    assert ac.principalId is '$everyone'
+                    assert ac.permission is 'ALLOW'
+                    assert ac.accessType is 'READ'
 
             it 'appends ACs with user model', ->
 
@@ -202,7 +202,7 @@ describe 'AclGenerator', ->
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 6
+                assert acl.length is 6
 
 
         describe 'when aclType is "member-read",', ->
@@ -213,7 +213,7 @@ describe 'AclGenerator', ->
                 isUser = false
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 3
+                assert acl.length is 3
                 expect(acl.slice(0,2)).to.deep.equal commonACL
 
             it 'appends AC allowing authenticated users to READ with nonUser model', ->
@@ -223,10 +223,10 @@ describe 'AclGenerator', ->
                 acl = new AclGenerator(aclType, isUser).generate()
 
                 for ac in acl.slice(2)
-                    expect(ac).to.have.property 'principalType', 'ROLE'
-                    expect(ac).to.have.property 'principalId', '$authenticated'
-                    expect(ac).to.have.property 'permission', 'ALLOW'
-                    expect(ac).to.have.property 'accessType', 'READ'
+                    assert ac.principalType is 'ROLE'
+                    assert ac.principalId is '$authenticated'
+                    assert ac.permission is 'ALLOW'
+                    assert ac.accessType is 'READ'
 
             it 'appends ACs with user model', ->
 
@@ -234,7 +234,7 @@ describe 'AclGenerator', ->
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 6
+                assert acl.length is 6
 
 
 
@@ -246,7 +246,7 @@ describe 'AclGenerator', ->
                 isUser = false
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 5
+                assert acl.length is 5
                 expect(acl.slice(0,2)).to.deep.equal commonACL
 
             it 'appends AC allowing read for member,  write and execute for owner', ->
@@ -256,18 +256,18 @@ describe 'AclGenerator', ->
                 acl = new AclGenerator(aclType, isUser).generate()
 
                 acl2 = acl[2]
-                expect(acl2).to.have.property 'principalType', 'ROLE'
-                expect(acl2).to.have.property 'principalId',   '$authenticated'
-                expect(acl2).to.have.property 'permission',    'ALLOW'
+                assert acl2.principalType is 'ROLE'
+                assert acl2.principalId is '$authenticated'
+                assert acl2.permission is 'ALLOW'
 
 
                 accessTypes = ['WRITE', 'EXECUTE']
 
                 for ac in acl.slice(3, 4)
-                    expect(ac).to.have.property 'principalType', 'ROLE'
-                    expect(ac).to.have.property 'principalId', '$owner'
-                    expect(ac).to.have.property 'permission', 'ALLOW'
-                    expect(accessTypes).to.include ac.accessType
+                    assert ac.principalType is 'ROLE'
+                    assert ac.principalId is '$owner'
+                    assert ac.permission is 'ALLOW'
+                    assert ac.accessType in accessTypes
 
 
             it 'appends ACs with user model', ->
@@ -276,7 +276,7 @@ describe 'AclGenerator', ->
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 8
+                assert acl.length is 8
 
 
         describe 'when aclType is "public-read-by-owner",', ->
@@ -288,7 +288,7 @@ describe 'AclGenerator', ->
                 isUser = false
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 5
+                assert acl.length is 5
                 expect(acl.slice(0, 2)).to.deep.equal commonACL
 
 
@@ -301,16 +301,16 @@ describe 'AclGenerator', ->
                 accessTypes = ['WRITE', 'EXECUTE']
 
                 acl2 = acl[2]
-                expect(acl2).to.have.property 'principalType', 'ROLE'
-                expect(acl2).to.have.property 'principalId',   '$everyone'
-                expect(acl2).to.have.property 'permission',    'ALLOW'
+                assert acl2.principalType is 'ROLE'
+                assert acl2.principalId is '$everyone'
+                assert acl2.permission is 'ALLOW'
 
 
                 for ac in acl.slice(3, 4)
-                    expect(ac).to.have.property 'principalType', 'ROLE'
-                    expect(ac).to.have.property 'principalId', '$owner'
-                    expect(ac).to.have.property 'permission', 'ALLOW'
-                    expect(accessTypes).to.include ac.accessType
+                    assert ac.principalType is 'ROLE'
+                    assert ac.principalId is '$owner'
+                    assert ac.permission is 'ALLOW'
+                    assert ac.accessType in accessTypes
 
 
             it 'appends ACs with user model', ->
@@ -319,7 +319,7 @@ describe 'AclGenerator', ->
                 isUser = true
                 acl = new AclGenerator(aclType, isUser).generate()
 
-                expect(acl).to.have.length 8
+                assert acl.length is 8
 
 
 

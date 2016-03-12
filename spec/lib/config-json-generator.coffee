@@ -16,12 +16,12 @@ describe 'ConfigJSONGenerator', ->
 
         it 'returns #{configName}.json', ->
             path = @generator.getDestinationPathByName('admin')
-            expect(path).to.equal normalize __dirname + '/../../loopback/server/admin.json'
+            assert path is normalize __dirname + '/../../loopback/server/admin.json'
 
 
         it 'returns config.json when "server" is given', ->
             path = @generator.getDestinationPathByName('server')
-            expect(path).to.equal normalize __dirname + '/../../loopback/server/config.json'
+            assert path is normalize __dirname + '/../../loopback/server/config.json'
 
 
     describe 'merge', ->
@@ -39,9 +39,9 @@ describe 'ConfigJSONGenerator', ->
                 onlyBase: true
 
             merged = @generator.merge(dominant, base)
-            expect(merged).to.have.property 'common', 'dominant'
-            expect(merged).to.have.property 'onlyDominant', true
-            expect(merged).to.have.property 'onlyBase', true
+            assert merged.common is 'dominant'
+            assert merged.onlyDominant is true
+            assert merged.onlyBase is true
 
 
         it 'merges sub objects, 1st argument is dominant', ->
@@ -64,51 +64,51 @@ describe 'ConfigJSONGenerator', ->
                         onlySubSubBase: true
 
             merged = @generator.merge(dominant, base)
-            expect(merged).to.have.property 'common', 'dominant'
-            expect(merged).to.have.property 'sub'
+            assert merged.common is 'dominant'
+            assert merged.hasOwnProperty 'sub'
 
-            expect(merged.sub).to.have.property 'common', 'dominant'
-            expect(merged.sub).to.have.property 'onlySubDominant', true
-            expect(merged.sub).to.have.property 'onlySubBase', true
-            expect(merged.sub).to.have.property 'subsub'
+            assert merged.sub.common is 'dominant'
+            assert merged.sub.onlySubDominant is true
+            assert merged.sub.onlySubBase is true
+            assert merged.sub.hasOwnProperty 'subsub'
 
-            expect(merged.sub.subsub).to.have.property 'common', 'dominant'
-            expect(merged.sub.subsub).to.have.property 'onlySubSubDominant', true
-            expect(merged.sub.subsub).to.have.property 'onlySubSubBase', true
+            assert merged.sub.subsub.common is 'dominant'
+            assert merged.sub.subsub.onlySubSubDominant is true
+            assert merged.sub.subsub.onlySubSubBase is true
 
 
     describe 'loadDefaultConfig', ->
 
         it 'loads admin', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('admin')
-            expect(config).to.be.an 'object'
-            expect(config).to.have.property 'accessToken'
+            assert typeof config is 'object'
+            assert config.hasOwnProperty 'accessToken'
 
         it 'loads datasources', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('datasources')
-            expect(config).to.be.an 'object'
-            expect(config).to.have.property 'memory'
-            expect(config).to.have.property 'db'
+            assert typeof config is 'object'
+            assert config.hasOwnProperty 'memory'
+            assert config.hasOwnProperty 'db'
 
         it 'loads middleware', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('middleware')
-            expect(config).to.be.an 'object'
+            assert typeof config is 'object'
 
         it 'does not load model-config', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('model-config')
-            expect(config).not.to.exist
+            assert not config?
 
         it 'loads server', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('server')
-            expect(config).to.be.an 'object'
-            expect(config).to.have.property 'port', 3000
+            assert typeof config is 'object'
+            assert config.port is 3000
 
         it 'loads push-credentials', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('push-credentials')
-            expect(config).to.be.an 'object'
-            expect(config).to.have.property 'gcmServerApiKey'
-            expect(config).to.have.property 'apnsCertData'
-            expect(config).to.have.property 'apnsKeyData'
+            assert typeof config is 'object'
+            assert config.hasOwnProperty 'gcmServerApiKey'
+            assert config.hasOwnProperty 'apnsCertData'
+            assert config.hasOwnProperty 'apnsKeyData'
 
 
     describe 'getMergedConfig', ->
@@ -127,9 +127,9 @@ describe 'ConfigJSONGenerator', ->
 
             merged = generator.getMergedConfig('admin')
 
-            expect(merged).to.have.property 'accessToken', 'MySecretOne'
-            expect(merged.account).to.have.property 'email', 'dummy@example.com' # from default config
-            expect(merged.account).to.have.property 'password', 'xxxyyy'
+            assert merged.accessToken is 'MySecretOne'
+            assert merged.account.email is 'dummy@example.com' # from default config
+            assert merged.account.password is 'xxxyyy'
 
 
     describe 'generate', ->
@@ -151,15 +151,15 @@ describe 'ConfigJSONGenerator', ->
 
         it 'generates five json files', ->
 
-            expect(fs.readdirSync @tmpdir).to.have.length 5
+            assert fs.readdirSync(@tmpdir).length is 5
 
         it 'generates config.json', ->
 
-            expect(fs.readdirSync @tmpdir).to.include 'config.json'
+            assert 'config.json' in fs.readdirSync @tmpdir
 
         it 'returns generated contents', ->
 
-            expect(Object.keys @generatedContents).to.have.length 5
+            assert Object.keys @generatedContents.length is 5
 
 
     describe 'reset', ->
@@ -179,8 +179,8 @@ describe 'ConfigJSONGenerator', ->
         it 'removes all generated files', ->
 
             @generator.generate()
-            expect(fs.readdirSync @tmpdir).to.have.length 5
+            assert fs.readdirSync(@tmpdir).length is 5
 
             @generator.reset()
-            expect(fs.readdirSync @tmpdir).to.have.length 0
+            assert fs.readdirSync(@tmpdir).length is 0
 

@@ -17,7 +17,7 @@ describe 'LoopbackBootGenerator', ->
 
             bootGenerator.generate()
 
-            expect(fs.existsSync(__dirname + '/../../loopback/server/custom-roles/foo.js')).to.be.true
+            assert fs.existsSync(__dirname + '/../../loopback/server/custom-roles/foo.js') is true
 
 
         it 'does not copy non-existing javascript files', ->
@@ -30,18 +30,18 @@ describe 'LoopbackBootGenerator', ->
 
             bootGenerator.generate()
 
-            expect(fs.existsSync(__dirname + '/../../loopback/server/custom-roles/bar.js')).to.be.false
+            assert fs.existsSync(__dirname + '/../../loopback/server/custom-roles/bar.js') is false
 
 
     describe 'reset', ->
 
         it 'removes javascript files in loopback/server/custom-roles', ->
 
-            expect(fs.existsSync(__dirname + '/../../loopback/server/custom-roles/foo.js')).to.be.true
+            assert fs.existsSync(__dirname + '/../../loopback/server/custom-roles/foo.js') is true
 
             bootGenerator = new LoopbackBootGenerator()
             bootGenerator.reset()
 
-            expect(fs.existsSync(__dirname + '/../../loopback/server/custom-roles/foo.js')).to.be.false
+            assert fs.existsSync(__dirname + '/../../loopback/server/custom-roles/foo.js') is false
 
 

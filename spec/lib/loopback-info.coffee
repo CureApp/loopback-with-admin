@@ -35,19 +35,19 @@ describe 'LoopbackInfo', ->
     describe 'getURL', ->
 
         it 'returns URL with host, port and api root info', ->
-            expect(@lbInfo.getURL()).to.equal('localhost:3000/api')
+            assert @lbInfo.getURL() is('localhost:3000/api')
 
 
     describe 'getEnv', ->
 
         it 'returns environment in which main generated', ->
-            expect(@lbInfo.getEnv()).to.equal 'xxxyyyzzz'
+            assert @lbInfo.getEnv() is 'xxxyyyzzz'
 
 
     describe 'getAccessToken', ->
 
         it 'returns access token of admin', ->
-            expect(@lbInfo.getAccessToken()).to.equal '(you must set access token)'
+            assert @lbInfo.getAccessToken() is '(you must set access token)'
 
 
 

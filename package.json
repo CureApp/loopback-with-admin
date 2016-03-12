@@ -16,6 +16,9 @@
   },
   "author": "CureApp, Inc.",
   "license": "MIT",
+  "directories": {
+    "test": "spec"
+  },
   "dependencies": {
     "coffee-script": "^1.9.3",
     "compression": "^1.0.3",
@@ -33,12 +36,14 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "espower-coffee": "^1.0.1",
     "gulp": "^3.9.1",
     "gulp-coffee": "^2.3.1",
     "gulp-plumber": "^1.1.0",
     "gulp-yuidoc": "^0.1.2",
     "mocha": "^2.4.5",
-    "node-circleci-autorelease": "^1.5.11"
+    "node-circleci-autorelease": "^1.5.11",
+    "power-assert": "^1.3.1"
   },
   "repository": {
     "type": "",

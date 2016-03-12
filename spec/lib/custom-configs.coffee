@@ -8,8 +8,8 @@ describe 'CustomConfigs', ->
         it 'loads env dir if exists', ->
             configDir = __dirname + '/music-live-configs'
             configs = new CustomConfigs().loadEnvDir(configDir, 'development')
-            expect(configs).to.have.property 'server'
-            expect(configs).not.to.have.property 'plain'
+            assert configs.hasOwnProperty 'server'
+            assert not configs.hasOwnProperty 'plain'
 
         it 'returns empty object if not exists', ->
             configDir = __dirname + '/music-live-configs'
@@ -26,8 +26,8 @@ describe 'CustomConfigs', ->
                     port: 8080
             new CustomConfigs().appendCommonConfigs(configDir, configs)
 
-            expect(configs).to.have.property 'plain'
-            expect(configs.server.port).to.equal 8080
+            assert configs.hasOwnProperty 'plain'
+            assert configs.server.port is 8080
 
 
    describe 'toObject,', ->
@@ -36,14 +36,14 @@ describe 'CustomConfigs', ->
             it 'contains copy of the given object', ->
                 configObj = {abc: true}
                 customConfigs = new CustomConfigs(configObj)
-                expect(customConfigs.toObject()).to.have.property 'abc', true
+                assert customConfigs.toObject().abc is true
 
         describe 'when instance is create from config object', ->
             it 'contains config in the directory', ->
 
                 configDir = __dirname + '/music-live-configs'
                 customConfigs = new CustomConfigs(configDir)
-                expect(customConfigs.toObject()).to.have.property 'plain'
+                assert customConfigs.toObject().hasOwnProperty 'plain'
 
 
 

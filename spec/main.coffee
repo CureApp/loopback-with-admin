@@ -17,7 +17,7 @@ describe 'Main', ->
         it 'is "development" by default', ->
 
             main = new Main(modelDefinitions, configDir)
-            expect(main.env).to.equal 'development'
+            assert main.env is 'development'
 
 
         it 'is set the same as environment variable "NODE_ENV" if set.', ->
@@ -25,7 +25,7 @@ describe 'Main', ->
             process.env.NODE_ENV = 'xxxx'
 
             main = new Main(modelDefinitions, configDir)
-            expect(main.env).to.equal 'xxxx'
+            assert main.env is 'xxxx'
 
             process.env.NODE_ENV = ''
 
@@ -34,7 +34,7 @@ describe 'Main', ->
             process.env.NODE_ENV = 'xxxx'
             main = new Main(modelDefinitions, configDir, 'local')
 
-            expect(main.env).to.equal 'local'
+            assert main.env is 'local'
             process.env.NODE_ENV = ''
 
 
@@ -52,7 +52,7 @@ describe 'Main', ->
 
             main.generate()
 
-            expect(counter).to.equal 4
+            assert counter is 4
 
 
         it 'returns generated contents', ->
@@ -68,10 +68,10 @@ describe 'Main', ->
 
             generated = main.generate()
 
-            expect(generated).to.have.property 'config'
-            expect(generated).to.have.property 'buildInfo'
-            expect(generated).to.have.property 'models'
-            expect(generated).to.have.property 'bootInfo'
+            assert generated.hasOwnProperty('config')
+            assert generated.hasOwnProperty('buildInfo')
+            assert generated.hasOwnProperty('models')
+            assert generated.hasOwnProperty('bootInfo')
 
             rmdirSyncRecursive __dirname + '/main-test'
 
@@ -90,7 +90,7 @@ describe 'Main', ->
 
             main.reset()
 
-            expect(counter).to.equal 4
+            assert counter is 4
 
 
     describe '@launchLoopback', ->
@@ -140,16 +140,16 @@ describe 'Main', ->
 
             Main.run(modelDefinitions, configDir)
 
-            expect(@called.reset).to.be.true
-            expect(@called.generate).to.be.true
-            expect(@called.launchLoopback).to.be.true
+            assert @called.reset is true
+            assert @called.generate is true
+            assert @called.launchLoopback is true
 
 
         it 'does not invoke reset if reset is false', ->
 
             Main.run(modelDefinitions, configDir, reset: false)
 
-            expect(@called.reset).not.to.exist
-            expect(@called.generate).to.be.true
-            expect(@called.launchLoopback).to.be.true
+            assert not @called.reset?
+            assert @called.generate is true
+            assert @called.launchLoopback is true
 

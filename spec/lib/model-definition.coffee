@@ -16,46 +16,46 @@ describe 'ModelDefinition', ->
         it 'set acls by aclType', ->
             customDefinition = aclType: 'owner'
             def = new ModelDefinition('entity-model', customDefinition)
-            expect(def.definition.acls).to.be.instanceof Array
-            expect(def.definition.acls).to.have.length.above 1
+            assert def.definition.acls instanceof Array
+            assert def.definition.acls.length > 1
 
 
         it 'use custom relations setting', ->
             customDefinition =
                 relations: 'xxx'
             def = new ModelDefinition('entity-model', customDefinition)
-            expect(def.definition.relations).to.equal 'xxx'
+            assert def.definition.relations is 'xxx'
 
 
     describe 'isUser', ->
 
         it 'returns false by default', ->
             modelDefinition = new ModelDefinition('xxx')
-            expect(modelDefinition.isUser()).to.be.false
+            assert modelDefinition.isUser() is false
 
         it 'returns true if base is User', ->
             modelDefinition = new ModelDefinition('xxx', base: 'User')
-            expect(modelDefinition.isUser()).to.be.true
+            assert modelDefinition.isUser() is true
 
         it 'returns true if base is not User', ->
             modelDefinition = new ModelDefinition('xxx', base: 'Users')
-            expect(modelDefinition.isUser()).to.be.false
+            assert modelDefinition.isUser() is false
 
 
     describe 'aclType', ->
 
         it 'is admin by default', ->
             modelDefinition = new ModelDefinition('xxx')
-            expect(modelDefinition.aclType).to.equal 'admin'
+            assert modelDefinition.aclType is 'admin'
 
         it 'follows customDefinition value', ->
             modelDefinition = new ModelDefinition('xxx', aclType: 'public-read')
-            expect(modelDefinition.aclType).to.equal 'public-read'
+            assert modelDefinition.aclType is 'public-read'
 
 
         it 'returns "custom" when aclType is not set and acls exist', ->
             modelDefinition = new ModelDefinition('xxx', acls: [])
-            expect(modelDefinition.aclType).to.equal 'custom'
+            assert modelDefinition.aclType is 'custom'
 
 
     describe 'toJSON', ->
@@ -65,23 +65,23 @@ describe 'ModelDefinition', ->
             @json = @def.toJSON()
 
         it 'has name', ->
-            expect(@json).to.have.property 'name', 'entity-model'
+            assert @json.name is 'entity-model'
 
         it 'has plural', ->
-            expect(@json).to.have.property 'plural', 'entity-model'
+            assert @json.plural is 'entity-model'
 
         it 'has base = User', ->
-            expect(@json).to.have.property 'base', 'User'
+            assert @json.base is 'User'
 
         it 'has idInjection', ->
-            expect(@json).to.have.property 'idInjection', true
+            assert @json.idInjection is true
 
         it 'has acls', ->
-            expect(@json).to.have.property 'acls'
-            expect(@json.acls).to.be.instanceof Array
+            assert @json.hasOwnProperty 'acls'
+            assert @json.acls instanceof Array
 
         it 'has relations', ->
-            expect(@json).to.have.property 'relations'
+            assert @json.hasOwnProperty 'relations'
 
 
     describe 'toStringifiedJSON', ->

@@ -21,7 +21,7 @@ describe 'ModelsGenerator', ->
 
         it 'generate ModelConfigGenerator with array of models', ->
             mGenerator = new ModelsGenerator()
-            expect(mGenerator.modelConfigGenerator).to.be.instanceof ModelConfigGenerator
+            assert mGenerator.modelConfigGenerator instanceof ModelConfigGenerator
 
 
     describe 'createModelDefinitions', ->
@@ -30,8 +30,8 @@ describe 'ModelsGenerator', ->
 
             customDefinitions = a: {}
             defs = new ModelsGenerator().createModelDefinitions(customDefinitions)
-            expect(defs).to.have.property 'a'
-            expect(defs).not.to.have.property 'b'
+            assert defs.hasOwnProperty 'a'
+            assert not defs.hasOwnProperty 'b'
 
 
     describe 'modelConfigGenerator', ->
@@ -41,8 +41,8 @@ describe 'ModelsGenerator', ->
             customDefinitions = a: {}
             mcGenerator = new ModelsGenerator(customDefinitions).modelConfigGenerator
             mergedConfig = mcGenerator.getMergedConfig('model-config')
-            expect(mergedConfig).to.have.property 'a'
-            expect(mergedConfig).not.to.have.property 'b'
+            assert mergedConfig.hasOwnProperty 'a'
+            assert not mergedConfig.hasOwnProperty 'b'
 
 
 
@@ -76,13 +76,13 @@ describe 'ModelsGenerator', ->
             rmdirSyncRecursive __dirname + '/a'
 
         it 'generate JSON file', ->
-            expect(fs.existsSync @generator.destinationDir + '/test-model.json').to.be.true
+            assert fs.existsSync(@generator.destinationDir + '/test-model.json') is true
             expect(require @generator.destinationDir + '/test-model.json').to.eql {test: true}
 
         it 'generate JS file', ->
-            expect(fs.existsSync @generator.destinationDir + '/test-model.json').to.be.true
+            assert fs.existsSync(@generator.destinationDir + '/test-model.json') is true
             content = fs.readFileSync(@generator.destinationDir + '/test-model.js', 'utf8')
-            expect(content).to.equal @generator.getEmptyJSContent()
+            assert content is @generator.getEmptyJSContent()
 
 
     describe 'generateBuiltinModels', ->
@@ -102,11 +102,11 @@ describe 'ModelsGenerator', ->
             rmdirSyncRecursive __dirname + '/b'
 
         it 'generate four JSON files', ->
-            expect(fs.readdirSync @generator.destinationDir).to.have.length 8
+            assert fs.readdirSync(@generator.destinationDir).length is 8
 
 
         it 'generate JS file', ->
-            expect(fs.readdirSync @generator.destinationDir).to.have.length 8
+            assert fs.readdirSync(@generator.destinationDir).length is 8
 
 
     describe 'generateDefinitionFiles', ->
@@ -122,7 +122,7 @@ describe 'ModelsGenerator', ->
 
         it 'remove dir if exists', ->
             @generator.reset()
-            expect(fs.existsSync(@generator.destinationDir)).to.be.false
+            assert fs.existsSync(@generator.destinationDir) is false
 
         it 'do nothing if dir does not exist', ->
             expect(=> @generator.reset()).not.to.throw Error
@@ -143,11 +143,11 @@ describe 'ModelsGenerator', ->
 
             generated = @generator.generate()
 
-            expect(generated).to.have.property 'config'
-            expect(generated).to.have.property 'names'
-            expect(generated.names).to.be.instanceof Array
-            expect(generated.names).to.have.length 4
-            expect(generated.config).to.be.an 'object'
+            assert generated.hasOwnProperty 'config'
+            assert generated.hasOwnProperty 'names'
+            assert generated.names instanceof Array
+            assert generated.names.length is 4
+            assert typeof generated.config is 'object'
 
 
 

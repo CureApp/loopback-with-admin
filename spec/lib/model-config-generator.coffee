@@ -15,15 +15,15 @@ describe 'ModelConfigGenerator', ->
         it 'returns model-config.json', ->
             generator = new ModelConfigGenerator()
             path = generator.getDestinationPathByName('model-config')
-            expect(path).to.equal normalize __dirname + '/../../loopback/server/model-config.json'
+            assert path is normalize __dirname + '/../../loopback/server/model-config.json'
 
 
     describe 'loadDefaultConfig', ->
 
         it 'loads model-config', ->
             config = new ModelConfigGenerator().loadDefaultConfig('model-config')
-            expect(config).to.be.an 'object'
-            expect(Object.keys config).to.have.length 10
+            assert typeof config is 'object'
+            assert Object.keys(config).length is 10
 
 
     describe 'customConfigObj', ->
@@ -35,9 +35,9 @@ describe 'ModelConfigGenerator', ->
                 'song'
             ]
             config = new ModelConfigGenerator(entityNames).customConfigObj['model-config']
-            expect(Object.keys config).to.have.length 3
-            expect(config.player).to.have.property 'dataSource', 'db'
-            expect(config.player).to.have.property 'public', true
+            assert Object.keys(config).length is 3
+            assert config.player.dataSource is 'db'
+            assert config.player.public is true
 
 
     describe 'getMergedConfig', ->
@@ -49,7 +49,7 @@ describe 'ModelConfigGenerator', ->
                 'song'
             ]
             config = new ModelConfigGenerator(entityNames).getMergedConfig('model-config')
-            expect(Object.keys config).to.have.length 10 + 3
+            assert Object.keys(config).length is 10 + 3
 
 
     describe 'generate', ->
@@ -66,6 +66,6 @@ describe 'ModelConfigGenerator', ->
         it 'returns model config', ->
 
             generated = @generator.generate()
-            expect(Object.keys generated).to.have.length 10 + 2
+            assert Object.keys(generated).length is 10 + 2
 
 
