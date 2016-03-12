@@ -1,14 +1,13 @@
 
-{ normalize } = require 'path'
-
 LoopbackProcessLauncher = require './lib/loopback-process-launcher'
 LoopbackInfo   = require './lib/loopback-info'
 LoopbackServer = require './lib/loopback-server'
 
-ConfigJSONGenerator  = require './lib/config-json-generator'
-ModelsGenerator      = require './lib/models-generator'
-BuildInfoGenerator   = require './lib/build-info-generator'
-CustomConfigs        = require './lib/custom-configs'
+ConfigJSONGenerator   = require './lib/config-json-generator'
+ModelsGenerator       = require './lib/models-generator'
+BuildInfoGenerator    = require './lib/build-info-generator'
+CustomConfigs         = require './lib/custom-configs'
+LoopbackBootGenerator = require './lib/loopback-boot-generator'
 
 ###*
 entry point
@@ -24,16 +23,16 @@ class Main
     @method run
     @public
     @static
-    @param {Object} modelDefinitions
+    @param {Object} loopbackDefinitions
     @param {Object|String} [config] config object or config directory containing config info
     @param {Boolean} [options.reset] reset previously-generated settings before generation
     @param {String} [options.env] set environment (production|development|...)
     @param {Boolean} [options.spawn] if true, spawns child process of loopback
     return {Promise(LoopbackInfo)}
     ###
-    @run: (modelDefinitions, config, options = {}) ->
+    @run: (loopbackDefinitions, config, options = {}) ->
 
-        main = new @(modelDefinitions, config, options.env)
+        main = new @(loopbackDefinitions, config, options.env)
 
         main.reset() unless options.reset is false
 
@@ -47,7 +46,14 @@ class Main
     @constructor
     @private
     ###
-    constructor: (@modelDefinitions, configs, @env) ->
+    constructor: (loopbackDefinitions, configs, @env) ->
+
+        if loopbackDefinitions.models?
+            modelDefinitions = loopbackDefinitions.models
+            { customRoles } = loopbackDefinitions
+        else
+            modelDefinitions = loopbackDefinitions
+            customRoles = null
 
         @env ?= process.env.NODE_ENV or 'development'
 
@@ -55,8 +61,9 @@ class Main
         configObj = customConfigs.toObject()
 
         @configJSONGenerator = new ConfigJSONGenerator(configObj, @env)
-        @modelsGenerator     = new ModelsGenerator(@modelDefinitions)
-        @buildInfoGenerator  = new BuildInfoGenerator(@modelDefinitions, configObj, @env)
+        @modelsGenerator     = new ModelsGenerator(modelDefinitions)
+        @bootGenerator       = new LoopbackBootGenerator(customRoles: customRoles)
+        @buildInfoGenerator  = new BuildInfoGenerator(modelDefinitions, configObj, @env)
 
 
     ###*
@@ -66,6 +73,7 @@ class Main
         config    : @configJSONGenerator.generate()
         models    : @modelsGenerator.generate()
         buildInfo : @buildInfoGenerator.generate()
+        bootInfo  : @bootGenerator.generate()
 
     ###*
     @private
@@ -74,6 +82,7 @@ class Main
         @configJSONGenerator.reset()
         @modelsGenerator.reset()
         @buildInfoGenerator.reset()
+        @bootGenerator.reset()
 
 
 

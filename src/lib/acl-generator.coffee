@@ -1,4 +1,5 @@
 
+AclConditions = require './acl-conditions'
 
 ###*
 generate ACL
@@ -8,67 +9,72 @@ ACL is Array of access control information
 ###
 class AclGenerator
 
-    constructor: (@aclType = 'admin', @isUser = false) ->
+    constructor: (aclType = 'admin', @isUser = false) ->
         @acl = []
+        @aclConditions = @constructor.createAclConditions(aclType)
 
 
     ###*
-    get ACL by aclType
+    create AclConditions by aclType
+    @param {String|Object} aclType
+    ###
+    @createAclConditions: (aclType) ->
+
+        if typeof aclType is 'string'
+
+            aclTypeStr = aclType
+
+            switch aclTypeStr
+                when 'admin'
+                    aclType = {}
+
+                when 'owner'
+                    aclType = { owner: 'rwx' }
+
+                when 'public-read-by-owner'
+                    aclType = { public: 'r', owner: 'rwx' }
+
+                when 'member-read-by-owner'
+                    aclType = { member: 'r', owner: 'rwx' }
+
+                when 'member-read'
+                    aclType = { member: 'r' }
+
+                when 'public-read'
+                    aclType = { public: 'r' }
+
+                when 'none'
+                    aclType = { public: 'rwx' }
+
+        return new AclConditions(aclType)
+
+
+    ###*
+    get ACL by aclConditions
 
     @method generate
     @public
-    @param {String} aclType
     return {Array} ACL
     ###
     generate: ->
 
-        switch @aclType
+        if @aclConditions.isPublic()
+            return @acl
 
-            when 'admin'
-                @commonACL()
-                @adminACL()
+        @commonACL()
 
-            when 'owner'
-                @commonACL()
-                @ownerACL()
+        if @aclConditions.isAdminOnly()
+            @adminACL()
+            return @acl
 
-            when 'public-read-by-owner'
-                @commonACL()
-                @ownerACL()
-                @publicReadACL()
+        @addAllowACL('$everyone',      @aclConditions.basicPermissions.public)
+        @addAllowACL('$authenticated', @aclConditions.basicPermissions.member)
+        @addAllowACL('$owner',         @aclConditions.basicPermissions.owner)
 
-            when 'member-read-by-owner'
-                @commonACL()
-                @ownerACL()
-                @memberReadACL()
-
-            when 'member-read'
-                @commonACL()
-                @memberReadACL()
-
-            when 'public-read'
-                @commonACL()
-                @publicReadACL()
-
-            when 'none'
-                return @acl = []
-
-            else
-                throw new Error """unknown aclType: #{@aclType}"""
+        for roleName, accessTypes of @aclConditions.customPermissions
+            @addAllowACL(roleName, accessTypes)
 
         return @acl
-
-
-    ###*
-    append ACL allowing accesses only from admin
-
-    @method adminACL
-    @private
-    ###
-    adminACL: ->
-        if @isUser
-            @adminUserACL()
-        @
 
 
     ###*
@@ -77,46 +83,14 @@ class AclGenerator
     @method ownerACL
     @private
     ###
-    ownerACL: ->
+    addAllowACL: (principalId, accessTypes) ->
 
-        accessTypes = ['READ', 'WRITE', 'EXECUTE']
-
-        for accessType in accessTypes
+        accessTypes.forEach (accessType) =>
             @acl.push
                 accessType: accessType
                 principalType: 'ROLE'
-                principalId: '$owner'
+                principalId: principalId
                 permission: 'ALLOW'
-        @
-
-    ###*
-    append ACL allowing READ accesses from authenticated users
-
-    @method memberReadACL
-    @private
-    ###
-    memberReadACL: ->
-
-        @acl.push
-            accessType: 'READ'
-            principalType: 'ROLE'
-            principalId: '$authenticated'
-            permission: 'ALLOW'
-        @
-
-    ###*
-    append ACL allowing accesses from READ access to everyone
-
-    @method publicReadACL
-    @private
-    ###
-    publicReadACL: ->
-        @acl.push
-            accessType: 'READ'
-            principalType: 'ROLE'
-            principalId: '$everyone'
-            permission: 'ALLOW'
-        @
 
 
     ###*
@@ -142,7 +116,6 @@ class AclGenerator
         if @isUser
             @userACL()
         @
-
 
     ###*
     append ACL for User model
@@ -177,6 +150,18 @@ class AclGenerator
             property: 'create'
         @
 
+
+    ###*
+    append ACL allowing accesses only from admin
+
+    @method adminACL
+    @private
+    ###
+    adminACL: ->
+        if @isUser
+            @adminUserACL()
+
+
     ###*
     append ACL for User model handled by admin,
     denying login from everyone. Login must be executed via admin access.
@@ -199,8 +184,6 @@ class AclGenerator
             principalId: 'admin'
             permission: 'ALLOW'
             property: 'login'
-        @
-
 
 
 module.exports = AclGenerator

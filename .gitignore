@@ -19,6 +19,7 @@ node_modules
 npm-debug.log
 loopback/common/models
 loopback/server/*.json
+loopback/server/custom-roles/*.js
 tmp
 dist
 doc

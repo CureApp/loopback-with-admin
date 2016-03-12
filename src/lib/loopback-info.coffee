@@ -12,7 +12,7 @@ class LoopbackInfo
         else
             @app = server
 
-        { @config, @models, @buildInfo } = generatedInMain
+        { @config, @models, @buildInfo, @bootInfo } = generatedInMain
 
 
     ###*
