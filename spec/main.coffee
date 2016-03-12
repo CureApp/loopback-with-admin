@@ -40,7 +40,7 @@ describe 'Main', ->
 
     describe 'generate', ->
 
-        it 'invokes three generator\'s generate()', ->
+        it 'invokes four generator\'s generate()', ->
 
             main = new Main(modelDefinitions, configDir)
             counter = 0
@@ -48,10 +48,11 @@ describe 'Main', ->
             main.configJSONGenerator = generate: generate
             main.modelsGenerator     = generate: generate
             main.buildInfoGenerator  = generate: generate
+            main.bootGenerator       = generate: generate
 
             main.generate()
 
-            expect(counter).to.equal 3
+            expect(counter).to.equal 4
 
 
         it 'returns generated contents', ->
@@ -70,13 +71,14 @@ describe 'Main', ->
             expect(generated).to.have.property 'config'
             expect(generated).to.have.property 'buildInfo'
             expect(generated).to.have.property 'models'
+            expect(generated).to.have.property 'bootInfo'
 
             rmdirSyncRecursive __dirname + '/main-test'
 
 
     describe 'reset', ->
 
-        it 'invokes three generator\'s reset()', ->
+        it 'invokes four generator\'s reset()', ->
 
             main = new Main(modelDefinitions, configDir)
             counter = 0
@@ -84,10 +86,11 @@ describe 'Main', ->
             main.configJSONGenerator = reset: reset
             main.modelsGenerator     = reset: reset
             main.buildInfoGenerator  = reset: reset
+            main.bootGenerator       = reset: reset
 
             main.reset()
 
-            expect(counter).to.equal 3
+            expect(counter).to.equal 4
 
 
     describe '@launchLoopback', ->
