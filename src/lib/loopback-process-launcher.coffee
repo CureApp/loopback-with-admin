@@ -17,6 +17,8 @@ class LoopbackProcessLauncher extends LoopbackServer
         @lbProcess.stdout.setEncoding 'utf8'
         @lbProcess.stderr.pipe process.stderr
 
+        process.on 'exit', => @lbProcess.kill()
+
         @rejectOnFailure(reject)
         @rejectOnTimeout(reject)
         @resolveOnStarted(resolve)
