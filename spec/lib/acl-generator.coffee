@@ -110,12 +110,12 @@ describe 'AclGenerator', ->
         it 'appends no ACL when aclType is "none"', ->
 
             aclGenerator = new AclGenerator('none', false)
-            expect(aclGenerator.acl).to.eql []
+            assert.deepEqual aclGenerator.acl, []
 
         it 'appends no ACL when aclType is "none" even if it is user model', ->
 
             aclGenerator = new AclGenerator('none', true)
-            expect(aclGenerator.acl).to.eql []
+            assert.deepEqual aclGenerator.acl, []
 
 
         describe 'when aclType is "admin",', ->
@@ -127,7 +127,7 @@ describe 'AclGenerator', ->
                 acl = new AclGenerator(aclType, isUser).generate()
 
                 assert acl.length is 2
-                expect(acl).to.deep.equal commonACL
+                assert.deepEqual acl, commonACL
 
 
             it 'appends seven ACs with user model', ->
@@ -148,7 +148,7 @@ describe 'AclGenerator', ->
                 acl = new AclGenerator(aclType, isUser).generate()
 
                 assert acl.length is 5
-                expect(acl.slice(0,2)).to.deep.equal commonACL
+                assert.deepEqual acl.slice(0,2), commonACL
 
 
             it 'appends AC allowing read, write, by admin for owner with nonUser', ->
@@ -182,7 +182,7 @@ describe 'AclGenerator', ->
                 acl = new AclGenerator(aclType, isUser).generate()
 
                 assert acl.length is 3
-                expect(acl.slice(0,2)).to.deep.equal commonACL
+                assert.deepEqual acl.slice(0,2), commonACL
 
             it 'appends AC allowing everyone to READ with nonUser model', ->
 
@@ -214,7 +214,7 @@ describe 'AclGenerator', ->
                 acl = new AclGenerator(aclType, isUser).generate()
 
                 assert acl.length is 3
-                expect(acl.slice(0,2)).to.deep.equal commonACL
+                assert.deepEqual acl.slice(0,2), commonACL
 
             it 'appends AC allowing authenticated users to READ with nonUser model', ->
 
@@ -247,7 +247,7 @@ describe 'AclGenerator', ->
                 acl = new AclGenerator(aclType, isUser).generate()
 
                 assert acl.length is 5
-                expect(acl.slice(0,2)).to.deep.equal commonACL
+                assert.deepEqual acl.slice(0,2), commonACL
 
             it 'appends AC allowing read for member,  write and execute for owner', ->
 
@@ -289,7 +289,7 @@ describe 'AclGenerator', ->
                 acl = new AclGenerator(aclType, isUser).generate()
 
                 assert acl.length is 5
-                expect(acl.slice(0, 2)).to.deep.equal commonACL
+                assert.deepEqual acl.slice(0, 2), commonACL
 
 
             it 'appends AC allowing read, write, by admin for owner with nonUser', ->

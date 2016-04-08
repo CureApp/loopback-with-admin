@@ -14,7 +14,7 @@ describe 'CustomConfigs', ->
         it 'returns empty object if not exists', ->
             configDir = __dirname + '/music-live-configs'
             configs = new CustomConfigs().loadEnvDir(configDir, 'xxx')
-            expect(configs).to.eql {}
+            assert.deepEqual configs, {}
 
 
     describe 'appendCommonConfigs', ->

@@ -10,7 +10,7 @@ describe 'ModelDefinition', ->
             customDefinition =
                 acls: ['xxx']
             def = new ModelDefinition('entity-model', customDefinition)
-            expect(def.definition.acls).to.eql ['xxx']
+            assert.deepEqual def.definition.acls, ['xxx']
 
 
         it 'set acls by aclType', ->
@@ -90,7 +90,7 @@ describe 'ModelDefinition', ->
 
             def = new ModelDefinition('xxx')
             stringifiedJSON = def.toStringifiedJSON()
-            expect(-> JSON.parse(stringifiedJSON)).not.to.throw Error
+            -> JSON.parse(stringifiedJSON)
 
             parsed = JSON.parse(stringifiedJSON)
-            expect(parsed).to.eql def.toJSON()
+            assert.deepEqual parsed, def.toJSON()
