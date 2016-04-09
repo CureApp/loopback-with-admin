@@ -77,7 +77,7 @@ describe 'ModelsGenerator', ->
 
         it 'generate JSON file', ->
             assert fs.existsSync(@generator.destinationDir + '/test-model.json') is true
-            expect(require @generator.destinationDir + '/test-model.json').to.eql {test: true}
+            assert.deepEqual require(@generator.destinationDir + '/test-model.json'), {test: true}
 
         it 'generate JS file', ->
             assert fs.existsSync(@generator.destinationDir + '/test-model.json') is true
@@ -125,7 +125,7 @@ describe 'ModelsGenerator', ->
             assert fs.existsSync(@generator.destinationDir) is false
 
         it 'do nothing if dir does not exist', ->
-            expect(=> @generator.reset()).not.to.throw Error
+            => @generator.reset()
 
 
     describe 'generate', ->
