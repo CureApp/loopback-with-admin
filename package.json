@@ -12,7 +12,8 @@
     "post-dependencies": "echo post-dependencies",
     "pre-release": "gulp coffee",
     "post-release": "echo post-release",
-    "gh-pages": "gulp yuidoc"
+    "gh-pages": "gulp yuidoc",
+    "bmp-r": "cc-bmp -r"
   },
   "author": "CureApp, Inc.",
   "license": "MIT",
@@ -20,34 +21,33 @@
     "test": "spec"
   },
   "dependencies": {
-    "coffee-script": "^1.9.3",
-    "compression": "^1.0.3",
-    "errorhandler": "^1.1.1",
-    "loopback": "^2.8.0",
-    "loopback-boot": "^2.6.5",
-    "loopback-component-push": "~1.4.4",
+    "coffee-script": "^1.10.0",
+    "compression": "^1.6.1",
+    "errorhandler": "^1.4.3",
+    "loopback": "^2.27.0",
+    "loopback-boot": "^2.18.1",
+    "loopback-component-push": "^1.5.3",
     "loopback-connector-memory-idstr": "^1.0.0",
-    "loopback-datasource-juggler": "^2.30.1",
+    "loopback-datasource-juggler": "^2.46.0",
     "serve-favicon": "^2.0.1",
-    "wrench": "^1.5.8"
+    "wrench": "^1.5.9"
   },
   "optionalDependencies": {
-    "loopback-explorer": "^1.1.0"
+    "loopback-explorer": "^1.8.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
     "espower-coffee": "^1.0.1",
     "gulp": "^3.9.1",
-    "gulp-coffee": "^2.3.1",
+    "gulp-coffee": "^2.3.2",
     "gulp-plumber": "^1.1.0",
     "gulp-yuidoc": "^0.1.2",
     "mocha": "^2.4.5",
-    "node-circleci-autorelease": "^1.5.11",
+    "node-circleci-autorelease": "^1.6.1",
     "power-assert": "^1.3.1"
   },
   "repository": {
-    "type": "",
-    "url": ""
+    "type": "git",
+    "url": "https://github.com/CureApp/loopback-with-admin"
   },
   "description": "launch loopback with admin, push-notifications",
   "node-circleci-autorelease": {
