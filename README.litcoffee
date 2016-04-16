@@ -22,6 +22,7 @@ npm install loopback-with-admin
 
         # see "LoopbackInfo" section for more detail
         console.log lbInfo.getURL()         # loopback api root
+        console.log lbInfo.getAdminTokens() # access tokens of admin
 
 
 ## run with config dir
@@ -188,6 +189,9 @@ instance of LoopbackInfo is obtained after loopback is launched
 
 ## getURL()
 returns hosting URL
+
+## getAdminTokens()
+returns Array of access tokens (string).
 
     lbInfo.getURL() # e.g. localhost:3000/api
 
