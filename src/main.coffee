@@ -27,7 +27,6 @@ class Main
     @param {Object|String} [config] config object or config directory containing config info
     @param {Boolean} [options.reset] reset previously-generated settings before generation
     @param {String} [options.env] set environment (production|development|...)
-    @param {Boolean} [options.spawn] if true, spawns child process of loopback
     return {Promise(LoopbackInfo)}
     ###
     @run: (loopbackDefinitions, config, options = {}) ->
@@ -94,6 +93,7 @@ class Main
     @launchLoopback: (spawnChildProcess) ->
 
         if spawnChildProcess
+            console.error('`options.spawn` is deprecated. It cannot set admin access token.')
             new LoopbackProcessLauncher().launch()
         else
             new LoopbackServer().launch()
