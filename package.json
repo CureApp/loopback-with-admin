@@ -23,6 +23,7 @@
   "dependencies": {
     "coffee-script": "^1.10.0",
     "compression": "^1.6.1",
+    "debug": "^2.2.0",
     "errorhandler": "^1.4.3",
     "loopback": "^2.27.0",
     "loopback-boot": "^2.18.1",
