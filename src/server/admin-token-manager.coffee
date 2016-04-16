@@ -24,11 +24,10 @@ class AdminTokenManager
 
     ###*
     @param {Function|Array(String)} [options.fetch] function to return admin tokens (or promise of it). When string[] is given, these value are used for the admin access token.
-    @param {Number} [options.intervalHours] Interval hours to fetch new admin token.
     ###
     constructor: (options = {}) ->
 
-        { fetch, @intervalHours } = options
+        { fetch } = options
 
         @fetch = @constructor.createFetchFunction(fetch)
 
@@ -58,8 +57,6 @@ class AdminTokenManager
 
             if not @validTokenStrs(tokenStrs)
                 throw @invalidTokenError(tokenStrs)
-
-            ____("tokens: #{tokenStrs.join(',')}")
 
             @updateTokens(tokenStrs)
 
@@ -106,6 +103,9 @@ class AdminTokenManager
 
             Promise.all promises
 
+        .then =>
+            ____("tokens: #{Object.keys(@tokensById).join(',')}")
+
 
     ###*
     set new token
@@ -120,7 +120,7 @@ class AdminTokenManager
             if foundToken?
                 ____("token: #{token.id} already exists.")
 
-                if foundToken.userId isnt ADMIN_USER
+                if foundToken.userId isnt ADMIN_USER.id
                     console.error """
                         AdminTokenManager: The token `#{token.id}` is already exist for non-admin user. Skip creating.
                     """

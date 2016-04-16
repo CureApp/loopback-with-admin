@@ -99,6 +99,6 @@ class Main
             console.error('`options.spawn` is deprecated. It cannot set admin access token.')
             new LoopbackProcessLauncher().launch()
         else
-            new LoopbackServer(adminTokenOptions).launch()
+            new LoopbackServer().launch(adminTokenOptions)
 
 module.exports = Main
