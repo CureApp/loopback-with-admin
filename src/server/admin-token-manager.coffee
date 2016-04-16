@@ -87,6 +87,16 @@ class AdminTokenManager
 
 
     ###*
+    Get current tokens
+    @public
+    @method getCurrentTokens
+    @return {Array(String)}
+    ###
+    getCurrentTokens: ->
+        Object.keys @tokensById
+
+
+    ###*
     Save new tokens and destroy old tokens.
     @private
     ###

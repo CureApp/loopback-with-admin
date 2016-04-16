@@ -18,10 +18,8 @@ describe 'LoopbackServer', ->
 
     describe 'launch', ->
 
-        it 'runs loopback in the same process', (done) ->
+        it 'runs loopback in the same process', ->
             @timeout 30000
 
             launcher = new LoopbackServer()
-            launcher.launch().then (app) ->
-                done()
-            .catch done
+            launcher.launch()

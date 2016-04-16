@@ -93,32 +93,6 @@ describe 'Main', ->
             assert counter is 4
 
 
-    describe '@launchLoopback', ->
-
-        before ->
-
-        after ->
-
-        it 'launches loopback-server by default', (done) ->
-            @launch = LoopbackServer::launch
-            LoopbackServer::launch = =>
-                LoopbackServer::launch = @launch
-                done()
-
-            Main.launchLoopback()
-
-
-        # deprecated
-        xit 'launches loopback-process-launcher when spawn is true', (done) ->
-            @launch = LoopbackProcessLauncher::launch
-            LoopbackProcessLauncher::launch = =>
-                LoopbackProcessLauncher::launch = @launch
-                done()
-
-            spawn = true
-            Main.launchLoopback(spawn)
-
-
     describe '@run', ->
 
         beforeEach ->

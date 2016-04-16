@@ -5,16 +5,19 @@ var app = module.exports = loopback();
 
 app.start = function(callback) {
   boot(app, __dirname, function(err) {
-    if (err) throw err;
+    if (err) return callback(err)
 
       // start the web server
-      app.listen(function() {
+      app.listen(function(err) {
+
+        if (err) return callback(err)
+
         app.emit('started');
         console.log('Web server listening at: %s', app.get('url'));
 
         console.log('LOOPBACK_WITH_ADMIN_STARTED');
 
-        if (callback) callback(app);
+        callback()
       });
   });
 };

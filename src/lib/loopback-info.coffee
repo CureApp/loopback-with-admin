@@ -6,11 +6,11 @@ Loopback info
 ###
 class LoopbackInfo
 
-    constructor: (server = {}, generatedInMain = {}) ->
-        if typeof server.kill is 'function'
+    constructor: (server, generatedInMain = {}) ->
+        if typeof server?.kill is 'function'
             @process = server
         else
-            @app = server
+            @lbServer = server
 
         { @config, @models, @buildInfo, @bootInfo } = generatedInMain
 
@@ -27,6 +27,20 @@ class LoopbackInfo
         hostName ?= @config.server.host
 
         "#{hostName}:#{@config.server.port}#{@config.server.restApiRoot}"
+
+
+    ###*
+    get available admin access tokens
+
+    @method getAdminTokens
+    @public
+    @return {Array(String)} tokens
+    ###
+    getAdminTokens: ->
+        if not @lbServer?
+            throw new Error('Cannot get admin tokens when loopback is launched with {spawn: true} option.')
+
+        @lbServer.app.lwaTokenManager.getCurrentTokens()
 
 
 

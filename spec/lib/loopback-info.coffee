@@ -44,7 +44,6 @@ describe 'LoopbackInfo', ->
             assert @lbInfo.getEnv() is 'xxxyyyzzz'
 
 
-
     describe 'kill', ->
 
         it 'kills loopback process', (done) ->
