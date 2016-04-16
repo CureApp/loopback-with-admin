@@ -3,7 +3,6 @@
 { mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
 Main = require '../src/main'
-LoopbackProcessLauncher = require '../src/lib/loopback-process-launcher'
 LoopbackServer = require '../src/lib/loopback-server'
 
 modelDefinitions = {}

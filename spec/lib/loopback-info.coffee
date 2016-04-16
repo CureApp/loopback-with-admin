@@ -4,10 +4,6 @@ Main = require '../../src/main'
 
 { mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
-lbProcess =
-    kill: -> @cb()
-
-
 configDir = __dirname + '/music-live-configs'
 
 modelDefinitions = {}
@@ -27,7 +23,7 @@ describe 'LoopbackInfo', ->
         mkdirSyncRecursive __dirname + '/lbi-test/models'
 
         @generated = main.generate()
-        @lbInfo = new LoopbackInfo(lbProcess, @generated)
+        @lbInfo = new LoopbackInfo({}, @generated)
 
     after ->
         rmdirSyncRecursive __dirname + '/lbi-test'
@@ -43,9 +39,3 @@ describe 'LoopbackInfo', ->
         it 'returns environment in which main generated', ->
             assert @lbInfo.getEnv() is 'xxxyyyzzz'
 
-
-    describe 'kill', ->
-
-        it 'kills loopback process', (done) ->
-            lbProcess.cb = done
-            @lbInfo.kill()

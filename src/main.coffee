@@ -1,5 +1,4 @@
 
-LoopbackProcessLauncher = require './lib/loopback-process-launcher'
 LoopbackInfo   = require './lib/loopback-info'
 LoopbackServer = require './lib/loopback-server'
 
@@ -40,7 +39,7 @@ class Main
 
         generated = main.generate()
 
-        @launchLoopback(options.adminToken, options.spawn).then (server) =>
+        @launchLoopback(options.adminToken).then (server) =>
             return new LoopbackInfo(server, generated)
 
 
@@ -93,13 +92,9 @@ class Main
 
     @private
     ###
-    @launchLoopback: (adminTokenOptions, spawnChildProcess) ->
+    @launchLoopback: (adminTokenOptions) ->
 
-        if spawnChildProcess
-            console.error('`options.spawn` is deprecated. It cannot set admin access token.')
-            new LoopbackProcessLauncher().launch()
-        else
-            server = new LoopbackServer()
-            server.launch(adminTokenOptions).then => server
+        server = new LoopbackServer()
+        server.launch(adminTokenOptions).then => server
 
 module.exports = Main
