@@ -108,7 +108,8 @@ describe 'Main', ->
             Main.launchLoopback()
 
 
-        it 'launches loopback-process-launcher when spawn is true', (done) ->
+        # deprecated
+        xit 'launches loopback-process-launcher when spawn is true', (done) ->
             @launch = LoopbackProcessLauncher::launch
             LoopbackProcessLauncher::launch = =>
                 LoopbackProcessLauncher::launch = @launch
@@ -118,7 +119,7 @@ describe 'Main', ->
             Main.launchLoopback(spawn)
 
 
-    describe 'run', ->
+    describe '@run', ->
 
         beforeEach ->
             @called = {}
@@ -129,7 +130,7 @@ describe 'Main', ->
 
             Main::reset = => @called.reset = true
             Main::generate = => @called.generate = true
-            Main.launchLoopback = => Promise.resolve @called.launchLoopback = true
+            Main.launchLoopback = (params) => Promise.resolve @called.launchLoopback = true
 
         afterEach ->
             Main::reset = @reset
@@ -152,4 +153,29 @@ describe 'Main', ->
             assert not @called.reset?
             assert @called.generate is true
             assert @called.launchLoopback is true
+
+
+        it 'invokes launchLoopback with `adminToken` options', ->
+
+            adminTokenOptions =
+                fetchNew: -> 'new-token'
+                fetchAll: -> ['xxx', 'abc', 'token123']
+                intervalHours: -> 12
+                maxTokens: 4
+
+
+            params = null
+
+            Main.launchLoopback = (p) =>
+                params = p
+                Promise.resolve @called.launchLoopback = true
+
+            Main.run(modelDefinitions, configDir, adminToken: adminTokenOptions)
+
+            assert @called.reset is true
+            assert @called.generate is true
+            assert @called.launchLoopback is true
+            assert params is adminTokenOptions
+
+
 

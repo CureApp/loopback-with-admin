@@ -17,10 +17,15 @@ promisify = (fn) ->
 
 class AdminTokenManager
 
-    constructor: (@app, @fetchNew, @fetchAll) ->
+    ###*
+    @param {Function|String} [options.fetchNew] function to return new admin token (or promise of it). When string is given, the value is used for the admin access token. Default value is 'loopback-with-admin-access-token'
+    @param {Function|Array(String)} [options.fetchAll] function to return initial admin tokens (or promise of it). When string[] is given, these value are used for the admin access token.
+    @param {Number} [options.intervalHours] Interval hours to fetch new admin token.
+    @param {Number} [options.maxTokens] The limit of the number of admin access tokens. Default is the length of the result of fetchAll()
+    ###
+    constructor: (options = {}) ->
 
-        # in this timing, @app is incomplete: it doesn't contain models' information.
-        # `init` will be called after @app is built.
+        { @fetchNew, @fetchAll, @intervalHours, @maxTokens } = options
 
         if not @fetchNew? or typeof @fetchNew isnt 'function'
             tokenStr = @fetchNew?.toString() ? DEFAULT_TOKEN
@@ -35,7 +40,7 @@ class AdminTokenManager
 
 
 
-    init: ->
+    init: (@models) ->
 
         @createAdminUser()
 
@@ -62,7 +67,7 @@ class AdminTokenManager
 
     createAdminUser: ->
         ____("creating admin user. id: #{ADMIN_USER.id}")
-        { User } = @app.models
+        { User } = @models
 
         promisify (cb) =>
             User.create ADMIN_USER, cb
@@ -71,7 +76,7 @@ class AdminTokenManager
     createAdminRole: ->
 
         ____("creating admin role.")
-        { Role, RoleMapping } = @app.models
+        { Role, RoleMapping } = @models
 
         promisify (cb) =>
             Role.create name: 'admin', cb
@@ -101,7 +106,7 @@ class AdminTokenManager
 
     setNew: (token) ->
 
-        { AccessToken } = @app.models
+        { AccessToken } = @models
 
         @exists(token).then (exists) =>
 
@@ -120,7 +125,7 @@ class AdminTokenManager
 
     exists: (token) ->
 
-        { AccessToken } = @app.models
+        { AccessToken } = @models
 
         promisify (cb) =>
             AccessToken.exists token.id, cb
@@ -129,7 +134,7 @@ class AdminTokenManager
 
     deleteOldest: ->
 
-        { AccessToken } = @app.models
+        { AccessToken } = @models
 
         token = @tokens[0]
 

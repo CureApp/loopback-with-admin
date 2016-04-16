@@ -27,6 +27,11 @@ class Main
     @param {Object|String} [config] config object or config directory containing config info
     @param {Boolean} [options.reset] reset previously-generated settings before generation
     @param {String} [options.env] set environment (production|development|...)
+    @param {Object} [options.adminToken] options for admin token manager
+    @param {Function|String} [options.adminToken.fetchNew] function to return new admin token (or promise of it). When string is given, the value is used for the admin access token. Default value is 'loopback-with-admin-access-token'
+    @param {Function|Array(String)} [options.adminToken.fetchAll] function to return initial admin tokens (or promise of it). When string[] is given, these value are used for the admin access token.
+    @param {Number} [options.adminToken.intervalHours] IntervalHours to fetch new admin token.
+    @param {Number} [options.adminToken.maxTokens] The limit of the number of admin access tokens. Default is the length of the result of fetchAll()
     return {Promise(LoopbackInfo)}
     ###
     @run: (loopbackDefinitions, config, options = {}) ->
@@ -37,7 +42,7 @@ class Main
 
         generated = main.generate()
 
-        @launchLoopback(options.spawn).then (server) =>
+        @launchLoopback(options.adminToken, options.spawn).then (server) =>
             return new LoopbackInfo(server, generated)
 
 
@@ -90,12 +95,12 @@ class Main
 
     @private
     ###
-    @launchLoopback: (spawnChildProcess) ->
+    @launchLoopback: (adminTokenOptions, spawnChildProcess) ->
 
         if spawnChildProcess
             console.error('`options.spawn` is deprecated. It cannot set admin access token.')
             new LoopbackProcessLauncher().launch()
         else
-            new LoopbackServer().launch()
+            new LoopbackServer(adminTokenOptions).launch()
 
 module.exports = Main
