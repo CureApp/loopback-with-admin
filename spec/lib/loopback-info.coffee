@@ -44,12 +44,6 @@ describe 'LoopbackInfo', ->
             assert @lbInfo.getEnv() is 'xxxyyyzzz'
 
 
-    describe 'getAccessToken', ->
-
-        it 'returns access token of admin', ->
-            assert @lbInfo.getAccessToken() is '(you must set access token)'
-
-
 
     describe 'kill', ->
 

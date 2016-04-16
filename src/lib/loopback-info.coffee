@@ -40,15 +40,6 @@ class LoopbackInfo
     getEnv: -> @buildInfo.env
 
 
-    ###*
-    get access token of admin
-
-    @method getAccessToken
-    @public
-    return {String}
-    ###
-    getAccessToken: -> @config.admin.accessToken
-
 
     ###*
     kill loopback process

@@ -9,7 +9,6 @@ class ConfigJSONGenerator
     destinationPath   : normalize "#{__dirname}/../../loopback/server"
 
     configNames: [
-        'admin'
         'datasources'
         'middleware'
         'server'

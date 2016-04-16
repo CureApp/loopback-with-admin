@@ -22,7 +22,6 @@ npm install loopback-with-admin
 
         # see "LoopbackInfo" section for more detail
         console.log lbInfo.getURL()         # loopback api root
-        console.log lbInfo.getAccessToken() # access token of admin
 
 
 ## run with config dir
@@ -33,7 +32,6 @@ before running, you can prepare a directory which contains custom config informa
 (config-dir) # any name is acceptable
 |-- common
 |   |-- server.coffee
-|   `-- admin.coffee
 |-- development
 |   `-- datasources.coffee
 `-- production
@@ -79,7 +77,6 @@ when your config dir is
 (config-dir) # any name is acceptable
 |-- common
 |   |-- server.coffee
-|   `-- admin.coffee
 |-- development
 |   `-- datasources.coffee
 |-- local
@@ -133,7 +130,6 @@ three types are available.
 
 these are the config names.
 
-- admin
 - datasources
 - middleware
 - server
@@ -142,12 +138,6 @@ these are the config names.
 see JSON files in "default-values/non-model-configs" directory.
 you can set the same properties as these JSONs.
 
-
-## admin
-
- config key  | meaning
--------------|-----------------------
- accessToken | accessToken for admin
 
 ## datasources
 
@@ -206,15 +196,10 @@ returns environment name where loopback launched
 
     lbInfo.getEnv() # development|production or other custom environments
 
-## getAccessToken()
-returns access token of admin
-
-    lbInfo.getAccessToken()
 
 ## config
 contains all config values used to build loopback.
 
-- admin
 - datasources
 - middleware
 - server
@@ -226,10 +211,6 @@ see configs section above.
 contains model definitions used to build loopback
 
 see models section above.
-
-
-# admin
-(coming soon)
 
 # push notification 
 (coming soon)

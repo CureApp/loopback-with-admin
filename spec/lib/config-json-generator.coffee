@@ -15,8 +15,8 @@ describe 'ConfigJSONGenerator', ->
             @generator = new ConfigJSONGenerator()
 
         it 'returns #{configName}.json', ->
-            path = @generator.getDestinationPathByName('admin')
-            assert path is normalize __dirname + '/../../loopback/server/admin.json'
+            path = @generator.getDestinationPathByName('datasources')
+            assert path is normalize __dirname + '/../../loopback/server/datasources.json'
 
 
         it 'returns config.json when "server" is given', ->
@@ -79,11 +79,6 @@ describe 'ConfigJSONGenerator', ->
 
     describe 'loadDefaultConfig', ->
 
-        it 'loads admin', ->
-            config = new ConfigJSONGenerator().loadDefaultConfig('admin')
-            assert typeof config is 'object'
-            assert config.hasOwnProperty 'accessToken'
-
         it 'loads datasources', ->
             config = new ConfigJSONGenerator().loadDefaultConfig('datasources')
             assert typeof config is 'object'
@@ -116,20 +111,25 @@ describe 'ConfigJSONGenerator', ->
         it 'merges custom and default configs', ->
 
             customConfigObj =
-                admin:
-                    accessToken: 'MySecretOne'
-                    account:
-                        password: 'xxxyyy'
+                datasources:
+                    memory:
+                        name: "memory"
+                        connector: "memory-idstr123"
+                    memory2:
+                        name: "memory"
+                        connector: "memory"
+
                 models: {}
                 xxx: 'yyy'
 
             generator = new ConfigJSONGenerator(customConfigObj)
 
-            merged = generator.getMergedConfig('admin')
+            merged = generator.getMergedConfig('datasources')
 
-            assert merged.accessToken is 'MySecretOne'
-            assert merged.account.email is 'dummy@example.com' # from default config
-            assert merged.account.password is 'xxxyyy'
+            assert merged.memory.name is 'memory'
+            assert merged.memory.connector is 'memory-idstr123'
+            assert merged.db.name is 'db' # from default config
+            assert merged.memory2.connector is 'memory'
 
 
     describe 'generate', ->
@@ -149,9 +149,9 @@ describe 'ConfigJSONGenerator', ->
                 fs.unlinkSync @tmpdir + '/' + fname
             fs.rmdirSync @tmpdir
 
-        it 'generates five json files', ->
+        it 'generates four json files', ->
 
-            assert fs.readdirSync(@tmpdir).length is 5
+            assert fs.readdirSync(@tmpdir).length is 4
 
         it 'generates config.json', ->
 
@@ -179,7 +179,7 @@ describe 'ConfigJSONGenerator', ->
         it 'removes all generated files', ->
 
             @generator.generate()
-            assert fs.readdirSync(@tmpdir).length is 5
+            assert fs.readdirSync(@tmpdir).length is 4
 
             @generator.reset()
             assert fs.readdirSync(@tmpdir).length is 0
