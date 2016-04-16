@@ -1,6 +1,6 @@
 {
   "name": "loopback-with-admin",
-  "version": "1.8.1",
+  "version": "2.0.0",
   "main": "dist/main.js",
   "scripts": {
     "test": "mocha -r spec/global.js spec/main.coffee spec/lib/*.coffee",
