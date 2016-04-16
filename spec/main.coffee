@@ -1,6 +1,6 @@
 
 { normalize } = require 'path'
-{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
+fs = require 'fs-extra'
 
 Main = require '../src/main'
 LoopbackServer = require '../src/lib/loopback-server'
@@ -56,8 +56,8 @@ describe 'Main', ->
 
         it 'returns generated contents', ->
 
-            mkdirSyncRecursive(__dirname + '/main-test/config')
-            mkdirSyncRecursive(__dirname + '/main-test/models')
+            fs.mkdirsSync(__dirname + '/main-test/config')
+            fs.mkdirsSync(__dirname + '/main-test/models')
 
             main = new Main(modelDefinitions, configDir)
             main.configJSONGenerator.destinationPath = __dirname + '/main-test/config'
@@ -72,7 +72,7 @@ describe 'Main', ->
             assert generated.hasOwnProperty('models')
             assert generated.hasOwnProperty('bootInfo')
 
-            rmdirSyncRecursive __dirname + '/main-test'
+            fs.removeSync __dirname + '/main-test'
 
 
     describe 'reset', ->

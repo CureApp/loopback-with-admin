@@ -1,7 +1,6 @@
 
 { normalize } = require 'path'
-{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
-fs = require 'fs'
+fs = require 'fs-extra'
 
 ModelsGenerator      = require '../../src/lib/models-generator'
 ModelDefinition      = require '../../src/lib/model-definition'
@@ -65,7 +64,7 @@ describe 'ModelsGenerator', ->
             @generator = new ModelsGenerator()
             @generator.destinationDir = __dirname + '/a/b/c'
 
-            mkdirSyncRecursive @generator.destinationDir
+            fs.mkdirsSync @generator.destinationDir
 
             @modelName = 'test-model'
             @contents = JSON.stringify test: true
@@ -73,7 +72,7 @@ describe 'ModelsGenerator', ->
             @generator.generateJSONandJS(@modelName, @contents)
 
         after ->
-            rmdirSyncRecursive __dirname + '/a'
+            fs.removeSync __dirname + '/a'
 
         it 'generate JSON file', ->
             assert fs.existsSync(@generator.destinationDir + '/test-model.json') is true
@@ -91,7 +90,7 @@ describe 'ModelsGenerator', ->
             @generator = new ModelsGenerator()
             @generator.destinationDir = __dirname + '/b/c/d'
 
-            mkdirSyncRecursive @generator.destinationDir
+            fs.mkdirsSync @generator.destinationDir
 
             @modelName = 'test-model'
             @contents = JSON.stringify test: true
@@ -99,7 +98,7 @@ describe 'ModelsGenerator', ->
             @generator.generateBuiltinModels(@modelName, @contents)
 
         after ->
-            rmdirSyncRecursive __dirname + '/b'
+            fs.removeSync __dirname + '/b'
 
         it 'generate four JSON files', ->
             assert fs.readdirSync(@generator.destinationDir).length is 8
@@ -117,7 +116,7 @@ describe 'ModelsGenerator', ->
             @generator = new ModelsGenerator()
             @generator.destinationDir = __dirname + '/c'
             @generator.modelConfigGenerator.destinationPath = __dirname + '/c'
-            mkdirSyncRecursive __dirname + '/c'
+            fs.mkdirsSync __dirname + '/c'
 
 
         it 'remove dir if exists', ->
@@ -134,10 +133,10 @@ describe 'ModelsGenerator', ->
             @generator = new ModelsGenerator()
             @generator.destinationDir = __dirname + '/d'
             @generator.modelConfigGenerator.destinationPath = __dirname + '/d'
-            mkdirSyncRecursive __dirname + '/d'
+            fs.mkdirsSync __dirname + '/d'
 
         after ->
-            rmdirSyncRecursive __dirname + '/d'
+            fs.removeSync __dirname + '/d'
 
         it 'returns generated models and configs', ->
 

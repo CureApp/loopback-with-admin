@@ -2,7 +2,7 @@
 LoopbackInfo = require '../../src/lib/loopback-info'
 Main = require '../../src/main'
 
-{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
+fs = require 'fs-extra'
 
 configDir = __dirname + '/music-live-configs'
 
@@ -19,14 +19,14 @@ describe 'LoopbackInfo', ->
         main.modelsGenerator.modelConfigGenerator.destinationPath = __dirname + '/lbi-test/config'
         main.modelsGenerator.buildInfoGenerator                   = __dirname + '/lbi-test/config'
 
-        mkdirSyncRecursive __dirname + '/lbi-test/config'
-        mkdirSyncRecursive __dirname + '/lbi-test/models'
+        fs.mkdirsSync __dirname + '/lbi-test/config'
+        fs.mkdirsSync __dirname + '/lbi-test/models'
 
         @generated = main.generate()
         @lbInfo = new LoopbackInfo({}, @generated)
 
     after ->
-        rmdirSyncRecursive __dirname + '/lbi-test'
+        fs.removeSync __dirname + '/lbi-test'
 
     describe 'getURL', ->
 

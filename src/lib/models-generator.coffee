@@ -1,9 +1,7 @@
 
 { normalize } = require 'path'
 
-fs = require 'fs'
-
-{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
+fs = require 'fs-extra'
 
 ModelDefinition = require './model-definition'
 ModelConfigGenerator = require './model-config-generator'
@@ -48,7 +46,7 @@ class ModelsGenerator
     ###
     generateDefinitionFiles: ->
 
-        mkdirSyncRecursive @destinationDir
+        fs.mkdirsSync @destinationDir
 
         modelNames = for name, definition of @definitions
 
@@ -68,7 +66,7 @@ class ModelsGenerator
     ###
     reset: ->
         if fs.existsSync @destinationDir
-            rmdirSyncRecursive @destinationDir
+            fs.removeSync @destinationDir
 
         @modelConfigGenerator.reset()
 

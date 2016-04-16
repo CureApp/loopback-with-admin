@@ -1,8 +1,7 @@
 
 { normalize } = require 'path'
-{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
-fs = require 'fs'
+fs = require 'fs-extra'
 
 ModelConfigGenerator = require '../../src/lib/model-config-generator'
 
@@ -57,10 +56,10 @@ describe 'ModelConfigGenerator', ->
         before ->
             @generator = new ModelConfigGenerator(['e1', 'e2'])
             @generator.destinationPath = __dirname + '/d'
-            mkdirSyncRecursive __dirname + '/d'
+            fs.mkdirsSync __dirname + '/d'
 
         after ->
-            rmdirSyncRecursive __dirname + '/d'
+            fs.removeSync __dirname + '/d'
 
 
         it 'returns model config', ->

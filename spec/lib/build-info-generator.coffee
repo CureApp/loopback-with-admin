@@ -1,8 +1,7 @@
 
 { normalize } = require 'path'
-{ mkdirSyncRecursive, rmdirSyncRecursive }  = require 'wrench'
 
-fs = require 'fs'
+fs = require 'fs-extra'
 
 BuildInfoGenerator = require '../../src/lib/build-info-generator'
 
@@ -56,10 +55,10 @@ describe 'BuildInfoGenerator', ->
         before ->
             @generator = new BuildInfoGenerator({}, {}, 'development')
             @generator.destinationPath = __dirname + '/d'
-            mkdirSyncRecursive __dirname + '/d'
+            fs.mkdirsSync __dirname + '/d'
 
         after ->
-            rmdirSyncRecursive __dirname + '/d'
+            fs.removeSync __dirname + '/d'
 
 
         it 'returns build info', ->
