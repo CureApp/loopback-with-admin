@@ -24,9 +24,6 @@ class LoopbackServer
 
         return @app.start (err) =>
 
-            console.log "err"
-            console.log err
-
             return reject(err) if err
 
             @startRefreshingAdminTokens(intervalHours = Number(adminTokenOptions.intervalHours) || 12)
