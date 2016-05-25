@@ -25,7 +25,7 @@
     "compression": "^1.6.1",
     "debug": "^2.2.0",
     "errorhandler": "^1.4.3",
-    "fs-extra": "^0.27.0",
+    "fs-extra": "^0.30.0",
     "loopback": "^2.27.0",
     "loopback-boot": "^2.18.1",
     "loopback-component-push": "^1.5.3",
@@ -34,7 +34,7 @@
     "serve-favicon": "^2.0.1"
   },
   "optionalDependencies": {
-    "loopback-explorer": "^1.8.0"
+    "loopback-explorer": "^2.0.2"
   },
   "devDependencies": {
     "espower-coffee": "^1.0.1",
