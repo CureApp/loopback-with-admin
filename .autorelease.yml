@@ -6,14 +6,12 @@ hooks:
     pre:
       - gulp yuidoc
 config:
-  git_user_name: CircleCI
-  git_user_email: circleci@example.com
-  npm_update_depth: 3
-  version_prefix: v
-  create_branch: false
-  npm_shrinkwrap: true
-  create_gh_pages: false
-  gh_pages_dir: null
+  "git-user-name": "CircleCI",
+  "git-user-email": "circleci@cureapp.jp",
+  "version-prefix": "v",
+  "create-branch": false,
+  "create-gh-pages": true,
+  "gh-pages-dir": "doc"
 circle:
   machine:
     timezone: Asia/Tokyo
