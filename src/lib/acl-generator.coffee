@@ -72,7 +72,7 @@ class AclGenerator
         @addAllowACL('$owner',         @aclConditions.basicPermissions.owner)
 
         for roleName, accessTypes of @aclConditions.customPermissions
-            @addAllowACL(roleName, accessTypes)
+            @addAllowACL(roleName, accessTypes, ['create', 'updateAttributes'])
 
         return @acl
 
@@ -83,15 +83,23 @@ class AclGenerator
     @method ownerACL
     @private
     ###
-    addAllowACL: (principalId, accessTypes) ->
+    addAllowACL: (principalId, accessTypes, properties = []) ->
 
         accessTypes.forEach (accessType) =>
-            @acl.push
-                accessType: accessType
-                principalType: 'ROLE'
-                principalId: principalId
-                permission: 'ALLOW'
-
+            if properties.length > 0 and accessType is 'WRITE'
+                for property in properties
+                    @acl.push
+                        accessType: accessType
+                        principalType: 'ROLE'
+                        principalId: principalId
+                        permission: 'ALLOW'
+                        property: property
+            else
+                @acl.push
+                    accessType: accessType
+                    principalType: 'ROLE'
+                    principalId: principalId
+                    permission: 'ALLOW'
 
     ###*
     append basic ACL, which allow accesses only from admin
