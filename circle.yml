@@ -14,13 +14,16 @@ machine:
     version: 4.2.1
 dependencies:
   post:
-    - nca run nca notice update-modules
+    - nca run nca update-modules --depth 3
 deployment:
   create_release_branch:
     branch:
       - master
     commands:
       - nca run gulp coffee
-      - nca release --prefix v
+      - nca release --prefix v --shrinkwrap
       - nca run gulp yuidoc
       - nca run nca notice gh-pages
+notify:
+  webhooks:
+    - url: 'https://script.google.com/macros/s/AKfycbwJJOSKRGQYeyWDqiOCrmUOoBZ2xHsXFWFGZXLyhKcKEFPcWg8M/exec'

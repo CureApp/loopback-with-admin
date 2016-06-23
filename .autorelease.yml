@@ -8,10 +8,10 @@ hooks:
 config:
   git_user_name: CircleCI
   git_user_email: circleci@example.com
-  npm_update_depth: 0
+  npm_update_depth: 3
   version_prefix: v
   create_branch: false
-  npm_shrinkwrap: false
+  npm_shrinkwrap: true
   create_gh_pages: false
   gh_pages_dir: null
 circle:
@@ -19,3 +19,6 @@ circle:
     timezone: Asia/Tokyo
     node:
       version: 4.2.1
+  notify:
+    webhooks:
+      - url: 'https://script.google.com/macros/s/AKfycbwJJOSKRGQYeyWDqiOCrmUOoBZ2xHsXFWFGZXLyhKcKEFPcWg8M/exec'
