@@ -50,20 +50,5 @@
     "type": "git",
     "url": "https://github.com/CureApp/loopback-with-admin"
   },
-  "description": "launch loopback with admin, push-notifications",
-  "node-circleci-autorelease": {
-    "machine": {
-      "environment": {
-        "NODE_ENV": ""
-      }
-    },
-    "config": {
-      "git-user-name": "CircleCI",
-      "git-user-email": "circleci@cureapp.jp",
-      "version-prefix": "v",
-      "create-branch": false,
-      "create-gh-pages": true,
-      "gh-pages-dir": "doc"
-    }
-  }
+  "description": "launch loopback with admin, push-notifications"
 }
