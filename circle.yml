@@ -6,9 +6,10 @@ general:
 machine:
   environment:
     PATH: './node_modules/.bin:$PATH'
+    NODE_ENV: null
   pre:
     - git config --global user.name "CircleCI"
-    - git config --global user.email "circleci@example.com"
+    - git config --global user.email "circleci@cureapp.jp"
   timezone: Asia/Tokyo
   node:
     version: 4.2.1
@@ -23,7 +24,7 @@ deployment:
       - nca run gulp coffee
       - nca release --prefix v --shrinkwrap
       - nca run gulp yuidoc
-      - nca run nca notice gh-pages
+      - nca run nca gh-pages --dir doc
 notify:
   webhooks:
     - url: 'https://script.google.com/macros/s/AKfycbwJJOSKRGQYeyWDqiOCrmUOoBZ2xHsXFWFGZXLyhKcKEFPcWg8M/exec'

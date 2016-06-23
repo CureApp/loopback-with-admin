@@ -6,19 +6,21 @@ hooks:
     pre:
       - gulp yuidoc
 config:
-  git-user-name: CircleCI
-  git-user-email: circleci@cureapp.jp
-  version-prefix: v
-  create-branch: false
-  create-gh-pages: true
-  gh-pages-dir: doc
+  git_user_name: CircleCI
+  git_user_email: circleci@cureapp.jp
+  version_prefix: v
+  create_branch: false
+  create_gh_pages: true
+  gh_pages_dir: doc
   npm_update_depth: 3
   npm_shrinkwrap: true
 circle:
   machine:
+    environment:
+      NODE_ENV:
     timezone: Asia/Tokyo
     node:
       version: 4.2.1
   notify:
     webhooks:
-      - url: 'https://script.google.com/macros/s/AKfycbwJJOSKRGQYeyWDqiOCrmUOoBZ2xHsXFWFGZXLyhKcKEFPcWg8M/exec'
+      - url: "https://script.google.com/macros/s/AKfycbwJJOSKRGQYeyWDqiOCrmUOoBZ2xHsXFWFGZXLyhKcKEFPcWg8M/exec"
