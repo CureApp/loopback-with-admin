@@ -3,17 +3,7 @@
   "version": "2.0.1",
   "main": "dist/main.js",
   "scripts": {
-    "test": "mocha -r spec/global.js spec/main.coffee spec/lib/*.coffee",
-    "bmp": "cc-bmp",
-    "bmp-p": "cc-bmp -p",
-    "bmp-m": "cc-bmp -m",
-    "bmp-j": "cc-bmp -j",
-    "circle": "cc-generate-yml",
-    "post-dependencies": "echo post-dependencies",
-    "pre-release": "gulp coffee",
-    "post-release": "echo post-release",
-    "gh-pages": "gulp yuidoc",
-    "bmp-r": "cc-bmp -r"
+    "test": "mocha -r spec/global.js spec/main.coffee spec/lib/*.coffee"
   },
   "author": "CureApp, Inc.",
   "license": "MIT",
