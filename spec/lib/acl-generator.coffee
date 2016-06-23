@@ -321,5 +321,25 @@ describe 'AclGenerator', ->
 
                 assert acl.length is 8
 
+        describe 'when aclType is "custom" and give permission to write', ->
+
+            it 'appends AC allowing create and updateAttributes', ->
+
+                aclType =
+                    'my-custom': 'rw'
+                isUser = true
+                acl = new AclGenerator(aclType, isUser).generate()
+
+                assert acl[6].principalType is 'ROLE'
+                assert acl[6].principalId is 'my-custom'
+                assert acl[6].permission is 'ALLOW'
+                assert acl[6].accessType is 'WRITE'
+                assert acl[6].property is 'create'
+
+                assert acl[7].principalType is 'ROLE'
+                assert acl[7].principalId is 'my-custom'
+                assert acl[7].permission is 'ALLOW'
+                assert acl[7].accessType is 'WRITE'
+                assert acl[7].property is 'updateAttributes'
 
 
