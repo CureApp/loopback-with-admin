@@ -3,17 +3,7 @@
   "version": "2.0.1",
   "main": "dist/main.js",
   "scripts": {
-    "test": "mocha -r spec/global.js spec/main.coffee spec/lib/*.coffee",
-    "bmp": "cc-bmp",
-    "bmp-p": "cc-bmp -p",
-    "bmp-m": "cc-bmp -m",
-    "bmp-j": "cc-bmp -j",
-    "circle": "cc-generate-yml",
-    "post-dependencies": "echo post-dependencies",
-    "pre-release": "gulp coffee",
-    "post-release": "echo post-release",
-    "gh-pages": "gulp yuidoc",
-    "bmp-r": "cc-bmp -r"
+    "test": "mocha -r spec/global.js spec/main.coffee spec/lib/*.coffee"
   },
   "author": "CureApp, Inc.",
   "license": "MIT",
@@ -43,27 +33,12 @@
     "gulp-plumber": "^1.1.0",
     "gulp-yuidoc": "^0.1.2",
     "mocha": "^2.4.5",
-    "node-circleci-autorelease": "^1.6.1",
+    "node-circleci-autorelease": "^2.1.8",
     "power-assert": "^1.3.1"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/CureApp/loopback-with-admin"
   },
-  "description": "launch loopback with admin, push-notifications",
-  "node-circleci-autorelease": {
-    "machine": {
-      "environment": {
-        "NODE_ENV": ""
-      }
-    },
-    "config": {
-      "git-user-name": "CircleCI",
-      "git-user-email": "circleci@cureapp.jp",
-      "version-prefix": "v",
-      "create-branch": false,
-      "create-gh-pages": true,
-      "gh-pages-dir": "doc"
-    }
-  }
+  "description": "launch loopback with admin, push-notifications"
 }
