@@ -14,19 +14,22 @@ class LoopbackServer
 
     ###*
     @param {Function|Array(String)} [options.fetch] function to return admin tokens (or promise of it). When string[] is given, these value are used for the admin access token.
+    @param {String} [options.email=loopback-with-admin@example.com] email address for admin user
+    @param {String} [options.id=loopback-with-admin-user-id] id of admin user
+    @param {String} [options.password=admin-user-password] password of admin user
     @param {Number} [options.intervalHours] Interval hours to fetch new admin token.
     ###
-    launch: (adminTokenOptions = {}) -> new Promise (resolve, reject) =>
+    launch: (options = {}) -> new Promise (resolve, reject) =>
 
         @app = require(@entryPath)
 
-        @app.lwaTokenManager = new AdminTokenManager(adminTokenOptions)
+        @app.lwaTokenManager = new AdminTokenManager(options)
 
         return @app.start (err) =>
 
             return reject(err) if err
 
-            @startRefreshingAdminTokens(intervalHours = Number(adminTokenOptions.intervalHours) || 12)
+            @startRefreshingAdminTokens(intervalHours = Number(options.intervalHours) || 12)
 
             resolve()
 

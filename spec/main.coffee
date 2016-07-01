@@ -128,14 +128,13 @@ describe 'Main', ->
             assert @called.launchLoopback is true
 
 
-        it 'invokes launchLoopback with `adminToken` options', ->
+        it 'invokes launchLoopback with `admin` options', ->
 
-            adminTokenOptions =
-                fetchNew: -> 'new-token'
-                fetchAll: -> ['xxx', 'abc', 'token123']
-                intervalHours: -> 12
-                maxTokens: 4
-
+            adminOptions =
+                id: 'admin-1234'
+                email: 'i-am-admin@example.com'
+                password: 'administrator'
+                intervalHours: 12
 
             params = null
 
@@ -143,12 +142,10 @@ describe 'Main', ->
                 params = p
                 Promise.resolve @called.launchLoopback = true
 
-            Main.run(modelDefinitions, configDir, adminToken: adminTokenOptions)
+            Main.run(modelDefinitions, configDir, admin: adminOptions)
 
             assert @called.reset is true
             assert @called.generate is true
             assert @called.launchLoopback is true
-            assert params is adminTokenOptions
-
-
+            assert params is adminOptions
 

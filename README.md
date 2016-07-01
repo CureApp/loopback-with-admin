@@ -243,26 +243,26 @@ By default, the token is fixed and it's `loopback-with-admin-token`.
 **You must change the value by passing `fetch` function**.
 
 ```javascript
-const adminToken = {
+const admin = {
   fetch: function() {
     return ['your-secret-token1', 'your-secret-token2']
   }
 }
 
-require('loopback-with-admin').run(models, config, { adminToken: adminToken })
+require('loopback-with-admin').run(models, config, { admin: admin })
 ```
 
 ## change tokens periodically
 
 ```javascript
-const adminToken = {
+const admin = {
   fetch: function() {
     return generateSecretValuesByRandom().then(value => [ value ]) // fetch function allows Promise to return
   },
   intervalHours: 24 // change the value every day (by default, it's 12 hours)
 }
 
-require('loopback-with-admin').run(models, config, { adminToken: adminToken })
+require('loopback-with-admin').run(models, config, { admin: admin })
 ```
 
 
@@ -364,13 +364,13 @@ require('loopback-with-admin').run(models, config).then(lbInfo => {
 Returns Array of access tokens (string).
 
 ```javascript
-const adminToken = {
+const admin = {
   fetch: function() {
     return ['your-secret-token1', 'your-secret-token2']
   }
 }
 
-require('loopback-with-admin').run(models, config, { adminToken: adminToken }).then(lbInfo => {
+require('loopback-with-admin').run(models, config, { admin: admin }).then(lbInfo => {
   console.log(lbInfo.getAdminTokens()) // ['your-secret-token1', 'your-secret-token2']
 })
 ```

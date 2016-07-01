@@ -26,9 +26,12 @@ class Main
     @param {Object|String} [config] config object or config directory containing config info
     @param {Boolean} [options.reset] reset previously-generated settings before generation
     @param {String} [options.env] set environment (production|development|...)
-    @param {Object} [options.adminToken] options for admin token manager
-    @param {Function|Array(String)} [options.fetch] function to return admin tokens (or promise of it). When string[] is given, these value are used for the admin access token.
-    @param {Number} [options.adminToken.intervalHours] IntervalHours to fetch new admin token.
+    @param {Object} [options.admin] options for admin token manager
+    @param {Function|Array(String)} [options.admin.fetch] function to return admin tokens (or promise of it). When string[] is given, these value are used for the admin access token.
+    @param {String} [options.admin.email=loopback-with-admin@example.com] email address for admin user
+    @param {String} [options.admin.id=loopback-with-admin-user-id] id of admin user
+    @param {String} [options.admin.password=admin-user-password] password of admin user
+    @param {Number} [options.admin.intervalHours] IntervalHours to fetch new admin token.
     return {Promise(LoopbackInfo)}
     ###
     @run: (loopbackDefinitions, config, options = {}) ->
@@ -39,7 +42,12 @@ class Main
 
         generated = main.generate()
 
-        @launchLoopback(options.adminToken).then (server) =>
+        if (options.adminToken)
+            console.error 'LoopbackWithAdmin.run(): options.adminToken is deprecated. Use options.admin instead.'
+
+        adminOptions = options.admin or options.adminToken # adminToken is for backward compatibility
+
+        @launchLoopback(adminOptions).then (server) =>
             return new LoopbackInfo(server, generated)
 
 
@@ -92,9 +100,9 @@ class Main
 
     @private
     ###
-    @launchLoopback: (adminTokenOptions) ->
+    @launchLoopback: (adminOptions) ->
 
         server = new LoopbackServer()
-        server.launch(adminTokenOptions).then => server
+        server.launch(adminOptions).then => server
 
 module.exports = Main

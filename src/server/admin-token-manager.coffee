@@ -1,6 +1,6 @@
 ____ = require('debug')('loopback-with-admin:admin-token-manager')
 
-ADMIN_USER =
+DEFAULT_ADMIN_USER =
     email: 'loopback-with-admin@example.com'
     id: 'loopback-with-admin-user-id'
     password: 'admin-user-password' # No worry, noone can login through REST API.
@@ -24,12 +24,20 @@ class AdminTokenManager
 
     ###*
     @param {Function|Array(String)} [options.fetch] function to return admin tokens (or promise of it). When string[] is given, these value are used for the admin access token.
+    @param {String} [options.email=loopback-with-admin@example.com] email address for admin user
+    @param {String} [options.id=loopback-with-admin-user-id] id of admin user
+    @param {String} [options.password=admin-user-password] password of admin user
     ###
     constructor: (options = {}) ->
 
-        { fetch } = options
+        { fetch, email, id, password } = options
 
         @fetch = @constructor.createFetchFunction(fetch)
+
+        @adminUser =
+            email: email or DEFAULT_ADMIN_USER.email
+            id: id or DEFAULT_ADMIN_USER.id
+            password: password or DEFAULT_ADMIN_USER.password
 
         @tokensById = {}
 
@@ -102,7 +110,7 @@ class AdminTokenManager
     ###
     updateTokens: (tokenStrs) ->
 
-        tokens = tokenStrs.map (tokenStr) -> new AdminToken(tokenStr)
+        tokens = tokenStrs.map (tokenStr) => new AdminToken(tokenStr, @adminUser.id)
 
         Promise.all(tokens.map (token) => @setNew token).then =>
 
@@ -130,7 +138,7 @@ class AdminTokenManager
             if foundToken?
                 ____("token: #{token.id} already exists.")
 
-                if foundToken.userId isnt ADMIN_USER.id
+                if foundToken.userId isnt @adminUser.id
                     console.error """
                         AdminTokenManager: The token `#{token.id}` is already exist for non-admin user. Skip creating.
                     """
@@ -157,7 +165,7 @@ class AdminTokenManager
 
         @findById(tokenStr).then (foundToken) =>
             # check if the token to be deleted is admin token
-            if foundToken.userId isnt ADMIN_USER.id
+            if foundToken.userId isnt @adminUser.id
                 console.error """
                     AdminTokenManager: The token `#{token.id}` is not the admin token. Skip destroying.
                 """
@@ -190,11 +198,11 @@ class AdminTokenManager
     @private
     ###
     createAdminUser: ->
-        ____("creating admin user. id: #{ADMIN_USER.id}")
+        ____("creating admin user. id: #{@adminUser.id}")
         { User } = @models
 
         promisify (cb) =>
-            User.create ADMIN_USER, cb
+            User.create @adminUser, cb
 
 
     ###*
@@ -212,7 +220,7 @@ class AdminTokenManager
         .then (role) =>
             principal =
                 principalType: RoleMapping.USER
-                principalId: ADMIN_USER.id
+                principalId: @adminUser.id
 
             promisify (cb) =>
                 role.principals.create principal, cb
@@ -243,7 +251,7 @@ class AdminTokenManager
                     return Promise.resolve(['token1', 'token2', 'token3'])
                 };
 
-                require('loopback-with-admin').run(models, config, { adminToken: {fetch: fn} })
+                require('loopback-with-admin').run(models, config, { admin: {fetch: fn} })
         """
 
 
@@ -287,8 +295,7 @@ Admin token
 ###
 class AdminToken
 
-    constructor: (@id) ->
-        @userId = ADMIN_USER.id
+    constructor: (@id, @userId) ->
         @ttl = ONE_YEAR
         @isAdmin = true
 
