@@ -7,7 +7,7 @@ AclGenerator = require './acl-generator'
 ###
 class ModelDefinition
 
-    constructor: (@modelName, @customDefinition = {}) ->
+    constructor: (@modelName, @customDefinition = {}, @relationDefinitions = {}) ->
 
         @definition = @getDefaultDefinition()
         @definition[k] = @customDefinition[k] for k, v of @customDefinition
@@ -71,7 +71,7 @@ class ModelDefinition
             return
 
         @aclType ?= 'admin'
-        @definition.acls = new AclGenerator(@aclType, @isUser()).generate()
+        @definition.acls = new AclGenerator(@aclType, @isUser(), @relationDefinitions).generate()
 
 
     ###*

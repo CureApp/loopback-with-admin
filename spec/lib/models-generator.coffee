@@ -148,5 +148,220 @@ describe 'ModelsGenerator', ->
             assert generated.names.length is 4
             assert typeof generated.config is 'object'
 
+    describe 'generate, when give the relation define, and owner permission is read only', ->
+
+        before ->
+
+            ownerPermission = 'r'
+
+            define =
+                staff:
+                    aclType:
+                        owner: 'rwx'
+                    name: 'staff'
+                    plural: 'staff'
+                    base: 'User'
+                    idInjection: true
+                    properties: {}
+                    validations: []
+                    relations:
+                        'job-with-staffId':
+                            type: 'hasMany', model: 'staff', foreignKey: 'staffId'
+                        job:
+                            type: 'hasMany', model: 'staff', foreignKey: 'staffId'
+                job:
+                    aclType:
+                        owner: ownerPermission
+                    name: 'job',
+                    plural: 'job',
+                    base: 'PersistedModel',
+                    idInjection: true,
+                    properties: {},
+                    validations: [],
+                    relations:
+                        staff:
+                            type: 'belongsTo', model: 'staff', foreignKey: 'staffId'
 
 
+            @generator = new ModelsGenerator(define)
+            @generator.destinationDir = __dirname + '/d'
+            @generator.modelConfigGenerator.destinationPath = __dirname + '/d'
+            fs.mkdirsSync __dirname + '/d'
+
+        after ->
+            fs.removeSync __dirname + '/d'
+
+        it 'generate JSON file include related models', (done) ->
+
+            @generator.generate()
+
+            fs.readFile __dirname + '/d/staff.json', 'utf8', (err, data) ->
+
+                acls = JSON.parse(data).acls
+
+                acl = [
+                    accessType      : "WRITE"
+                    permission      : "DENY"
+                    principalId     : "$owner"
+                    principalType   : "ROLE"
+                    property        : "__create__job"
+                ,
+                    accessType      : "WRITE"
+                    permission      : "DENY"
+                    principalId     : "$owner"
+                    principalType   : "ROLE"
+                    property        : "__delete__job"
+                ,
+                    accessType      : "WRITE"
+                    permission      : "DENY"
+                    principalId     : "$owner"
+                    principalType   : "ROLE"
+                    property        : "__destroyById__job"
+                ,
+                    accessType      : "WRITE"
+                    permission      : "DENY"
+                    principalId     : "$owner"
+                    principalType   : "ROLE"
+                    property        : "__updateById__job"
+                ]
+
+                assert.deepEqual acls.splice(8, 4), acl
+
+                done()
+
+    describe 'generate, when give the relation define, and owner permission is undefined', ->
+
+        before ->
+
+            # job aclType = ''
+            define =
+                staff:
+                    aclType:
+                        owner: 'rwx'
+                    name: 'staff'
+                    plural: 'staff'
+                    base: 'User'
+                    idInjection: true
+                    properties: {}
+                    validations: []
+                    relations:
+                        'job-with-staffId':
+                            type: 'hasMany', model: 'staff', foreignKey: 'staffId'
+                        job:
+                            type: 'hasMany', model: 'staff', foreignKey: 'staffId'
+                job:
+                    aclType: ''
+                    name: 'job',
+                    plural: 'job',
+                    base: 'PersistedModel',
+                    idInjection: true,
+                    properties: {},
+                    validations: [],
+                    relations:
+                        staff:
+                            type: 'belongsTo', model: 'staff', foreignKey: 'staffId'
+
+
+            @generator = new ModelsGenerator(define)
+            @generator.destinationDir = __dirname + '/d'
+            @generator.modelConfigGenerator.destinationPath = __dirname + '/d'
+            fs.mkdirsSync __dirname + '/d'
+
+        after ->
+            fs.removeSync __dirname + '/d'
+
+        it 'generate JSON file include related models', (done) ->
+
+            @generator.generate()
+
+            fs.readFile __dirname + '/d/staff.json', 'utf8', (err, data) ->
+
+                acls = JSON.parse(data).acls
+
+                acl = [
+                    accessType      : "WRITE"
+                    permission      : "DENY"
+                    principalId     : "$owner"
+                    principalType   : "ROLE"
+                    property        : "__create__job"
+                ,
+                    accessType      : "WRITE"
+                    permission      : "DENY"
+                    principalId     : "$owner"
+                    principalType   : "ROLE"
+                    property        : "__delete__job"
+                ,
+                    accessType      : "WRITE"
+                    permission      : "DENY"
+                    principalId     : "$owner"
+                    principalType   : "ROLE"
+                    property        : "__destroyById__job"
+                ,
+                    accessType      : "WRITE"
+                    permission      : "DENY"
+                    principalId     : "$owner"
+                    principalType   : "ROLE"
+                    property        : "__updateById__job"
+                ]
+
+                assert.deepEqual acls.splice(8, 4), acl
+
+                done()
+
+
+    describe 'generate, when give the relation define, and owner permission is read-write', ->
+
+        before ->
+
+            ownerPermission = 'rw'
+
+            define =
+                staff:
+                    aclType:
+                        owner: 'rwx'
+                    name: 'staff'
+                    plural: 'staff'
+                    base: 'User'
+                    idInjection: true
+                    properties: {}
+                    validations: []
+                    relations:
+                        'job-with-staffId':
+                            type: 'hasMany', model: 'staff', foreignKey: 'staffId'
+                        job:
+                            type: 'hasMany', model: 'staff', foreignKey: 'staffId'
+                job:
+                    aclType:
+                        owner: ownerPermission
+                    name: 'job',
+                    plural: 'job',
+                    base: 'PersistedModel',
+                    idInjection: true,
+                    properties: {},
+                    validations: [],
+                    relations:
+                        staff:
+                            type: 'belongsTo', model: 'staff', foreignKey: 'staffId'
+
+
+            @generator = new ModelsGenerator(define)
+            @generator.destinationDir = __dirname + '/d'
+            @generator.modelConfigGenerator.destinationPath = __dirname + '/d'
+            fs.mkdirsSync __dirname + '/d'
+
+        after ->
+            fs.removeSync __dirname + '/d'
+
+        it 'generate JSON file does not include related models', (done) ->
+
+            @generator.generate()
+
+            fs.readFile __dirname + '/d/staff.json', 'utf8', (err, data) ->
+
+                acls = JSON.parse(data).acls
+
+                acl = []
+
+                assert.deepEqual acls.splice(8, 4), acl
+
+                done()
