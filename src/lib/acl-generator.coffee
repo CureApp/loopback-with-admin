@@ -73,8 +73,12 @@ class AclGenerator
 
         # deny write of related model if read only permission
         for roleName, relationDefine of @relationDefinitions
-            rwx = relationDefine.aclType.owner
-            accessTypes = AclConditions.regularPermissions(rwx)
+            if relationDefine.aclType.owner?
+                rwx = relationDefine.aclType.owner
+                accessTypes = AclConditions.regularPermissions(rwx)
+            else
+                accessTypes = ['READ']
+
             if accessTypes.length is 1 and accessTypes[0] is 'READ'
                 @addDenyACL('$owner', ['WRITE'], @getRestrictingProperties(relationDefine.type, 'WRITE', roleName))
 
