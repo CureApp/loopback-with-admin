@@ -120,6 +120,26 @@ class ModelsGenerator
     getEmptyJSContent: ->
         'module.exports = function(Model) {};'
 
+    ###*
+    get RelationDefinition
+
+    @private
+    ###
+    getRelationDefinitions: (customModelDefinition, customModelDefinitions) ->
+
+        definitions = {}
+
+        for relationName, relationDefinition of customModelDefinition.relations
+
+            continue unless customModelDefinitions[relationName]
+
+            switch relationDefinition.type
+                when 'hasMany'
+                    definitions[relationName] =
+                        type: relationDefinition.type
+                        aclType: customModelDefinitions[relationName].aclType
+
+        return definitions
 
     ###*
     create ModelDefinition instances
@@ -132,7 +152,10 @@ class ModelsGenerator
 
         for modelName, customModelDefinition of customModelDefinitions
 
-            definitions[modelName] = new ModelDefinition(modelName, customModelDefinition)
+            if customModelDefinition.relations?
+                relationDefinitions = @getRelationDefinitions(customModelDefinition, customModelDefinitions)
+
+            definitions[modelName] = new ModelDefinition(modelName, customModelDefinition, relationDefinitions)
 
         return definitions
 

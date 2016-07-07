@@ -9,7 +9,7 @@ ACL is Array of access control information
 ###
 class AclGenerator
 
-    constructor: (aclType = 'admin', @isUser = false) ->
+    constructor: (aclType = 'admin', @isUser = false, @relationDefinitions = {}) ->
         @acl = []
         @aclConditions = @constructor.createAclConditions(aclType)
 
@@ -71,6 +71,13 @@ class AclGenerator
         @addAllowACL('$authenticated', @aclConditions.basicPermissions.member)
         @addAllowACL('$owner',         @aclConditions.basicPermissions.owner)
 
+        # deny write of related model if read only permission
+        for roleName, relationDefine of @relationDefinitions
+            rwx = relationDefine.aclType.owner
+            accessTypes = AclConditions.regularPermissions(rwx)
+            if accessTypes.length is 1 and accessTypes[0] is 'READ'
+                @addDenyACL('$owner', ['WRITE'], @getRestrictingProperties(relationDefine.type, 'WRITE', roleName))
+
         for roleName, accessTypes of @aclConditions.customPermissions
             @addAllowACL(roleName, accessTypes, ['create', 'updateAttributes'])
 
@@ -101,6 +108,25 @@ class AclGenerator
                     principalId: principalId
                     permission: 'ALLOW'
 
+    ###*
+    append ACL denying accesses from the accessToken of model's owners
+
+    @method addDenyACL
+    @param principalId
+    @param accessTypes
+    @param properties
+    @private
+    ###
+    addDenyACL: (principalId, accessTypes, properties = []) ->
+
+        accessTypes.forEach (accessType) =>
+            for property in properties
+                @acl.push
+                    accessType: accessType
+                    principalType: 'ROLE'
+                    principalId: principalId
+                    permission: 'DENY'
+                    property: property
 
 
     ###*
@@ -195,5 +221,27 @@ class AclGenerator
             permission: 'ALLOW'
             property: 'login'
 
+    ###*
+    get restricting properties
+
+    @method getRestrictingProperties
+    @param relationType
+    @param accessTypes
+    @param roleName
+    @private
+    ###
+    getRestrictingProperties: (relationType, accessType, roleName) ->
+
+        properties = []
+
+        switch relationType
+            when 'hasMany'
+                if accessType is 'WRITE'
+                    properties.push "__create__#{roleName}"
+                    properties.push "__delete__#{roleName}"
+                    properties.push "__destroyById__#{roleName}"
+                    properties.push "__updateById__#{roleName}"
+
+        return properties
 
 module.exports = AclGenerator
