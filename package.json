@@ -3,7 +3,8 @@
   "version": "2.2.0",
   "main": "dist/main.js",
   "scripts": {
-    "test": "mocha -r spec/global.js spec/main.coffee spec/lib/*.coffee"
+    "test": "mocha -r spec/global.js spec/main.coffee spec/lib/*.coffee",
+    "single": "mocha -r spec/global.js"
   },
   "author": "CureApp, Inc.",
   "license": "MIT",
