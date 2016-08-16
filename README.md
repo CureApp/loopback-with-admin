@@ -173,6 +173,7 @@ aclType can be an object, whose key contains the following roles.
 - owner: `$owner` role in LoopBack
 - member: `$authenticated` role in LoopBack
 - public: `$everyone` role in LoopBack
+- participant: participant token (see `participant role` section)
 - [custom roles] : see `custom roles` section.
 
 The values of the keys are `rwx`, which is the same as Unix permission.
@@ -394,6 +395,18 @@ See configs section above.
 Contains model definitions used to build loopback
 
 See models section above.
+
+# participant role (since v2.4)
+The role for anonymous but limited access.
+Programs which know a specific static access token can become the role.
+The token is set by options param in `run()` method.
+
+```
+const participantToken = 'AbCdE'
+require('loopback-with-admin').run(models, config, { participantToken })
+```
+
+Then, all accesses with the accessToken `AbCdE` will be `participant` role.
 
 # push notification settings
 (coming soon)
