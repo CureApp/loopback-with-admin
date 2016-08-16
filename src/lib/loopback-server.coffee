@@ -2,6 +2,7 @@
 { normalize } = require 'path'
 
 AdminTokenManager = require '../server/admin-token-manager'
+ParticipantTokenSetter = require '../server/participant-token-setter'
 
 ###*
 launches loopback server
@@ -18,12 +19,17 @@ class LoopbackServer
     @param {String} [options.id=loopback-with-admin-user-id] id of admin user
     @param {String} [options.password=admin-user-password] password of admin user
     @param {Number} [options.intervalHours] Interval hours to fetch new admin token.
+    @param {String} [participantToken] static token for participant user
     ###
-    launch: (options = {}) -> new Promise (resolve, reject) =>
+    launch: (options = {}, participantToken) -> new Promise (resolve, reject) =>
 
         @app = require(@entryPath)
 
+        # see loopback/server/boot/admin.js
         @app.lwaTokenManager = new AdminTokenManager(options)
+        # see loopback/server/boot/participant.js
+        if participantToken
+            @app.participantTokenSetter = new ParticipantTokenSetter(participantToken)
 
         return @app.start (err) =>
 

@@ -26,6 +26,7 @@ class Main
     @param {Object|String} [config] config object or config directory containing config info
     @param {Boolean} [options.reset] reset previously-generated settings before generation
     @param {String} [options.env] set environment (production|development|...)
+    @param {String} [options.participantToken] token for participant user
     @param {Object} [options.admin] options for admin token manager
     @param {Function|Array(String)} [options.admin.fetch] function to return admin tokens (or promise of it). When string[] is given, these value are used for the admin access token.
     @param {String} [options.admin.email=loopback-with-admin@example.com] email address for admin user
@@ -47,7 +48,7 @@ class Main
 
         adminOptions = options.admin or options.adminToken # adminToken is for backward compatibility
 
-        @launchLoopback(adminOptions).then (server) =>
+        @launchLoopback(adminOptions, options.participantToken).then (server) =>
             return new LoopbackInfo(server, generated)
 
 
@@ -100,9 +101,9 @@ class Main
 
     @private
     ###
-    @launchLoopback: (adminOptions) ->
+    @launchLoopback: (adminOptions, participantToken) ->
 
         server = new LoopbackServer()
-        server.launch(adminOptions).then => server
+        server.launch(adminOptions, participantToken).then => server
 
 module.exports = Main
