@@ -22,7 +22,7 @@ deployment:
       - master
     commands:
       - nca run gulp coffee
-      - nca release --prefix v --shrinkwrap
+      - nca release --prefix v
       - nca run gulp yuidoc
       - nca run nca gh-pages --dir doc
 notify:
