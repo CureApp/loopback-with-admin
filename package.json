@@ -4,7 +4,8 @@
   "main": "dist/main.js",
   "scripts": {
     "test": "mocha -r spec/global.js spec/main.coffee spec/lib/*.coffee",
-    "single": "mocha -r spec/global.js"
+    "single": "mocha -r spec/global.js",
+    "build": "gulp coffee"
   },
   "author": "CureApp, Inc.",
   "license": "MIT",
