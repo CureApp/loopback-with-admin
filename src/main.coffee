@@ -48,7 +48,7 @@ class Main
 
         adminOptions = options.admin or options.adminToken # adminToken is for backward compatibility
 
-        @launchLoopback(adminOptions, options.participantToken).then (server) =>
+        @launchLoopback(generated.config, adminOptions, options.participantToken).then (server) =>
             return new LoopbackInfo(server, generated)
 
 
@@ -99,11 +99,11 @@ class Main
     ###*
     run loopback
 
+    @param {Object} [serverConfig] defaut config is defined in : default-values/non-model-configs/server.json
     @private
     ###
-    @launchLoopback: (adminOptions, participantToken) ->
-
+    @launchLoopback: (serverConfig, adminOptions, participantToken) ->
         server = new LoopbackServer()
-        server.launch(adminOptions, participantToken).then => server
+        server.launch(serverConfig.server, adminOptions, participantToken).then => server
 
 module.exports = Main
