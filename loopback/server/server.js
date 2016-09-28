@@ -1,31 +1,41 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 
-var app = module.exports = loopback();
+module.exports = function(config) {
+  var app = loopback();
 
-app.start = function(callback) {
-  boot(app, __dirname, function(err) {
-    if (err) return callback(err)
+  app.start = function(callback) {
+    boot(app, __dirname, function(err) {
+      if (err) return callback(err)
 
-      // start the web server
-      app.listen(function(err) {
+        // set port, host
+        if(config && Object.keys(config).length !== 0) {
+          Object.keys(config).forEach(function(key) {
+            app.set(key, config[key]);
+          })
+        }
 
-        if (err) return callback(err)
+        // start the web server
+        app.listen(function(err) {
 
-        app.emit('started');
-        console.log('Web server listening at: %s', app.get('url'));
+          if (err) return callback(err)
 
-        console.log('LOOPBACK_WITH_ADMIN_STARTED');
+          app.emit('started');
+          console.log('Web server listening at: %s', app.get('url'));
 
-        callback()
-      });
-  });
-};
+          console.log('LOOPBACK_WITH_ADMIN_STARTED');
 
-// Bootstrap the application, configure models, datasources and middleware.
-// Sub-apps like REST API are mounted via boot scripts.
+          callback()
+        });
+    });
+  };
 
-// start the server if `$ node server.js`
-if (require.main === module) {
-  app.start();
+  // Bootstrap the application, configure models, datasources and middleware.
+  // Sub-apps like REST API are mounted via boot scripts.
+
+  // start the server if `$ node server.js`
+  if (require.main === module) {
+    app.start();
+  }
+  return app;
 }

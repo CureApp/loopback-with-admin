@@ -23,7 +23,7 @@ class LoopbackServer
     ###
     launch: (options = {}, participantToken) -> new Promise (resolve, reject) =>
 
-        @app = require(@entryPath)
+        @app = require(@entryPath)(options)
 
         # see loopback/server/boot/admin.js
         @app.lwaTokenManager = new AdminTokenManager(options)
