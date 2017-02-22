@@ -83,7 +83,7 @@ class AclGenerator
                 @addDenyACL('$owner', ['WRITE'], @getRestrictingProperties(relationDefine.type, 'WRITE', roleName))
 
         for roleName, accessTypes of @aclConditions.customPermissions
-            @addAllowACL(roleName, accessTypes, ['create', 'updateAttributes'])
+            @addAllowACL(roleName, accessTypes, ['create', 'updateAttributes', 'upsert', 'deleteById'])
 
         return @acl
 
