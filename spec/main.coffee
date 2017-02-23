@@ -138,7 +138,7 @@ describe 'Main', ->
 
             params = null
 
-            Main.launchLoopback = (_, p, __) =>
+            Main.launchLoopback = (p) =>
                 params = p
                 Promise.resolve @called.launchLoopback = true
 
