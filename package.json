@@ -19,7 +19,7 @@
     "errorhandler": "^1.4.3",
     "fs-extra": "^0.27.0",
     "loopback": "^2.27.0",
-    "loopback-boot": "^2.18.1",
+    "loopback-boot": "^2.22.0",
     "loopback-component-push": "^1.5.3",
     "loopback-connector-memory-idstr": "^1.0.0",
     "loopback-datasource-juggler": "^2.46.0",
