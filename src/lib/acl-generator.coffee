@@ -172,14 +172,15 @@ class AclGenerator
             permission: 'DENY'
             property: 'logout'
 
-        # user creation is denied by default.
-        @acl.push
-            accessType: 'WRITE'
-            principalType: 'ROLE'
-            principalId: '$everyone'
-            permission: 'DENY'
-            property: 'create'
-        @
+        if @aclConditions.hasCustomWrite() is false
+            # user creation is denied by default.
+            @acl.push
+                accessType: 'WRITE'
+                principalType: 'ROLE'
+                principalId: '$everyone'
+                permission: 'DENY'
+                property: 'create'
+            @
 
         # user creation is allowed by admin.
         @acl.push

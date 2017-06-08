@@ -57,5 +57,12 @@ class AclConditions
             return false if regularPermissions.length > 0
         return true
 
+    hasCustomWrite: ->
+        for name, permissions of @customPermissions
+            if isNaN(parseInt(name)) is false
+                continue
+            if permissions.indexOf('WRITE') isnt -1
+                return true
+        false
 
 module.exports = AclConditions
