@@ -104,11 +104,6 @@ describe 'ConfigJSONGenerator', ->
             assert config.hasOwnProperty 'gcmServerApiKey'
             assert config.hasOwnProperty 'apnsCertData'
             assert config.hasOwnProperty 'apnsKeyData'
-            assert config.hasOwnProperty 'apnsTokenKeyPath'
-            assert config.hasOwnProperty 'apnsTokenKeyId'
-            assert config.hasOwnProperty 'apnsTokenTeamId'
-            assert config.hasOwnProperty 'apnsBundleId'
-            assert config.hasOwnProperty 'useAPNsAuthKey'
 
 
     describe 'getMergedConfig', ->
