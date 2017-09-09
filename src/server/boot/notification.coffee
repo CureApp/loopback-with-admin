@@ -29,7 +29,7 @@ createAPNsSettings = ->
 
     keySettings = {}
 
-    if config.useAPNsAuthKey
+    if config.useAPNsAuthKey is true
         keySettings =
             token: {
                 key: config.apnsTokenKeyPath
