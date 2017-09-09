@@ -1,4 +1,3 @@
-config    = require('../push-credentials')
 
 module.exports = (app, cb) ->
 
@@ -13,48 +12,15 @@ module.exports = (app, cb) ->
 
 
 ###*
-create settings for apns
-
-@method createAPNsSettings
-###
-createAPNsSettings = ->
-
-    buildInfo = require('../build-info')
-
-    commonSettings =
-        production: buildInfo.env is 'production'
-        feeedbackOptions:
-            batchFeedback: true
-            interval: 300
-
-    keySettings = {}
-
-    if config.useAPNsAuthKey
-        keySettings =
-            token: {
-                key: config.apnsTokenKeyPath
-                keyId: config.apns.apnsTokenKeyId
-                teamId: config.apnsTokenTeamId
-            }
-            bundle: config.apnsBundleId
-
-    else
-        keySettings = {
-            certData: config.apnsCertData
-            keyData: config.apnsKeyData
-        }
-
-    return Object.assign(commonSettings, keySettings)
-
-
-###*
 registers an application instance for push notification service
 
 @method registerApp
 ###
 registerApp = (app, cb) ->
-
     Application  = app.models.application
+
+    config    = require('../push-credentials')
+    buildInfo = require('../build-info')
 
     Application.observe 'before save', (ctx, next) ->
         ctx.instance.id = 'loopback-with-admin'
@@ -66,11 +32,21 @@ registerApp = (app, cb) ->
         {
             descriptions: ''
             pushSettings:
-                apns: createAPNsSettings()
+                apns:
+                    production: buildInfo.env is 'production'
+                    certData: config.apnsCertData
+                    keyData: config.apnsKeyData
+
+                    feeedbackOptions:
+                        batchFeedback: true
+                        interval: 300
+
                 gcm:
                     serverApiKey: config.gcmServerApiKey
+
         }
         (err, savedApp) ->
             console.log err if err
             cb()
     )
+
