@@ -56,6 +56,19 @@ describe 'ModelsGenerator', ->
 
     describe 'getJSContent', ->
 
+        it 'return valid js code with empty array validations', ->
+            mGenerator = new ModelsGenerator()
+            definition = []
+            result = mGenerator.getJSContent(definition)
+            # just exists function placeholder
+            assert /module\.exports = function\(Model\) \{/.test(result)
+
+        it 'return valid js code with empty validations', ->
+            mGenerator = new ModelsGenerator()
+            result = mGenerator.getJSContent(null)
+            # just exists function placeholder
+            assert /module\.exports = function\(Model\) \{/.test(result)
+
         it 'return valid js code with validation methods', ->
 
             mGenerator = new ModelsGenerator()
