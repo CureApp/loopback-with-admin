@@ -20,7 +20,7 @@ circle:
       NODE_ENV:
     timezone: Asia/Tokyo
     node:
-      version: 4.2.1
+      version: 6.9.1
   notify:
     webhooks:
       - url: "https://script.google.com/macros/s/AKfycbwJJOSKRGQYeyWDqiOCrmUOoBZ2xHsXFWFGZXLyhKcKEFPcWg8M/exec"
