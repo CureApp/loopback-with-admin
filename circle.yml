@@ -12,7 +12,7 @@ machine:
     - git config --global user.email "circleci@cureapp.jp"
   timezone: Asia/Tokyo
   node:
-    version: 4.2.1
+    version: 6.9.1
 dependencies:
   post:
     - nca run nca update-modules --depth 3
