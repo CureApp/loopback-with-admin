@@ -104,14 +104,13 @@ class ModelsGenerator
         jsonFilePath = normalize "#{@destinationDir}/#{modelName}.json"
         jsFilePath = normalize "#{@destinationDir}/#{modelName}.js"
 
-        if modelDefinition instanceof ModelDefinition
-            jsonContent = modelDefinition.toStringifiedJSON()
-        else
+        if modelDefinition not instanceof ModelDefinition
             jsonContent = JSON.stringify(modelDefinition, null, 2)
             fs.writeFileSync(jsonFilePath, jsonContent)
             fs.writeFileSync(jsFilePath, @getEmptyJSContent())
             return modelName
 
+        jsonContent = modelDefinition.toStringifiedJSON()
         fs.writeFileSync(jsonFilePath, jsonContent)
         fs.writeFileSync(jsFilePath, @getJSContent(modelDefinition.definition.validations))
 
@@ -132,6 +131,9 @@ class ModelsGenerator
     @private
     ###
     getJSContent: (validations) ->
+        if not validations
+            return @getEmptyJSContent()
+
         validateMethods = []
         for validation in validations
             for prop, rules of validation
