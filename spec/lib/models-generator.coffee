@@ -43,8 +43,6 @@ describe 'ModelsGenerator', ->
             assert mergedConfig.hasOwnProperty 'a'
             assert not mergedConfig.hasOwnProperty 'b'
 
-
-
     describe 'getEmptyJSContent', ->
 
         it 'returns valid JS code', ->
@@ -56,7 +54,36 @@ describe 'ModelsGenerator', ->
 
             vm.runInContext(mGenerator.getEmptyJSContent(), context)
 
+    describe 'getJSContent', ->
 
+        it 'return valid js code with empty array validations', ->
+            mGenerator = new ModelsGenerator()
+            definition = []
+            result = mGenerator.getJSContent(definition)
+            # just exists function placeholder
+            assert /module\.exports = function\(Model\) \{/.test(result)
+
+        it 'return valid js code with empty validations', ->
+            mGenerator = new ModelsGenerator()
+            result = mGenerator.getJSContent(null)
+            # just exists function placeholder
+            assert /module\.exports = function\(Model\) \{/.test(result)
+
+        it 'return valid js code with validation methods', ->
+
+            mGenerator = new ModelsGenerator()
+            definition = [
+                username:
+                    required: true
+                    min: 6,
+                    max: 10,
+                    pattern: '^[a-z]'
+            ]
+            result = mGenerator.getJSContent(definition)
+            assert /validatesPresenceOf\('username'\)/.test(result)
+            assert /validatesFormatOf\('username', \{ with: \/\^\[a-z\]\/ \}\)/.test(result)
+            assert /validatesLengthOf\('username', \{ max: 10 \}\)/.test(result)
+            assert /validatesLengthOf\('username', \{ min: 6 \}\)/.test(result)
 
     describe 'generateJSONandJS', ->
 
@@ -67,7 +94,7 @@ describe 'ModelsGenerator', ->
             fs.mkdirsSync @generator.destinationDir
 
             @modelName = 'test-model'
-            @contents = JSON.stringify test: true
+            @contents = test: true
 
             @generator.generateJSONandJS(@modelName, @contents)
 
@@ -83,6 +110,41 @@ describe 'ModelsGenerator', ->
             content = fs.readFileSync(@generator.destinationDir + '/test-model.js', 'utf8')
             assert content is @generator.getEmptyJSContent()
 
+    describe 'generateJSONandJS, when give the validation define', ->
+
+        before ->
+            @generator = new ModelsGenerator()
+            @generator.destinationDir = __dirname + '/a/b/c'
+
+            fs.mkdirsSync @generator.destinationDir
+
+            @modelName = 'test-model'
+            @definition =
+                patient:
+                    name: 'patient',
+                    plural: 'patient',
+                    properties:
+                        email:
+                            required: false
+                        username:
+                            type: 'string'
+                            required: true
+                    validations: [
+                        username:
+                            max: 10
+                            min: 6
+                    ]
+
+            modelDefinition = @generator.createModelDefinitions @definition
+            @generator.generateJSONandJS(@modelName, modelDefinition.patient)
+
+        after ->
+            fs.removeSync __dirname + '/a'
+
+        it 'generate non empty JS file', ->
+            content = fs.readFileSync(@generator.destinationDir + '/test-model.js', 'utf8')
+            assert /validatesLengthOf/.test(content)
+            assert /'username', { min: 6 }/.test(content)
 
     describe 'generateBuiltinModels', ->
 

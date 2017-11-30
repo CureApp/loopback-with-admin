@@ -49,8 +49,7 @@ class ModelsGenerator
         fs.mkdirsSync @destinationDir
 
         modelNames = for name, definition of @definitions
-
-            @generateJSONandJS(name, definition.toStringifiedJSON())
+            @generateJSONandJS(name, definition)
 
         builtinModelNames = @generateBuiltinModels()
 
@@ -79,10 +78,9 @@ class ModelsGenerator
     generateBuiltinModels: ->
 
         for filename in fs.readdirSync @builtinDir
-
             [modelName, ext] = filename.split('.')
             definition = require @builtinDir + '/' + filename
-            @generateJSONandJS(modelName, JSON.stringify(definition, null, 2))
+            @generateJSONandJS(modelName, definition)
 
 
     ###*
@@ -101,13 +99,20 @@ class ModelsGenerator
     @private
     @reurn {String} modelName
     ###
-    generateJSONandJS: (modelName, jsonContent) ->
+    generateJSONandJS: (modelName, modelDefinition) ->
 
         jsonFilePath = normalize "#{@destinationDir}/#{modelName}.json"
-        fs.writeFileSync(jsonFilePath, jsonContent)
-
         jsFilePath = normalize "#{@destinationDir}/#{modelName}.js"
-        fs.writeFileSync(jsFilePath, @getEmptyJSContent())
+
+        if modelDefinition not instanceof ModelDefinition
+            jsonContent = JSON.stringify(modelDefinition, null, 2)
+            fs.writeFileSync(jsonFilePath, jsonContent)
+            fs.writeFileSync(jsFilePath, @getEmptyJSContent())
+            return modelName
+
+        jsonContent = modelDefinition.toStringifiedJSON()
+        fs.writeFileSync(jsonFilePath, jsonContent)
+        fs.writeFileSync(jsFilePath, @getJSContent(modelDefinition.definition.validations))
 
         return modelName
 
@@ -119,6 +124,31 @@ class ModelsGenerator
     ###
     getEmptyJSContent: ->
         'module.exports = function(Model) {};'
+
+    ###*
+    get js content
+
+    @private
+    ###
+    getJSContent: (validations) ->
+        if not validations
+            return @getEmptyJSContent()
+
+        validateMethods = []
+        for validation in validations
+            for prop, rules of validation
+                if rules.required
+                    validateMethods.push("  Model.validatesPresenceOf('#{prop}');")
+                if rules.pattern
+                    validateMethods.push("  Model.validatesFormatOf('#{prop}', { with: /#{rules.pattern}/ });")
+                if rules.min
+                    validateMethods.push("  Model.validatesLengthOf('#{prop}', { min: #{rules.min} });")
+                if rules.max
+                    validateMethods.push("  Model.validatesLengthOf('#{prop}', { max: #{rules.max} });")
+
+        head = 'module.exports = function(Model) {\n'
+        foot = '\n};\n'
+        head + validateMethods.join('\n') + foot
 
     ###*
     get RelationDefinition
