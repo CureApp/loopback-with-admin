@@ -5,7 +5,6 @@ var helmet = require('helmet');
 var app = module.exports = loopback();
 
 app.use(helmet.ieNoOpen())
-app.use(helmet.noCache())
 app.use(helmet.noSniff())
 app.use(helmet.xssFilter())
 app.use(helmet.hidePoweredBy())
