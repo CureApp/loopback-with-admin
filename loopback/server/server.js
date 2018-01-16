@@ -1,7 +1,13 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var helmet = require('helmet');
 
 var app = module.exports = loopback();
+
+app.use(helmet.ieNoOpen())
+app.use(helmet.noSniff())
+app.use(helmet.xssFilter())
+app.use(helmet.hidePoweredBy())
 
 app.start = function(callback) {
   boot(app, __dirname, function(err) {
