@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>/home/ubuntu/loopback-with-admin/src/main.coffee - loopback-with-admin</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="loopback-with-admin"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/AclGenerator.html">AclGenerator</a></li>
+            
+                <li><a href="../classes/AdminToken.html">AdminToken</a></li>
+            
+                <li><a href="../classes/AdminTokenManager.html">AdminTokenManager</a></li>
+            
+                <li><a href="../classes/LoopbackInfo.html">LoopbackInfo</a></li>
+            
+                <li><a href="../classes/LoopbackServer.html">LoopbackServer</a></li>
+            
+                <li><a href="../classes/Main.html">Main</a></li>
+            
+                <li><a href="../classes/ModelDefinition.html">ModelDefinition</a></li>
+            
+                <li><a href="../classes/ParticipantTokenSetter.html">ParticipantTokenSetter</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: /home/ubuntu/loopback-with-admin/src/main.coffee</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+
+LoopbackInfo   = require &#x27;./lib/loopback-info&#x27;
+LoopbackServer = require &#x27;./lib/loopback-server&#x27;
+
+ConfigJSONGenerator   = require &#x27;./lib/config-json-generator&#x27;
+ModelsGenerator       = require &#x27;./lib/models-generator&#x27;
+BuildInfoGenerator    = require &#x27;./lib/build-info-generator&#x27;
+CustomConfigs         = require &#x27;./lib/custom-configs&#x27;
+LoopbackBootGenerator = require &#x27;./lib/loopback-boot-generator&#x27;
+
+###*
+entry point
+
+@class Main
+###
+class Main
+
+    ###*
+    entry point.
+    run loopback with model definitions, config
+
+    @method run
+    @public
+    @static
+    @param {Object} loopbackDefinitions
+    @param {Object|String} [config] config object or config directory containing config info
+    @param {Boolean} [options.reset] reset previously-generated settings before generation
+    @param {String} [options.env] set environment (production|development|...)
+    @param {String} [options.participantToken] token for participant user
+    @param {Object} [options.admin] options for admin token manager
+    @param {Function|Array(String)} [options.admin.fetch] function to return admin tokens (or promise of it). When string[] is given, these value are used for the admin access token.
+    @param {String} [options.admin.email=loopback-with-admin@example.com] email address for admin user
+    @param {String} [options.admin.id=loopback-with-admin-user-id] id of admin user
+    @param {String} [options.admin.password=admin-user-password] password of admin user
+    @param {Number} [options.admin.intervalHours] IntervalHours to fetch new admin token.
+    return {Promise(LoopbackInfo)}
+    ###
+    @run: (loopbackDefinitions, config, options = {}) -&gt;
+
+        main = new @(loopbackDefinitions, config, options.env)
+
+        main.reset() unless options.reset is false
+
+        generated = main.generate()
+
+        if (options.adminToken)
+            console.error &#x27;LoopbackWithAdmin.run(): options.adminToken is deprecated. Use options.admin instead.&#x27;
+
+        adminOptions = options.admin or options.adminToken # adminToken is for backward compatibility
+
+        @launchLoopback(adminOptions, options.participantToken).then (server) =&gt;
+            return new LoopbackInfo(server, generated)
+
+
+    ###*
+    @constructor
+    @private
+    ###
+    constructor: (loopbackDefinitions, configs, @env) -&gt;
+
+        if loopbackDefinitions.models?
+            modelDefinitions = loopbackDefinitions.models
+            { customRoles } = loopbackDefinitions
+        else
+            modelDefinitions = loopbackDefinitions
+            customRoles = null
+
+        @env ?= process.env.NODE_ENV or &#x27;development&#x27;
+
+        customConfigs = new CustomConfigs(configs, @env)
+        configObj = customConfigs.toObject()
+
+        @configJSONGenerator = new ConfigJSONGenerator(configObj, @env)
+        @modelsGenerator     = new ModelsGenerator(modelDefinitions)
+        @bootGenerator       = new LoopbackBootGenerator(customRoles: customRoles)
+        @buildInfoGenerator  = new BuildInfoGenerator(modelDefinitions, configObj, @env)
+
+
+    ###*
+    @private
+    ###
+    generate: -&gt;
+        config    : @configJSONGenerator.generate()
+        models    : @modelsGenerator.generate()
+        buildInfo : @buildInfoGenerator.generate()
+        bootInfo  : @bootGenerator.generate()
+
+    ###*
+    @private
+    ###
+    reset: -&gt;
+        @configJSONGenerator.reset()
+        @modelsGenerator.reset()
+        @buildInfoGenerator.reset()
+        @bootGenerator.reset()
+
+
+
+    ###*
+    run loopback
+
+    @private
+    ###
+    @launchLoopback: (adminOptions, participantToken) -&gt;
+
+        server = new LoopbackServer()
+        server.launch(adminOptions, participantToken).then =&gt; server
+
+module.exports = Main
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
